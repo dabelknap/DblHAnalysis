@@ -81,7 +81,8 @@ def main():
     #sample_name = "ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola"
     #sample_name = "data_DoubleMuParked_Run2012A_22Jan2013_v1"
     #sample_name = "data_DoubleMuParked_Run2012B_22Jan2013_v1"
-    sample_name = "data_DoubleMuParked_Run2012C_22Jan2013_v1"
+    #sample_name = "data_DoubleMuParked_Run2012C_22Jan2013_v1"
+    sample_name = "data_DoubleMuParked_Run2012D_22Jan2013_v1"
     file_names = os.listdir(os.path.join('root_files', sample_name))
 
     h5file = tb.open_file('./ntuples/' + sample_name + '.h5', mode='w')
