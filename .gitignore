@@ -1,0 +1,8 @@
+*.swp
+*.pdf
+.DS_Store
+*.o
+*.so
+*.root
+*.pyc
+ntuples
