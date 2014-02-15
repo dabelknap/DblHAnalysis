@@ -77,54 +77,54 @@ def good_to_store(cand1, cand2):
     return False
 
 
-def main():
-    #sample_name = "ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola"
-    #sample_name = "data_DoubleMuParked_Run2012A_22Jan2013_v1"
-    #sample_name = "data_DoubleMuParked_Run2012B_22Jan2013_v1"
-    #sample_name = "data_DoubleMuParked_Run2012C_22Jan2013_v1"
-    sample_name = "data_DoubleMuParked_Run2012D_22Jan2013_v1"
-    file_names = os.listdir(os.path.join('root_files', sample_name))
+def main(sample):
+    sample_name_list = glob.glob("./root_files/" + sample)
+    for name in sample_name_list:
+        print "Processing: ", name
+        sample_name = os.path.basename(name)
+        file_names = os.listdir(os.path.join('root_files', sample_name))
 
-    h5file = tb.open_file('./ntuples/' + sample_name + '.h5', mode='w')
-    zz_group = h5file.create_group('/', 'ZZ4l', 'ZZ to 4l')
-    mmmm_table = h5file.create_table(zz_group, 'mmmm', EventZZ, "Selected 4mu Events")
+        h5file = tb.open_file('./ntuples/' + sample_name + '.h5', mode='w')
+        zz_group = h5file.create_group('/', 'ZZ4l', 'ZZ to 4l')
+        mmmm_table = h5file.create_table(zz_group, 'mmmm', EventZZ, "Selected 4mu Events")
 
-    mmmm_row = mmmm_table.row
+        mmmm_row = mmmm_table.row
 
-    event_set = None
-    for i, file_name in enumerate(file_names):
-        if i % 20 == 0:
-            print "Processing %i/%i Files" % (i+1, len(file_names))
-        file_path = os.path.join('root_files', sample_name, file_name)
-        rtFile = rt.TFile(file_path, "READ")
-        tree = rtFile.Get("mmmm/final/Ntuple")
+        event_set = None
+        for i, file_name in enumerate(file_names):
+            if i % 20 == 0:
+                print "Processing %i/%i Files" % (i+1, len(file_names))
+            file_path = os.path.join('root_files', sample_name, file_name)
+            rtFile = rt.TFile(file_path, "READ")
+            tree = rtFile.Get("mmmm/final/Ntuple")
 
-        for row in tree:
-            if event_set:
-                if row.evt not in event_set:
-                    mmmm_row.append()
+            for row in tree:
+                if event_set:
+                    # Once we move to the next event, capture the info from the previous event
+                    if row.evt not in event_set:
+                        mmmm_row.append()
+                        best_cand = (0, 0, [1,2,3,4])
+                else:
                     best_cand = (0, 0, [1,2,3,4])
-            else:
-                best_cand = (0, 0, [1,2,3,4])
-                event_set = set()
+                    event_set = set()
 
-            if not preselection(row):
-                continue
+                if not preselection(row):
+                    continue
 
-            event_set.add(row.evt)
+                event_set.add(row.evt)
 
-            candidate = choose_leptons(row)
+                candidate = choose_leptons(row)
 
-            if good_to_store(candidate, best_cand):
-                store_row(row, mmmm_row, *candidate[2])
-                best_cand = tuple(candidate)
+                if good_to_store(candidate, best_cand):
+                    store_row(row, mmmm_row, *candidate[2])
+                    best_cand = tuple(candidate)
 
-        mmmm_row.append()
-        mmmm_table.flush()
-        rtFile.Close()
+            mmmm_row.append()
+            mmmm_table.flush()
+            rtFile.Close()
 
-    h5file.close()
+        h5file.close()
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
