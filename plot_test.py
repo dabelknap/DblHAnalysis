@@ -4,8 +4,17 @@ import matplotlib.pyplot as plt
 import scipy.stats as sp_stat
 from itertools import chain
 
-#NEVENTS = 4807893.0 # ZZJets
-NEVENTS = 1499064.0 # ZZTo4Mu
+madgraph = True
+
+if madgraph:
+    NEVENTS = 4807893.0 # ZZJets
+    XSEC = 0.1296 # ZZJets
+    MC_NAME = 'ntuples/ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola.h5'
+else:
+    NEVENTS = 1499064.0 # ZZTo4Mu
+    XSEC = 0.07691 # ZZTo4Mu
+    MC_NAME = 'ntuples/ZZTo4mu_8TeV-powheg-pythia6.h5'
+
 #LUMI = 19.6e3
 #LUMI_A = 854.716 # DoubleMuParked 2012A
 LUMI_A = 886.75482
@@ -16,8 +25,6 @@ LUMIS = {'A': LUMI_A,
          'B': LUMI_B,
          'C': LUMI_C,
          'D': LUMI_D}
-#XSEC = 0.1296 # ZZJets
-XSEC = 0.07691 # ZZTo4Mu
 
 datasets = ["A", "B", "C", "D"]
 
@@ -42,8 +49,7 @@ for label in datasets:
 print "Obs:", len(mass0)
 
 
-#with tb.open_file('ntuples/ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola.h5', 'r') as h5file:
-with tb.open_file('ntuples/ZZTo4mu_8TeV-powheg-pythia6.h5', 'r') as h5file:
+with tb.open_file(MC_NAME, 'r') as h5file:
     table = h5file.root.ZZ4l.mmmm
     mass   = np.fromiter((x['mass'] for x in table.where(CUT)),np.float)
     z1mass = np.fromiter((x['z1mass'] for x in table.where(CUT)),np.float)
