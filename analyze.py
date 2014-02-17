@@ -41,6 +41,15 @@ class ZZAnalyzer(object):
         self.sample_location = sample_location
 
 
+    def __enter__(self):
+        self.begin()
+        return self
+
+
+    def __exit__(self, type, value, traceback):
+        self.finish()
+
+
     def begin(self):
         self.h5file = tb.open_file(self.out_file, mode='a')
 
@@ -263,16 +272,12 @@ def main(argv=None):
     chan = args.channels
 
     if chan in ['mmmm', 'all']:
-        MuAnalyzer = ZZAnalyzerMMMM(args.in_sample, args.out_file)
-        MuAnalyzer.begin()
-        MuAnalyzer.analyze()
-        MuAnalyzer.finish()
+        with ZZAnalyzerMMMM(args.in_sample, args.out_file) as MuAnalyzer:
+            MuAnalyzer.analyze()
 
     if chan in ['eeee', 'all']:
-        eAnalyzer = ZZAnalyzerEEEE(args.in_sample, args.out_file)
-        eAnalyzer.begin()
-        eAnalyzer.analyze()
-        eAnalyzer.finish()
+        with ZZAnalyzerEEEE(args.in_sample, args.out_file) as eAnalyzer:
+            eAnalyzer.analyze()
 
     return 0
 
