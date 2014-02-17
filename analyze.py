@@ -247,6 +247,7 @@ def parse_command_line(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('in_sample', type=str)
     parser.add_argument('out_file', type=str)
+    parser.add_argument('channels', type=str, default='all')
     
     args = parser.parse_args(argv)
     return args
@@ -259,10 +260,19 @@ def main(argv=None):
 
     args = parse_command_line(argv)
 
-    MuAnalyzer = ZZAnalyzerMMMM(args.in_sample, args.out_file)
-    MuAnalyzer.begin()
-    MuAnalyzer.analyze()
-    MuAnalyzer.finish()
+    chan = args.channels
+
+    if chan in ['mmmm', 'all']:
+        MuAnalyzer = ZZAnalyzerMMMM(args.in_sample, args.out_file)
+        MuAnalyzer.begin()
+        MuAnalyzer.analyze()
+        MuAnalyzer.finish()
+
+    if chan in ['eeee', 'all']:
+        eAnalyzer = ZZAnalyzerEEEE(args.in_sample, args.out_file)
+        eAnalyzer.begin()
+        eAnalyzer.analyze()
+        eAnalyzer.finish()
 
     return 0
 
