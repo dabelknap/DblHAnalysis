@@ -170,6 +170,15 @@ class ZZAnalyzer(object):
         h5row["z1mass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2))
         h5row["z2mass"] = getattr(rtrow, "%s_%s_Mass" % (l3, l4))
 
+        for i, l in enumerate([l1, l2, l3, l4]):
+            j = i + 1
+            h5row["l%iPt" % j] = getattr(rtrow, "%sPt" % l)
+            h5row["l%iEta" % j] = getattr(rtrow, "%sEta" % l)
+            h5row["l%iPhi" % j] = getattr(rtrow, "%sPhi" % l)
+            h5row["l%iChg" % j] = getattr(rtrow, "%sCharge" % l)
+            h5row["l%iIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
+            h5row["l%iId" % j] = getattr(rtrow, "%sMVAIDH2TauWP" % l)
+
 
 
 
@@ -197,7 +206,7 @@ class ZZAnalyzerEEEE(ZZAnalyzer):
 
     def isolation(self, rtrow):
         iso_type = "RelPFIsoDB"
-        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.2 for l in self.leptons]
+        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.4 for l in self.leptons]
         return all(isos)
 
 
