@@ -15,5 +15,5 @@ download_root :
 
 ntuples : $(NTUPLES)
 
-%.h5 : $(ROOTDIR)/%
+$(NTUPDIR)/%.h5 : $(ROOTDIR)/%
 	python analyze.py $< $@ $(CHANNEL)
