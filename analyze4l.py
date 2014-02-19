@@ -80,16 +80,14 @@ class Analyzer4l(object):
             rtFile = rt.TFile(file_path, "READ")
             tree = rtFile.Get("%s/final/Ntuple" % self.channel)
 
-            cnt = 0
             for rtrow in tree:
-                cnt += 1
-                print "Row: %i" % cnt
+
                 if event_set:
                     if rtrow.evt not in event_set:
                         self.h5row.append()
-                        best_cand = (0, 0, [])
+                        best_cand = (0, float('inf'), [])
                 else:
-                    best_cand = (0, 0, [])
+                    best_cand = (0, float('inf'), [])
                     event_set = set()
 
                 if not self.preselection(rtrow):
@@ -102,9 +100,6 @@ class Analyzer4l(object):
                 if self.good_to_store(candidate, best_cand):
                     self.store_row(rtrow, self.h5row, *candidate[2])
                     best_cand = tuple(candidate)
-
-                if cnt == 10:
-                    break
 
             self.h5row.append()
             self.table.flush()
@@ -164,7 +159,7 @@ class Analyzer4l(object):
             h5row["l%iPhi" % j] = getattr(rtrow, "%sPhi" % l)
             h5row["l%iChg" % j] = getattr(rtrow, "%sCharge" % l)
             h5row["l%sFlv" % j] = l[0]
-            h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoDB")
+            h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
 
 
 
