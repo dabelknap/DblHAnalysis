@@ -1,4 +1,4 @@
-CHANNEL=eeee
+CHANNEL=all
 
 ROOTDIR = ./root_files
 NTUPDIR = ./ntuples
@@ -16,4 +16,4 @@ download_root :
 ntuples : $(NTUPLES)
 
 $(NTUPDIR)/%.h5 : $(ROOTDIR)/%
-	python analyze.py $< $@ $(CHANNEL)
+	python analyze4l.py $< $@ $(CHANNEL)
