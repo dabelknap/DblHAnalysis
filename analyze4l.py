@@ -149,8 +149,15 @@ class Analyzer4l(object):
         h5row["channel"] = self.channel
 
         h5row["mass"] = rtrow.Mass
+
         h5row["h1mass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2))
         h5row["h2mass"] = getattr(rtrow, "%s_%s_Mass" % (l3, l4))
+
+        h5row["sT1"] = getattr(rtrow, "%sPt" % l1) + getattr(rtrow, "%sPt" % l2)
+        h5row["sT2"] = getattr(rtrow, "%sPt" % l3) + getattr(rtrow, "%sPt" % l4)
+
+        h5row["dPhi1"] = getattr(rtrow, "%s_%s_DPhi" % (l1, l2))
+        h5row["dPhi2"] = getattr(rtrow, "%s_%s_DPhi" % (l3, l4))
 
         for i, l in enumerate([l1, l2, l3, l4]):
             j = i + 1

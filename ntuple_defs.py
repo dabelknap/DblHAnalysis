@@ -13,8 +13,16 @@ class EventBase(tb.IsDescription):
 
 class Event4l(EventBase):
     mass    = tb.Float32Col()
+
+    met     = tb.Float32Col()
+
     h1mass  = tb.Float32Col()
+    sT1     = tb.Float32Col()
+    dPhi1   = tb.Float32Col()
+
     h2mass  = tb.Float32Col()
+    sT2     = tb.Float32Col()
+    dPhi2   = tb.Float32Col()
 
     l1Pt    = tb.Float32Col()
     l1Eta   = tb.Float32Col()
