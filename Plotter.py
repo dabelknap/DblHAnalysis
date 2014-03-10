@@ -8,6 +8,8 @@ import xsec
 
 import matplotlib as mpl
 
+# Use PFG/Tikz backend to generate plots
+# Enables Latex, with better performance
 mpl.use("pgf")
 pgf_with_pdflatex = {
         "pgf.texsystem": "pdflatex",
@@ -40,6 +42,9 @@ class Plotter(object):
 
 
     def add_group(self, group_name, label, *sample_names, **kwargs):
+        """
+        Create a named group of MC samples, and assign plotting attributes
+        """
         samples = []
         for name in sample_names:
             samples += glob.glob("%s/%s" % (self.ntuple_dir, name))
@@ -55,6 +60,10 @@ class Plotter(object):
 
 
     def stack_order(self, *sample_order):
+        """
+        Define the order in which mc samples are to be stacked in the plot
+        """
+        self.sample_order = []
         for sample in sample_order:
             if sample not in self.sample_groups:
                 raise ValueError("%s not defined" % sample)
@@ -62,6 +71,9 @@ class Plotter(object):
 
 
     def plot_stack(self, file_name, var, nbins, xmin, xmax, **kwargs):
+        """
+        Plot a stacked histogram
+        """
         values = []
         weights = []
         labels = []
