@@ -144,7 +144,8 @@ class Analyzer4l(object):
         h5row["lumi"] = rtrow.lumi
         h5row["run"] = rtrow.run
 
-        h5row["weight"] = 1.0
+        h5row["lep_scale"] = 1.0
+        h5row["pu_weight"] = 1.0
 
         h5row["channel"] = self.channel
 

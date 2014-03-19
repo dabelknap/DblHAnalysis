@@ -8,7 +8,8 @@ class EventBase(tb.IsDescription):
 
     channel = tb.StringCol(4)
 
-    weight  = tb.Float32Col()
+    lep_scale = tb.Float32Col()
+    pu_weight = tb.Float32Col()
 
 
 class Event4l(EventBase):
