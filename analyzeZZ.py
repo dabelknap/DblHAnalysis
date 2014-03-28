@@ -185,8 +185,6 @@ class ZZAnalyzer(object):
             h5row["l%iPhi" % j] = getattr(rtrow, "%sPhi" % l)
             h5row["l%iChg" % j] = getattr(rtrow, "%sCharge" % l)
             h5row["l%iIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
-            h5row["l%iId" % j] = getattr(rtrow, "%sMVAIDH2TauWP" % l)
-
 
 
 
