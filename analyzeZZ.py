@@ -8,6 +8,7 @@ import argparse
 from ntuple_defs import EventZZ
 from scale_factors import LeptonScaleFactors
 from pu_weights import PileupWeights
+import leptonId as lepId
 
 sys.argv.append('-b')
 import ROOT as rt
@@ -207,12 +208,11 @@ class ZZAnalyzerEEEE(ZZAnalyzer):
 
 
     def eleID(self, rtrow):
-        ids = [getattr(rtrow, "%sMVAIDH2TauWP" % l) > 0.5 for l in self.leptons]
-        return all(ids)
+        return lepId.elec_id(rtrow, *self.leptons)
 
 
     def isolation(self, rtrow):
-        iso_type = "RelPFIsoDB"
+        iso_type = "RelPFIsoRho"
         isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.4 for l in self.leptons]
         return all(isos)
 
@@ -247,8 +247,7 @@ class ZZAnalyzerMMMM(ZZAnalyzer):
 
 
     def muID(self, rtrow):
-        ids = [getattr(rtrow, "%sPFIDTight" % l) > 0.5 for l in self.leptons]
-        return all(ids)
+        return lepId.muon_id(rtrow, *self.leptons)
 
 
     def isolation(self, rtrow):
