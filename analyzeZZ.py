@@ -7,6 +7,7 @@ import argparse
 
 from ntuple_defs import EventZZ
 from scale_factors import LeptonScaleFactors
+from pu_weights import PileupWeights
 
 sys.argv.append('-b')
 import ROOT as rt
@@ -53,6 +54,7 @@ class ZZAnalyzer(object):
 
     def begin(self):
         self.lepscaler = LeptonScaleFactors()
+        self.pu_weights = PileupWeights()
 
         self.h5file = tb.open_file(self.out_file, mode='a')
 
@@ -166,8 +168,8 @@ class ZZAnalyzer(object):
         h5row["lumi"] = rtrow.lumi
         h5row["run"] = rtrow.run
 
-        h5row["lep_scale"] = self.lepscaler(rtrow, l1, l2, l3, l4)
-        h5row["pu_weight"] = 1.0
+        h5row["lep_scale"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
+        h5row["pu_weight"] = self.pu_weights.weight(rtrow)
 
         h5row["channel"] = self.channel
 
