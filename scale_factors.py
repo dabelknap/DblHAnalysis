@@ -23,7 +23,7 @@ class LeptonScaleFactors(object):
             if lep_type == 'm':
                 out *= self.m_scale(row, l)
 
-            if lep_type == 'e':
+            elif lep_type == 'e':
                 out *= self.e_scale(row, l)
 
             else:

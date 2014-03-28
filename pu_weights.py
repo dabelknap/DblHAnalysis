@@ -3,7 +3,7 @@ import json
 
 sys.argv.append('-b')
 import ROOT as rt
-sys.pop()
+sys.argv.pop()
 
 
 class PileupWeights(object):
@@ -13,8 +13,8 @@ class PileupWeights(object):
             self.pu_weights = json.load(pu_file)
 
 
-    def weight(rtrow):
-        if row.nTruePU < 0:
+    def weight(self, rtrow):
+        if rtrow.nTruePU < 0:
             return 1
         else:
-            return self.pu_weights[str(int(floor(row.nTruePU)))]
+            return self.pu_weights[str(int(floor(rtrow.nTruePU)))]
