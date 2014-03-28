@@ -206,7 +206,7 @@ class ZZAnalyzerEEEE(ZZAnalyzer):
 
 
     def eleID(self, rtrow):
-        return lepId.elec_id(rtrow, *self.leptons)
+        return lepId.elec_id(rtrow, 1, 2, 3, 4)
 
 
     def isolation(self, rtrow):
@@ -245,7 +245,7 @@ class ZZAnalyzerMMMM(ZZAnalyzer):
 
 
     def muID(self, rtrow):
-        return lepId.muon_id(rtrow, *self.leptons)
+        return lepId.muon_id(rtrow, 1, 2, 3, 4)
 
 
     def isolation(self, rtrow):
