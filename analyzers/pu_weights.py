@@ -11,7 +11,7 @@ sys.argv.pop()
 class PileupWeights(object):
 
     def __init__(self):
-        with open('./pile_up/pu_weights.json', 'r') as pu_file:
+        with open('./analyzers/pile_up/pu_weights.json', 'r') as pu_file:
             self.pu_weights = json.load(pu_file)
 
 

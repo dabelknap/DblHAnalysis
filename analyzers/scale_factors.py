@@ -8,10 +8,10 @@ sys.argv.pop()
 class LeptonScaleFactors(object):
 
     def __init__(self):
-        self.e_rtfile = rt.TFile('./lepton_scales/CombinedMethod_ScaleFactors_RecoIdIsoSip.root', 'READ')
+        self.e_rtfile = rt.TFile('./analyzers/lepton_scales/CombinedMethod_ScaleFactors_RecoIdIsoSip.root', 'READ')
         self.e_hist = self.e_rtfile.Get("h_electronScaleFactor_RecoIdIsoSip")
 
-        self.m_rtfile = rt.TFile('./lepton_scales/MuonScaleFactors_2011_2012.root', 'READ')
+        self.m_rtfile = rt.TFile('./analyzers/lepton_scales/MuonScaleFactors_2011_2012.root', 'READ')
         self.m_hist = self.m_rtfile.Get("TH2D_ALL_2012")
 
 

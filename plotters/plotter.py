@@ -133,7 +133,7 @@ class Plotter(object):
 
 
 def main():
-    plotter = Plotter("DblH4l", "(mass > 80)", "./ntuples", "./plots/test",
+    plotter = Plotter("DblH4l", "(mass > 80)", "../ntuples", "../plots/test",
                       channels=["mmmm"], lumi=19.7)
 
     plotter.add_group("hpp", "HPP", "HPlus*110*",

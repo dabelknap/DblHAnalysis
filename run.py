@@ -1,5 +1,5 @@
-import analyze4l as an
-import analyzeZZ as zzan
+from analyzers import analyze4l as an4l
+from analyzers import analyzeZZ as anZZ
 import glob
 import os
 import sys
@@ -15,22 +15,22 @@ def main():
     if sys.argv[1] == "4l":
         for name in sample_names:
             print "processing %s" % name
-            with an.analyzer4lmmmm("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
+            with an4l.analyzer4lmmmm("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
                 print "4mu analyzer"
                 muanalyzer.analyze()
 
-            with an.analyzer4leeee("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
+            with an4l.analyzer4leeee("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
                 print "4ele analyzer"
                 eleanalyzer.analyze()
 
     elif sys.argv[1] == "zz":
         for name in sample_names:
             print "processing %s" % name
-            with zzan.ZZAnalyzerMMMM("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
+            with anZZ.ZZAnalyzerMMMM("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
                 print "4mu analyzer"
                 muanalyzer.analyze()
 
-            with zzan.ZZAnalyzerEEEE("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
+            with anZZ.ZZAnalyzerEEEE("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
                 print "4ele analyzer"
                 eleanalyzer.analyze()
 
