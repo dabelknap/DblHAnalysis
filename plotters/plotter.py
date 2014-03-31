@@ -82,10 +82,12 @@ class Plotter(object):
         ylab = kwargs.get('ylab', '')
         xlab = kwargs.get('xlab', '')
         title = kwargs.get('title', '')
+        log_scale = kwargs.get('log', False)
 
         hist_style = {'histtype': 'stepfilled',
                       'linewidth': 1.5,
-                      'stacked': True}
+                      'stacked': True,
+                      'log': log_scale}
 
         cut = "%s & %s" % (self.base_selections, cuts)
 
@@ -102,7 +104,7 @@ class Plotter(object):
                         vals += [x[var] for x in table.where(cut)]
                         scale = self.lumi * xsec.xsecs[sample_name] / \
                                 xsec.nevents[sample_name]
-                        wgts += [x['weight'] * scale for x in table.where(cut)]
+                        wgts += [x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)]
 
             values.append(vals)
             weights.append(wgts)
