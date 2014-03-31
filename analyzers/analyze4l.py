@@ -6,6 +6,9 @@ from itertools import permutations, combinations
 import argparse
 
 from ntuple_defs import Event4l
+from scale_factors import LeptonScaleFactors
+from pu_weights import PileupWeights
+import leptonId as lepId
 
 sys.argv.append('-b')
 import ROOT as rt
@@ -51,6 +54,9 @@ class Analyzer4l(object):
 
 
     def begin(self):
+        self.lepscaler = LeptonScaleFactors()
+        self.pu_weights = PileupWeights()
+
         self.h5file = tb.open_file(self.out_file, mode='a')
 
         try:
@@ -107,6 +113,7 @@ class Analyzer4l(object):
 
 
     def finish(self):
+        self.lepscaler.close()
         self.h5file.close()
 
 
@@ -144,8 +151,8 @@ class Analyzer4l(object):
         h5row["lumi"] = rtrow.lumi
         h5row["run"] = rtrow.run
 
-        h5row["lep_scale"] = 1.0
-        h5row["pu_weight"] = 1.0
+        h5row["lep_scale"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
+        h5row["pu_weight"] = self.pu_weights.weight(rtrow)
 
         h5row["channel"] = self.channel
 
@@ -167,7 +174,10 @@ class Analyzer4l(object):
             h5row["l%iPhi" % j] = getattr(rtrow, "%sPhi" % l)
             h5row["l%iChg" % j] = getattr(rtrow, "%sCharge" % l)
             h5row["l%sFlv" % j] = l[0]
-            h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
+            if l[0] == 'm':
+                h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
+            elif l[0] == 'e':
+                h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoRho" % l)
 
 
 
@@ -189,12 +199,11 @@ class Analyzer4lEEEE(Analyzer4l):
 
 
     def eleID(self, rtrow):
-        ids = [getattr(rtrow, "%sMVAIDH2TauWP" % l) > 0.5 for l in self.leptons]
-        return all(ids)
+        return lepId.elec_id(rtrow, 1, 2, 3, 4)
 
 
     def isolation(self, rtrow):
-        iso_type = "RelPFIsoDB"
+        iso_type = "RelPFIsoRho"
         isos = sorted([getattr(rtrow, "%s%s" % (l, iso_type)) for l in self.leptons], reverse=True)
         return (isos[0] + isos[1]) < 0.35
 
@@ -230,8 +239,7 @@ class Analyzer4lMMMM(Analyzer4l):
 
 
     def muID(self, rtrow):
-        ids = [getattr(rtrow, "%sPFIDTight" % l) > 0.5 for l in self.leptons]
-        return all(ids)
+        return lepId.muon_id(rtrow, 1, 2, 3, 4)
 
 
     def isolation(self, rtrow):
