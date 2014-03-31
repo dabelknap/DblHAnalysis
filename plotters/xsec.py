@@ -3,6 +3,7 @@ FB = 1.0
 
 xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-400_8TeV-pythia6': 1.3414 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6': 0.71531 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-500_8TeV-pythia6': 0.39604 * FB,
 
          'DYJetsToLL_M-10To50filter_8TeV-madgraph': 915.0 * PB,
@@ -20,6 +21,7 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
 
 nevents = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 1249577.0,
            'HPlusPlusHMinusMinusHTo4L_M-400_8TeV-pythia6': 250000.0,
+           'HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6': 248310.0,
            'HPlusPlusHMinusMinusHTo4L_M-500_8TeV-pythia6': 125000.0,
 
            'DYJetsToLL_M-10To50filter_8TeV-madgraph': 7095797.0,
