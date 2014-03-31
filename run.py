@@ -15,11 +15,11 @@ def main():
     if sys.argv[1] == "4l":
         for name in sample_names:
             print "processing %s" % name
-            with an4l.analyzer4lmmmm("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
+            with an4l.Analyzer4lMMMM("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
                 print "4mu analyzer"
                 muanalyzer.analyze()
 
-            with an4l.analyzer4leeee("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
+            with an4l.Analyzer4lEEEE("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
                 print "4ele analyzer"
                 eleanalyzer.analyze()
 
