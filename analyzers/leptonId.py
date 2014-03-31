@@ -22,14 +22,14 @@ def elec_id(rtrow, *lep):
 
     nhit = [getattr(rtrow, "e%iMissingHits" % l) <= 1 for l in lep]
 
-    mva = [_ele_mva(rtrow, l) for l in lep]
+    mva = [_elec_mva(rtrow, l) for l in lep]
 
     return all(dz + dxy + sip + nhit + mva)
 
 
-def _ele_mva(rtrow, l):
+def _elec_mva(rtrow, l):
     pt = getattr(rtrow, "e%iPt" % l)
-    eta = getattr(rtrow, "e%iSCEta" % l)
+    eta = abs(getattr(rtrow, "e%iSCEta" % l))
     mva = getattr(rtrow, "e%iMVANonTrig" % l)
 
     if 5.0 < pt < 10.0:
