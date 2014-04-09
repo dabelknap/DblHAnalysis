@@ -23,16 +23,12 @@ class CutSequence(object):
     def __init__(self):
         self.cut_sequence = []
 
-
     def add(self, fun):
         self.cut_sequence.append(fun)
-
 
     def evaluate(self, rtrow):
         cut_results = [f(rtrow) for f in self.cut_sequence]
         return all(cut_results)
-
-
 
 
 class ZZAnalyzer(object):
@@ -43,15 +39,12 @@ class ZZAnalyzer(object):
         self.out_file = out_file
         self.sample_location = sample_location
 
-
     def __enter__(self):
         self.begin()
         return self
 
-
     def __exit__(self, type, value, traceback):
         self.finish()
-
 
     def begin(self):
         self.lepscaler = LeptonScaleFactors()
@@ -70,11 +63,10 @@ class ZZAnalyzer(object):
             self.zz_group = self.h5file.root.ZZ4l
 
         self.table = self.h5file.create_table(
-                self.zz_group, self.channel,
-                EventZZ, "Selected %s Events" % self.channel)
+            self.zz_group, self.channel,
+            EventZZ, "Selected %s Events" % self.channel)
 
         self.h5row = self.table.row
-
 
     def analyze(self):
         event_set = None
@@ -110,17 +102,14 @@ class ZZAnalyzer(object):
             self.table.flush()
             rtFile.Close()
 
-
     def finish(self):
         self.lepscaler.close()
         self.h5file.close()
-
 
     def trigger_threshold(self, rtrow):
         pts = [getattr(rtrow, "%sPt" % l) for l in self.leptons]
         pts.sort(reverse=True)
         return pts[0] > 20.0 and pts[1] > 10.0
-
 
     def choose_leptons(self, rtrow):
         """
@@ -138,9 +127,10 @@ class ZZAnalyzer(object):
                 continue
 
             z1mass = getattr(rtrow, "%s_%s_Mass" % (l[0], l[1]))
-            z2Pt   = getattr(rtrow, "%sPt" % l[2]) + getattr(rtrow, "%sPt" % l[3])
-            OS1    = getattr(rtrow, "%s_%s_SS" % (l[0], l[1])) < 0.5
-            OS2    = getattr(rtrow, "%s_%s_SS" % (l[2], l[3])) < 0.5
+            z2Pt = getattr(rtrow, "%sPt" % l[2]) + \
+                getattr(rtrow, "%sPt" % l[3])
+            OS1 = getattr(rtrow, "%s_%s_SS" % (l[0], l[1])) < 0.5
+            OS2 = getattr(rtrow, "%s_%s_SS" % (l[2], l[3])) < 0.5
 
             if OS1 and OS2:
                 cands.append((z1mass, z2Pt, list(l)))
@@ -154,7 +144,6 @@ class ZZAnalyzer(object):
 
         return (z1mass, z2Pt, leps)
 
-
     @staticmethod
     def good_to_store(cand1, cand2):
         """Is cand1 better than cand2 for ZZ?"""
@@ -162,7 +151,6 @@ class ZZAnalyzer(object):
             if cand1[1] > cand2[1]:
                 return True
         return False
-
 
     def store_row(self, rtrow, h5row, l1, l2, l3, l4):
         h5row["evt"] = rtrow.evt
@@ -187,7 +175,6 @@ class ZZAnalyzer(object):
             h5row["l%iIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
 
 
-
 class ZZAnalyzerEEEE(ZZAnalyzer):
 
     def __init__(self, sample_location, out_file):
@@ -196,7 +183,6 @@ class ZZAnalyzerEEEE(ZZAnalyzer):
 
         super(ZZAnalyzerEEEE, self).__init__(sample_location, out_file)
 
-
     def fiducial(self, rtrow):
         pt_cut = 5.0
         eta_cut = 2.4
@@ -204,16 +190,14 @@ class ZZAnalyzerEEEE(ZZAnalyzer):
         etas = [getattr(rtrow, "%sAbsEta" % l) < eta_cut for l in self.leptons]
         return all(pts) and all(etas)
 
-
     def eleID(self, rtrow):
         return lepId.elec_id(rtrow, 1, 2, 3, 4)
 
-
     def isolation(self, rtrow):
         iso_type = "RelPFIsoRho"
-        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.4 for l in self.leptons]
+        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.4
+                for l in self.leptons]
         return all(isos)
-
 
     def preselection(self, rtrow):
         cuts = CutSequence()
@@ -225,8 +209,6 @@ class ZZAnalyzerEEEE(ZZAnalyzer):
         return cuts.evaluate(rtrow)
 
 
-
-
 class ZZAnalyzerMMMM(ZZAnalyzer):
 
     def __init__(self, sample_location, out_file):
@@ -235,7 +217,6 @@ class ZZAnalyzerMMMM(ZZAnalyzer):
 
         super(ZZAnalyzerMMMM, self).__init__(sample_location, out_file)
 
-
     def fiducial(self, rtrow):
         pt_cut = 5.0
         eta_cut = 2.4
@@ -243,16 +224,14 @@ class ZZAnalyzerMMMM(ZZAnalyzer):
         etas = [getattr(rtrow, "%sAbsEta" % l) < eta_cut for l in self.leptons]
         return all(pts) and all(etas)
 
-
     def muID(self, rtrow):
         return lepId.muon_id(rtrow, 1, 2, 3, 4)
 
-
     def isolation(self, rtrow):
         iso_type = "RelPFIsoDB"
-        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.2 for l in self.leptons]
+        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.2
+                for l in self.leptons]
         return all(isos)
-
 
     def preselection(self, rtrow):
         cuts = CutSequence()
@@ -264,16 +243,14 @@ class ZZAnalyzerMMMM(ZZAnalyzer):
         return cuts.evaluate(rtrow)
 
 
-
 def parse_command_line(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('in_sample', type=str)
     parser.add_argument('out_file', type=str)
     parser.add_argument('channels', type=str, default='all')
-    
+
     args = parser.parse_args(argv)
     return args
-
 
 
 def main(argv=None):
@@ -293,7 +270,6 @@ def main(argv=None):
             eAnalyzer.analyze()
 
     return 0
-
 
 
 if __name__ == "__main__":
