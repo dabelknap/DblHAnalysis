@@ -6,6 +6,8 @@ from itertools import chain
 
 madgraph = False
 
+subdir = '2014-03-31'
+
 chan = 'eeee'
 
 if madgraph:
@@ -82,7 +84,9 @@ with tb.open_file(MC_NAME, 'r') as h5file:
     l2Pt   = np.fromiter((x['l2Pt'] for x in table.where(CUT)),np.float)
     l3Pt   = np.fromiter((x['l3Pt'] for x in table.where(CUT)),np.float)
     l4Pt   = np.fromiter((x['l4Pt'] for x in table.where(CUT)),np.float)
-    weights = np.ones(mass.shape) * sum((LUMIS[x] for x in datasets))  * XSEC / NEVENTS
+    weights = np.fromiter((x['lep_scale'] * x['pu_weight'] for x in table.where(CUT)),np.float)
+    weights *= sum((LUMIS[x] for x in datasets)) * XSEC / NEVENTS
+    #weights = np.ones(mass.shape) * sum((LUMIS[x] for x in datasets))  * XSEC / NEVENTS
     #weights = np.ones(mass.shape) * 19.6e3  * XSEC / NEVENTS
 
 print "Lumi: %.2f ifb" % (sum((LUMIS[x] for x in datasets)) / 1000.0)
@@ -108,7 +112,7 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('4l Mass [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_mass.pdf' % chan)
+plt.savefig('./plots/%s/%s_mass.pdf' % (subdir, chan))
 
 plt.clf()
 (n, bins) = np.histogram(z1mass0, 25, range=(60,120))
@@ -119,7 +123,7 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('Z1 Mass [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_z1mass.pdf' % chan)
+plt.savefig('./plots/%s/%s_z1mass.pdf' % (subdir, chan))
 
 plt.clf()
 (n, bins) = np.histogram(z2mass0, 25, range=(40,120))
@@ -130,7 +134,7 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('Z2 Mass [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_z2mass.pdf' % chan)
+plt.savefig('./plots/%s/%s_z2mass.pdf' % (subdir, chan))
 
 """Lepton Pt Plots"""
 
@@ -147,7 +151,7 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('l1 pT [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_l1Pt.pdf' % chan)
+plt.savefig('./plots/%s/%s_l1Pt.pdf' % (subdir, chan))
 
 plt.clf()
 (n, bins) = np.histogram(l2Pt0, nbins, range=(xlow, xhigh))
@@ -158,7 +162,7 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('l2 pT [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_l2Pt.pdf' % chan)
+plt.savefig('./plots/%s/%s_l2Pt.pdf' % (subdir, chan))
 
 plt.clf()
 (n, bins) = np.histogram(l3Pt0, nbins, range=(xlow, xhigh))
@@ -169,7 +173,7 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('l3 pT [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_l3Pt.pdf' % chan)
+plt.savefig('./plots/%s/%s_l3Pt.pdf' % (subdir, chan))
 
 plt.clf()
 (n, bins) = np.histogram(l4Pt0, nbins, range=(xlow, xhigh))
@@ -180,4 +184,4 @@ plt.ylim(ymin=0)
 plt.title('%s, 8 TeV, 19.6 ifb' % chan)
 plt.xlabel('l4 pT [GeV]')
 plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
-plt.savefig('./plots/%s_l4Pt.pdf' % chan)
+plt.savefig('./plots/%s/%s_l4Pt.pdf' % (subdir, chan))

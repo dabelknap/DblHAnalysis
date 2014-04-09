@@ -5,20 +5,32 @@ import ROOT as rt
 sys.argv.pop()
 
 
-def muon_id(rtrow, *lep):
+def muon_id(rtrow, *lep, **kwargs):
+    control = kwargs.get('control', False)
+
     dz = [getattr(rtrow, "m%iPVDZ" % l) < 1.0 for l in lep]
     dxy = [getattr(rtrow, "m%iPVDXY" % l) < 0.5 for l in lep]
-    sip = [getattr(rtrow, "m%iIP3DS" % l) < 4.0 for l in lep]
+
+    if control:
+        sip = [getattr(rtrow, "m%iIP3DS" % l) > 4.0 for l in lep]
+    else:
+        sip = [getattr(rtrow, "m%iIP3DS" % l) < 4.0 for l in lep]
 
     mu_type = [getattr(rtrow, "m%iIsTracker" % l) or getattr(rtrow, "m%iIsGlobal" % l) for l in lep]
 
     return all(dz + dxy + sip + mu_type)
 
 
-def elec_id(rtrow, *lep):
+def elec_id(rtrow, *lep, **kwargs):
+    control = kwargs.get('control', False)
+
     dz = [getattr(rtrow, "e%iPVDZ" % l) < 1.0 for l in lep]
     dxy = [getattr(rtrow, "e%iPVDXY" % l) < 0.5 for l in lep]
-    sip = [getattr(rtrow, "e%iIP3DS" % l) < 4.0 for l in lep]
+
+    if control:
+        sip = [getattr(rtrow, "e%iIP3DS" % l) > 4.0 for l in lep]
+    else:
+        sip = [getattr(rtrow, "e%iIP3DS" % l) < 4.0 for l in lep]
 
     nhit = [getattr(rtrow, "e%iMissingHits" % l) <= 1 for l in lep]
 

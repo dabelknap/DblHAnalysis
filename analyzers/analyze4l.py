@@ -259,6 +259,45 @@ class Analyzer4lMMMM(Analyzer4l):
         return cuts.evaluate(rtrow)
 
 
+class AnalyzerControlMMMM(Analyzer4l):
+
+    def __init__(self, sample_location, out_file):
+        self.channel = 'mmmm'
+        self.leptons = ['m1', 'm2', 'm3', 'm4']
+
+        super(AnalyzerControlMMMM, self).__init__(sample_location, out_file)
+
+
+    def fiducial(self, rtrow):
+        pt_cut = 5.0
+        eta_cut = 2.4
+        pts = [getattr(rtrow, "%sPt" % l) > pt_cut for l in self.leptons]
+        etas = [getattr(rtrow, "%sAbsEta" % l) < eta_cut for l in self.leptons]
+        return all(pts) and all(etas)
+
+
+    def muID(self, rtrow):
+        return lepId.muon_id(rtrow, 1, 2, 3, 4, control=True)
+
+
+    def isolation(self, rtrow):
+        iso_type = "RelPFIsoDB"
+        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) > 0.4 for l in self.leptons]
+        return all(isos)
+
+
+    def preselection(self, rtrow):
+        cuts = CutSequence()
+        cuts.add(self.fiducial)
+        cuts.add(self.muID)
+        cuts.add(self.trigger_threshold)
+        cuts.add(self.qcd_rejection)
+        cuts.add(self.isolation)
+
+        return cuts.evaluate(rtrow)
+
+
+
 
 def parse_command_line(argv):
     parser = argparse.ArgumentParser()

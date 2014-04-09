@@ -34,6 +34,13 @@ def main():
                 print "4ele analyzer"
                 eleanalyzer.analyze()
 
+    elif sys.argv[1] == "ctrl":
+        for name in sample_names:
+            print "processing %s" % name
+            with an4l.AnalyzerControlMMMM("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
+                print "4mu control analyzer"
+                muanalyzer.analyze()
+
     else:
         raise ValueError("%s is invalid option" % sys.argv[1])
 

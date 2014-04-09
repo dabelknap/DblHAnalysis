@@ -12,6 +12,8 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'ZZTo4e_8TeV-powheg-pythia6': 0.07691 * PB,
          'ZZTo4mu_8TeV-powheg-pythia6': 0.07691 * PB,
 
+         'ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola': 0.1296 * PB,
+
          'T_s-channel_TuneZ2star_8TeV-powheg-tauola': 3.79 * PB,
          'T_t-channel_TuneZ2star_8TeV-powheg-tauola': 56.4 * PB,
          'T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola': 11.1 * PB,
@@ -29,6 +31,8 @@ nevents = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 1249577.0,
 
            'ZZTo4e_8TeV-powheg-pythia6': 1476608.0,
            'ZZTo4mu_8TeV-powheg-pythia6': 1499064.0,
+
+           'ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola': 4807893.0,
 
            'T_s-channel_TuneZ2star_8TeV-powheg-tauola': 259961.0,
            'T_t-channel_TuneZ2star_8TeV-powheg-tauola': 96351.0,
