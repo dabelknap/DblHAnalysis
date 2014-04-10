@@ -76,7 +76,7 @@ class Analyzer(object):
         event_set = None
 
         for i, filename in enumerate(self.filenames):
-            if i % 20 == 0:
+            if i % len(self.filenames)/20 == 0:
                 print "Processing %i/%i files" % (i+1, len(self.filenames))
 
             file_path = os.path.join(self.sample_location, filename)
@@ -90,7 +90,7 @@ class Analyzer(object):
                 for rtrow in tree:
 
                     if event_set:
-                        if (rtrow.evt, rtrow.lumi, rtrow.run) not in event_set:
+                        if (rtrow.evt, rtrow.lumi, rtrow.run) not in event_set and best_cand[0]:
                             self.h5row.append()
                             best_cand = (0, float('inf'), [])
                     else:
@@ -108,7 +108,9 @@ class Analyzer(object):
                         self.store_row(rtrow, self.h5row, *candidate[2])
                         best_cand = tuple(candidate)
 
-                self.h5row.append()
+                if best_cand[0]:
+                    self.h5row.append()
+
             self.table.flush()
             rtFile.Close()
 
