@@ -1,6 +1,7 @@
 from analyzers import analyze4l as an4l
 from analyzers import analyzeZZ as anZZ
 from analyzers import Analyzer4l
+from analyzers import Control4l
 import glob
 import os
 import sys
@@ -30,6 +31,12 @@ def main():
             with Analyzer4l("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as analyzer:
                 analyzer.analyze()
 
+    elif sys.argv[1] == "ctrl":
+        for name in sample_names:
+            print "Processing %s" % name
+            with Control4l("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as analyzer:
+                analyzer.analyze()
+
     elif sys.argv[1] == "zz":
         for name in sample_names:
             print "processing %s" % name
@@ -41,7 +48,7 @@ def main():
                 print "4ele analyzer"
                 eleanalyzer.analyze()
 
-    elif sys.argv[1] == "ctrl":
+    elif sys.argv[1] == "ctrl_old":
         for name in sample_names:
             print "processing %s" % name
             with an4l.AnalyzerControlMMMM("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
