@@ -250,8 +250,30 @@ class Analyzer4l(Analyzer):
         return cuts.evaluate(rtrow)
 
 
+class Control4l(Analyzer4l):
+
+    def __init__(self, sample_location, outfile):
+        self.channel = "dblh4l_control"
+        self.final_states = ["mmmm", "eeee", "eemm"]
+        super(Control4l, self).__init__(sample_location, outfile)
+
+    def ID(self, rtrow):
+        return lepId.lep_id(rtrow, *self.leptons, control=True)
+
+    def isolation(self, rtrow):
+        e_iso_type = "RelPFIsoRho"
+        m_iso_type = "RelPFIsoDB"
+        e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type)) > 0.4
+                  for l in self.leptons if l[0] == 'e']
+        m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type)) > 0.4
+                  for l in self.leptons if l[0] == 'm']
+
+        return all(e_isos + m_isos)
+
+
+
 def main():
-    with Analyzer4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",
+    with Control4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",
                     "test.h5") as analyzer4l:
         analyzer4l.analyze()
 

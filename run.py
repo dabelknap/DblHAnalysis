@@ -1,5 +1,6 @@
 from analyzers import analyze4l as an4l
 from analyzers import analyzeZZ as anZZ
+from analyzers import Analyzer4l
 import glob
 import os
 import sys
@@ -12,7 +13,7 @@ def main():
                     for string in sys.argv[2:]
                     for fname in glob.glob("%s/%s" % (root_dir, string))]
 
-    if sys.argv[1] == "4l":
+    if sys.argv[1] == "4l_old":
         for name in sample_names:
             print "processing %s" % name
             with an4l.Analyzer4lMMMM("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as muanalyzer:
@@ -22,6 +23,12 @@ def main():
             with an4l.Analyzer4lEEEE("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as eleanalyzer:
                 print "4ele analyzer"
                 eleanalyzer.analyze()
+
+    elif sys.argv[1] == "4l":
+        for name in sample_names:
+            print "Processing %s" % name
+            with Analyzer4l("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) as analyzer:
+                analyzer.analyze()
 
     elif sys.argv[1] == "zz":
         for name in sample_names:
