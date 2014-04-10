@@ -76,7 +76,10 @@ class Analyzer(object):
         event_set = None
 
         for i, filename in enumerate(self.filenames):
-            if i % len(self.filenames)/20 == 0:
+            if len(self.filenames) > 20:
+                if i % (len(self.filenames)/20) == 0:
+                    print "Processing %i/%i files" % (i+1, len(self.filenames))
+            else:
                 print "Processing %i/%i files" % (i+1, len(self.filenames))
 
             file_path = os.path.join(self.sample_location, filename)
