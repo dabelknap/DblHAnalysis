@@ -90,6 +90,8 @@ class Analyzer(object):
 
                 self.leptons = self.enumerate_leps(fs)
 
+                best_cand = (0, float('inf'), [])
+
                 for rtrow in tree:
 
                     if event_set:
@@ -256,9 +258,9 @@ class Analyzer4l(Analyzer):
 class Control4l(Analyzer4l):
 
     def __init__(self, sample_location, outfile):
+        super(Control4l, self).__init__(sample_location, outfile)
         self.channel = "dblh4l_control"
         self.final_states = ["mmmm", "eeee", "eemm"]
-        super(Control4l, self).__init__(sample_location, outfile)
 
     def ID(self, rtrow):
         return lepId.lep_id(rtrow, *self.leptons, control=True)
