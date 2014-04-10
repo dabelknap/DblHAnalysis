@@ -119,9 +119,9 @@ class Analyzer(object):
         def lep_order(a, b):
             a_index = int(a[1])
             b_index = int(b[1])
-            return a_index > b_index
+            return a_index > b_index or a[0] > b[0]
 
-        cands = []
+        cands = [(0, float('inf'), [])]
         for l in permutations(self.leptons):
             if lep_order(l[0], l[1]) or lep_order(l[2], l[3]):
                 continue
@@ -194,7 +194,7 @@ class Analyzer4l(Analyzer):
 
     def __init__(self, sample_location, outfile):
         self.channel = "dblh4l"
-        self.final_states = ["mmmm", "eeee"]
+        self.final_states = ["mmmm", "eeee", "eemm"]
         super(Analyzer4l, self).__init__(sample_location, outfile)
 
     def fiducial(self, rtrow):
