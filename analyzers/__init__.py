@@ -263,7 +263,7 @@ class Control4l(Analyzer4l):
         self.final_states = ["mmmm", "eeee", "eemm"]
 
     def ID(self, rtrow):
-        return lepId.lep_id(rtrow, *self.leptons, control=True)
+        return lepId.lep_id(rtrow, *self.leptons)
 
     def isolation(self, rtrow):
         e_iso_type = "RelPFIsoRho"
@@ -274,6 +274,15 @@ class Control4l(Analyzer4l):
                   for l in self.leptons if l[0] == 'm']
 
         return all(e_isos + m_isos)
+
+    def preselection(self, rtrow):
+        cuts = CutSequence()
+        cuts.add(self.fiducial)
+        cuts.add(self.ID)
+        cuts.add(self.trigger_threshold)
+        cuts.add(self.isolation)
+
+        return cuts.evaluate(rtrow)
 
 
 
