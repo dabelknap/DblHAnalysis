@@ -1,4 +1,5 @@
 import sys
+import os
 import json
 
 from math import floor
@@ -11,7 +12,8 @@ sys.argv.pop()
 class PileupWeights(object):
 
     def __init__(self):
-        with open('./analyzers/pile_up/pu_weights.json', 'r') as pu_file:
+        path = os.path.join(os.path.dirname(__file__), 'pu_weights.json')
+        with open(path, 'r') as pu_file:
             self.pu_weights = json.load(pu_file)
 
 
