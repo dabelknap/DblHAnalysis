@@ -190,7 +190,7 @@ class Analyzer(object):
             h5row["l%iChg" % j] = getattr(rtrow, "%sCharge" % l)
             h5row["l%sFlv" % j] = l[0]
             if l[0] == 'm':
-                h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
+                h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoDBDefault" % l)
             elif l[0] == 'e':
                 h5row["l%sIso" % j] = getattr(rtrow, "%sRelPFIsoRho" % l)
 
@@ -226,7 +226,7 @@ class Analyzer4l(Analyzer):
 
     def isolation(self, rtrow):
         e_iso_type = "RelPFIsoRho"
-        m_iso_type = "RelPFIsoDB"
+        m_iso_type = "RelPFIsoDBDefault"
         e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type)) < 0.4
                   for l in self.leptons if l[0] == 'e']
         m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type)) < 0.4
@@ -267,7 +267,7 @@ class Control4l(Analyzer4l):
 
     def isolation(self, rtrow):
         e_iso_type = "RelPFIsoRho"
-        m_iso_type = "RelPFIsoDB"
+        m_iso_type = "RelPFIsoDBDefault"
         e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type)) > 0.4
                   for l in self.leptons if l[0] == 'e']
         m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type)) > 0.4
