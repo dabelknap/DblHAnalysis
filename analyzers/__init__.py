@@ -202,6 +202,13 @@ class Analyzer4l(Analyzer):
         self.final_states = ["mmmm", "eeee", "eemm"]
         super(Analyzer4l, self).__init__(sample_location, outfile)
 
+    def trigger(self, rtrow):
+        triggers = ["mu17ele8isoPass", "mu8ele17isoPass",
+                    "doubleETightPass", "tripleEPass",
+                    "doubleMuPass", "doubleMuTrkPass"]
+
+        return any([getattr(rtrow, t) > 0 for t in triggers])
+
     def fiducial(self, rtrow):
         e_pt_cut = 15.0
         e_eta_cut = 2.5
@@ -246,6 +253,7 @@ class Analyzer4l(Analyzer):
 
     def preselection(self, rtrow):
         cuts = CutSequence()
+        cuts.add(self.trigger)
         cuts.add(self.fiducial)
         cuts.add(self.ID)
         cuts.add(self.trigger_threshold)
@@ -277,6 +285,7 @@ class Control4l(Analyzer4l):
 
     def preselection(self, rtrow):
         cuts = CutSequence()
+        cuts.add(self.trigger)
         cuts.add(self.fiducial)
         cuts.add(self.ID)
         cuts.add(self.trigger_threshold)
