@@ -116,9 +116,13 @@ class Plotter(object):
                 label=labels, **hist_style)
 
         for i, name in enumerate(self.sample_order):
-            for p in patches[i]:
-                p.set_facecolor(self.sample_groups[name]['facecolor'])
-                p.set_edgecolor(self.sample_groups[name]['edgecolor'])
+            try:
+                for p in patches[i]:
+                    p.set_facecolor(self.sample_groups[name]['facecolor'])
+                    p.set_edgecolor(self.sample_groups[name]['edgecolor'])
+            except TypeError:
+                patches[i].set_facecolor(self.sample_groups[name]['facecolor'])
+                patches[i].set_edgecolor(self.sample_groups[name]['edgecolor'])
 
         plt.legend(loc=legend_loc)
         plt.ylim(ymin=0)
