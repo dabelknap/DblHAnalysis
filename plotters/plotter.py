@@ -50,13 +50,15 @@ class Plotter(object):
 
         edgecolor = kwargs.get('edgecolor', 'black')
         facecolor = kwargs.get('facecolor', 'white')
+        is_data = kwargs.get('isdata', False)
 
         self.sample_groups[group_name] = {
                 'sample_names': [os.path.splitext(os.path.basename(x))[0]
                                  for x in samples],
                 'edgecolor': edgecolor,
                 'facecolor': facecolor,
-                'label': label}
+                'label': label,
+                'isdata': is_data}
 
     def stack_order(self, *sample_order):
         """
@@ -110,10 +112,30 @@ class Plotter(object):
             weights.append(wgts)
             labels += [self.sample_groups[mc]['label']]
 
+        if 'data' in self.sample_groups:
+            vals = []
+            evt_set = set()
+            for sample_name in self.sample_groups['data']['sample_names']:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis), chan)
+                        for x in table.where(cut):
+                            if (x['evt'], x['run'], x['lumi']) not in evt_set:
+                                vals.append(x[var])
+                                evt_set.add((x['evt'], x['run'], x['lumi']))
+
+            (n1, bins1, patches1) = plt.hist(vals, nbins, range=(xmin, xmax))
+            plt.clf()
+
         plt.figure(figsize=(5, 4))
         (n, bins, patches) = plt.hist(
                 values, nbins, weights=weights, range=(xmin, xmax),
                 label=labels, **hist_style)
+
+        if 'data' in self.sample_groups:
+            plt.errorbar(0.5*(bins[1:]+bins[:-1]), n1, yerr=np.sqrt(n1),
+                         fmt='ko', capsize=0, linewidth=1, ms=5, label="Observed")
 
         for i, name in enumerate(self.sample_order):
             try:
@@ -125,7 +147,10 @@ class Plotter(object):
                 patches[i].set_edgecolor(self.sample_groups[name]['edgecolor'])
 
         plt.legend(loc=legend_loc)
-        plt.ylim(ymin=0)
+        if log_scale:
+            plt.ylim(ymin=0.1)
+        else:
+            plt.ylim(ymin=0)
         if ylab_width:
             plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
         else:
