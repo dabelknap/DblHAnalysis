@@ -2,7 +2,7 @@ import tables as tb
 import numpy as np
 import os
 import sys
-from itertools import permutations
+from itertools import permutations, combinations
 import argparse
 
 from ntuple_defs import EventZZ
@@ -72,33 +72,45 @@ class ZZAnalyzer(object):
         event_set = None
 
         for i, file_name in enumerate(self.file_names):
-            if i % 20 == 0:
-                print "  Processing %i/%i files" % (i+1, len(self.file_names))
+            if len(self.file_names) > 20:
+                if i % (len(self.file_names)/20) == 0:
+                    print "  Processing %i/%i files" % (i+1, len(self.file_names))
+            else:
+                print "Processing %i/%i files" % (i+1, len(self.file_names))
+
             file_path = os.path.join(self.sample_location, file_name)
             rtFile = rt.TFile(file_path, "READ")
-            tree = rtFile.Get("%s/final/Ntuple" % self.channel)
 
-            for rtrow in tree:
-                if event_set:
-                    if rtrow.evt not in event_set:
-                        self.h5row.append()
+            for fs in self.final_states:
+                tree = rtFile.Get("%s/final/Ntuple" % fs)
+
+                self.leptons = self.enumerate_leps(fs)
+
+                best_cand = (0, 0, [])
+
+                for rtrow in tree:
+                    if event_set:
+                        if (rtrow.evt, rtrow.lumi, rtrow.run) not in event_set and best_cand[0]:
+                            self.h5row.append()
+                            best_cand = (0, 0, [])
+                    else:
                         best_cand = (0, 0, [])
-                else:
-                    best_cand = (0, 0, [])
-                    event_set = set()
+                        event_set = set()
 
-                if not self.preselection(rtrow):
-                    continue
+                    if not self.preselection(rtrow):
+                        continue
 
-                event_set.add(rtrow.evt)
+                    event_set.add((rtrow.evt, rtrow.lumi, rtrow.run))
 
-                candidate = self.choose_leptons(rtrow)
+                    candidate = self.choose_leptons(rtrow)
 
-                if self.good_to_store(candidate, best_cand):
-                    self.store_row(rtrow, self.h5row, *candidate[2])
-                    best_cand = tuple(candidate)
+                    if self.good_to_store(candidate, best_cand):
+                        self.store_row(rtrow, self.h5row, *candidate[2])
+                        best_cand = tuple(candidate)
 
-            self.h5row.append()
+                if best_cand[0]:
+                    self.h5row.append()
+
             self.table.flush()
             rtFile.Close()
 
@@ -119,9 +131,9 @@ class ZZAnalyzer(object):
         def lep_order(a, b):
             a_index = int(a[1])
             b_index = int(b[1])
-            return a_index > b_index
+            return a_index > b_index or a[0] > b[0]
 
-        cands = []
+        cands = [(0, 0, [])]
         for l in permutations(self.leptons):
             if lep_order(l[0], l[1]) or lep_order(l[2], l[3]):
                 continue
@@ -145,6 +157,14 @@ class ZZAnalyzer(object):
         return (z1mass, z2Pt, leps)
 
     @staticmethod
+    def enumerate_leps(final_state):
+        out = []
+        for i  in ['e', 'm', 't']:
+            N = final_state.count(i)
+            out += ['%s%i' % (i, n) for n in xrange(1, N+1)]
+        return out
+
+    @staticmethod
     def good_to_store(cand1, cand2):
         """Is cand1 better than cand2 for ZZ?"""
         if abs(cand1[0] - ZMASS) < abs(cand2[0] - ZMASS):
@@ -160,7 +180,7 @@ class ZZAnalyzer(object):
         h5row["lep_scale"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
         h5row["pu_weight"] = self.pu_weights.weight(rtrow)
 
-        h5row["channel"] = self.channel
+        h5row["channel"] = "%s%s%s%s" % (l1[0], l2[0], l3[0], l4[0])
 
         h5row["mass"] = rtrow.Mass
         h5row["z1mass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2))
@@ -172,72 +192,76 @@ class ZZAnalyzer(object):
             h5row["l%iEta" % j] = getattr(rtrow, "%sEta" % l)
             h5row["l%iPhi" % j] = getattr(rtrow, "%sPhi" % l)
             h5row["l%iChg" % j] = getattr(rtrow, "%sCharge" % l)
-            h5row["l%iIso" % j] = getattr(rtrow, "%sRelPFIsoDB" % l)
+            if l[0] == 'm':
+                h5row["l%iIso" % j] = getattr(rtrow, "%sRelPFIsoDBDefault" % l)
+            elif l[0] == 'e':
+                h5row["l%iIso" % j] = getattr(rtrow, "%sRelPFIsoRho" % l)
 
 
-class ZZAnalyzerEEEE(ZZAnalyzer):
+class ZZAnalyzer4l(ZZAnalyzer):
 
     def __init__(self, sample_location, out_file):
-        self.channel = "eeee"
-        self.leptons = ["e1", "e2", "e3", "e4"]
+        self.channel = "zz4l"
+        self.final_states = ["mmmm", "eeee", "eemm"]
+        super(ZZAnalyzer4l, self).__init__(sample_location, out_file)
 
-        super(ZZAnalyzerEEEE, self).__init__(sample_location, out_file)
+    def trigger(self, rtrow):
+        triggers = ["mu17ele8isoPass", "mu8ele17isoPass",
+                    "doubleETightPass", "tripleEPass",
+                    "doubleMuPass", "doubleMuTrkPass"]
+
+        return any([getattr(rtrow, t) > 0 for t in triggers])
 
     def fiducial(self, rtrow):
-        pt_cut = 5.0
-        eta_cut = 2.4
-        pts = [getattr(rtrow, "%sPt" % l) > pt_cut for l in self.leptons]
-        etas = [getattr(rtrow, "%sAbsEta" % l) < eta_cut for l in self.leptons]
-        return all(pts) and all(etas)
+        e_pt_cut = 7.0
+        e_eta_cut = 2.5
 
-    def eleID(self, rtrow):
-        return lepId.elec_id(rtrow, 1, 2, 3, 4)
+        m_pt_cut = 5.0
+        m_eta_cut = 2.4
+
+        e_pts = [getattr(rtrow, "%sPt" % l) > e_pt_cut
+                for l in self.leptons if l[0] == 'e']
+        e_eta = [getattr(rtrow, "%sAbsEta" % l) < e_eta_cut
+                for l in self.leptons if l[0] == 'e']
+
+        m_pts = [getattr(rtrow, "%sPt" % l) > m_pt_cut
+                for l in self.leptons if l[0] == 'm']
+        m_eta = [getattr(rtrow, "%sAbsEta" % l) < m_eta_cut
+                for l in self.leptons if l[0] == 'm']
+
+        return all(e_pts) and all(m_pts) and all(e_eta) and all(m_eta)
+
+    def ID(self, rtrow):
+        return lepId.lep_id(rtrow, *self.leptons)
 
     def isolation(self, rtrow):
-        iso_type = "RelPFIsoRho"
-        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.4
-                for l in self.leptons]
-        return all(isos)
+        e_iso_type = "RelPFIsoRho"
+        m_iso_type = "RelPFIsoDBDefault"
+        e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type)) < 0.4
+                  for l in self.leptons if l[0] == 'e']
+        m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type)) < 0.4
+                  for l in self.leptons if l[0] == 'm']
+
+        return all(e_isos + m_isos)
+
+    def trigger_threshold(self, rtrow):
+        pts = [getattr(rtrow, "%sPt" % l) for l in self.leptons]
+        pts.sort(reverse=True)
+        return pts[0] > 20.0 and pts[1] > 10.0
+
+    def qcd_rejection(self, rtrow):
+        qcd_pass = [getattr(rtrow, "%s_%s_Mass" % (l[0], l[1])) > 4.0 or
+                    getattr(rtrow, "%s_%s_SS" % (l[0], l[1])) > 0.0
+                    for l in combinations(self.leptons, 2)]
+        return all(qcd_pass)
 
     def preselection(self, rtrow):
         cuts = CutSequence()
+        cuts.add(self.trigger)
         cuts.add(self.fiducial)
+        cuts.add(self.ID)
         cuts.add(self.trigger_threshold)
-        cuts.add(self.eleID)
-        cuts.add(self.isolation)
-
-        return cuts.evaluate(rtrow)
-
-
-class ZZAnalyzerMMMM(ZZAnalyzer):
-
-    def __init__(self, sample_location, out_file):
-        self.channel = "mmmm"
-        self.leptons = ["m1", "m2", "m3", "m4"]
-
-        super(ZZAnalyzerMMMM, self).__init__(sample_location, out_file)
-
-    def fiducial(self, rtrow):
-        pt_cut = 5.0
-        eta_cut = 2.4
-        pts = [getattr(rtrow, "%sPt" % l) > pt_cut for l in self.leptons]
-        etas = [getattr(rtrow, "%sAbsEta" % l) < eta_cut for l in self.leptons]
-        return all(pts) and all(etas)
-
-    def muID(self, rtrow):
-        return lepId.muon_id(rtrow, 1, 2, 3, 4)
-
-    def isolation(self, rtrow):
-        iso_type = "RelPFIsoDB"
-        isos = [getattr(rtrow, "%s%s" % (l, iso_type)) < 0.2
-                for l in self.leptons]
-        return all(isos)
-
-    def preselection(self, rtrow):
-        cuts = CutSequence()
-        cuts.add(self.fiducial)
-        cuts.add(self.trigger_threshold)
-        cuts.add(self.muID)
+        cuts.add(self.qcd_rejection)
         cuts.add(self.isolation)
 
         return cuts.evaluate(rtrow)
