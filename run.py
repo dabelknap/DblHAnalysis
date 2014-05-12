@@ -40,15 +40,9 @@ def run_ntuples(analyzer_type, samples):
     elif analyzer_type == "zz":
         for name in sample_names:
             print "processing %s" % name
-            with anZZ.ZZAnalyzerMMMM("%s/%s" % (root_dir, name),
-                                     "%s/%s.h5" % (ntup_dir, name)) as mAnlyzr:
-                print "4mu analyzer"
-                mAnlyzer.analyze()
-
-            with anZZ.ZZAnalyzerEEEE("%s/%s" % (root_dir, name),
-                                     "%s/%s.h5" % (ntup_dir, name)) as eAnlyzr:
-                print "4ele analyzer"
-                eAnlyzer.analyze()
+            with anZZ.ZZAnalyzer4l("%s/%s" % (root_dir, name),
+                                     "%s/%s.h5" % (ntup_dir, name)) as Anlyzr:
+                Anlyzr.analyze()
 
     else:
         raise ValueError("%s is invalid option" % analyzer_type)
