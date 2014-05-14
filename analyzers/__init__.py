@@ -166,12 +166,21 @@ class Analyzer(object):
         h5row["lumi"] = rtrow.lumi
         h5row["run"] = rtrow.run
 
+        h5row["nvtx"] = rtrow.nvtx
+
         h5row["lep_scale"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
         h5row["pu_weight"] = self.pu_weights.weight(rtrow)
 
         h5row["channel"] = "%s%s%s%s" % (l1[0], l2[0], l3[0], l4[0])
 
         h5row["mass"] = rtrow.Mass
+        h5row["met"] = rtrow.pfMetEt
+        h5row["metPhi"] = rtrow.pfMetPhi
+
+        h5row["jetVeto"] = rtrow.jetVeto30_DR05
+
+        h5row["sT"] = getattr(rtrow, "%sPt" % l1) + getattr(rtrow, "%sPt" % l2) \
+                    + getattr(rtrow, "%sPt" % l3) + getattr(rtrow, "%sPt" % l4)
 
         h5row["h1mass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2))
         h5row["h2mass"] = getattr(rtrow, "%s_%s_Mass" % (l3, l4))

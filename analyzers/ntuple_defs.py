@@ -6,6 +6,8 @@ class EventBase(tb.IsDescription):
     run     = tb.Int32Col()
     lumi    = tb.Int32Col()
 
+    nvtx    = tb.Int32Col()
+
     channel = tb.StringCol(4)
 
     lep_scale = tb.Float32Col()
@@ -15,7 +17,12 @@ class EventBase(tb.IsDescription):
 class Event4l(EventBase):
     mass    = tb.Float32Col()
 
+    sT      = tb.Float32Col()
+
     met     = tb.Float32Col()
+    metPhi  = tb.Float32Col()
+
+    jetVeto = tb.Int32Col()
 
     h1mass  = tb.Float32Col()
     sT1     = tb.Float32Col()
