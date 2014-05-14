@@ -158,7 +158,7 @@ class Plotter(object):
         plt.xlabel(xlab)
         plt.title(title)
 
-        plt.tight_layout(0.5)
+        plt.tight_layout(1.0)
 
         plt.savefig("%s/%s" % (self.out_dir, file_name))
 
