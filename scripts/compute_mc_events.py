@@ -40,6 +40,14 @@ def sample_counts(sample_location):
 
 
 def main(argv=None):
+    filename = './plotters/mc_events.json'
+
+    try:
+        with open(filename, 'r') as infile:
+            out = json.load(infile)
+    except IOError:
+        out = {}
+
     log = logging.getLogger(__name__)
 
     logging.basicConfig(level=logging.INFO)
@@ -50,15 +58,12 @@ def main(argv=None):
                     for string in sys.argv[1:]
                     for fname in glob.glob("%s/%s" % (root_dir, string))]
 
-    out = {}
     for name in sample_names:
         out[name] = sample_counts("%s/%s" % (root_dir, name))
         log.info("Processing %s: %i" % (name, out[name]))
 
-    outfile = open('./plotters/mc_events.json', 'w')
-    outfile.write(json.dumps(out, indent=4, sort_keys=True))
-
-    outfile.close()
+    with open('./plotters/mc_events.json', 'w') as outfile:
+        outfile.write(json.dumps(out, indent=4, sort_keys=True))
 
 
 if __name__ == "__main__":
