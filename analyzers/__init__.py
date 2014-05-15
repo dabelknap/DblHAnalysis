@@ -303,6 +303,50 @@ class Control4l(Analyzer4l):
         return cuts.evaluate(rtrow)
 
 
+class TTControl4l(Analyzer4l):
+
+    def __init__(self, sample_location, outfile):
+        super(TTControl4l, self).__init__(sample_location, outfile)
+        self.channel = "dblh4l_tt_control"
+        self.final_states = ["mmmm", "eeee", "eemm"]
+
+    def zveto(self, rtrow):
+
+        l = self.leptons
+
+        indices = [(i, j) for i in xrange(4) for j in xrange(i+1, 4)]
+        mass_diffs = [abs(getattr(rtrow, "%s_%s_Mass" % (l[a[0]], l[a[1]])) - ZMASS) for a in indices
+                    if getattr(rtrow, "%s_%s_SS" % (l[a[0]], l[a[1]])) < 1]
+
+        if mass_diffs:
+            return min(mass_diffs) > 20
+        else:
+            return False
+
+    def isolation(self, rtrow):
+        e_iso_type = "RelPFIsoRho"
+        m_iso_type = "RelPFIsoDBDefault"
+        e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type))
+                  for l in self.leptons if l[0] == 'e']
+        m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type))
+                  for l in self.leptons if l[0] == 'm']
+
+        isos = e_isos + m_isos
+        isos.sort()
+
+        return isos[0] < 0.4 and isos[1] < 0.4 and isos[3] > 0.4
+
+    def preselection(self, rtrow):
+        cuts = CutSequence()
+        cuts.add(self.trigger)
+        cuts.add(self.fiducial)
+        cuts.add(self.ID)
+        cuts.add(self.trigger_threshold)
+        cuts.add(self.isolation)
+        cuts.add(self.zveto)
+
+        return cuts.evaluate(rtrow)
+
 
 def main():
     with Control4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",

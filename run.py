@@ -13,6 +13,7 @@ import argparse
 from analyzers import analyzeZZ as anZZ
 from analyzers import Analyzer4l
 from analyzers import Control4l
+from analyzers import TTControl4l
 
 
 def run_ntuples(analyzer_type, samples):
@@ -34,6 +35,13 @@ def run_ntuples(analyzer_type, samples):
         for name in sample_names:
             print "Processing %s" % name
             with Control4l("%s/%s" % (root_dir, name),
+                           "%s/%s.h5" % (ntup_dir, name)) as analyzer:
+                analyzer.analyze()
+
+    elif analyzer_type == "tt":
+        for name in sample_names:
+            print "Processing %s" % name
+            with TTControl4l("%s/%s" % (root_dir, name),
                            "%s/%s.h5" % (ntup_dir, name)) as analyzer:
                 analyzer.analyze()
 
