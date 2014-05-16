@@ -133,8 +133,11 @@ class Plotter(object):
                 values, nbins, weights=weights, range=(xmin, xmax),
                 label=labels, **hist_style)
 
+        if log_scale:
+            plt.yscale('log')
+
         if 'data' in self.sample_groups:
-            plt.errorbar(0.5*(bins[1:]+bins[:-1]), n1, yerr=np.sqrt(n1),
+            plt.errorbar(0.5*(bins[1:]+bins[:-1]), n1, yerr=[np.sqrt(n1)*0.99,np.sqrt(n1)],
                          fmt='ko', capsize=0, linewidth=1, ms=5, label="Observed")
 
         for i, name in enumerate(self.sample_order):
