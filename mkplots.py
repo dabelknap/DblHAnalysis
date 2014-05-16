@@ -38,6 +38,51 @@ def control():
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
 
+def tt_control():
+    cut = '(sT > 150) & (met > 30)'
+    plotter = Plotter("DblH", cut, "./ntuples", "./plots/tt_ctrl",
+                      channels=["dblh4l_tt_control"], lumi=19.7)
+
+    plotter.add_group("dyjets", r"Z+Jets", "Z[1234]jets*",
+                      facecolor='orange', edgecolor='darkorange')
+
+    plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",
+                      facecolor='mediumseagreen', edgecolor='darkgreen')
+
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
+
+    plotter.stack_order("top","dyjets")
+
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 250,
+            title='sqrt{s}= 8 TeV, L = 19.7 fb-1',
+            xlab='M [GeV]',
+            label_bin_width=True, log=True)
+
+    #plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$M_{l^+l^+}$ [GeV]',
+    #        label_bin_width=True, log=True)
+
+    #plotter.plot_stack('met.pdf', 'met', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$E_T^{miss}$ [GeV]',
+    #        label_bin_width=True, log=True)
+
+    #plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$s_T(\Phi^{++})$ [GeV]',
+    #        label_bin_width=True, log=True)
+
+    #plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$s_T(\Phi^{--})$ [GeV]',
+    #        label_bin_width=True, log=True)
+
+    #plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$s_T$ [GeV]',
+    #        label_bin_width=True, log=True)
+
 def zz():
     channels = ["mmmm"]
     tmp = ["channel == '%s'" % c for c in channels]
@@ -76,6 +121,8 @@ def main():
         zz()
     elif sys.argv[1] == "ctrl":
         control()
+    elif sys.argv[1] == "tt":
+        tt_control()
     else:
         raise ValueError("Incorrect option given: %s" % sys.argv[1])
 
