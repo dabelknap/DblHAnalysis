@@ -97,7 +97,7 @@ def z_control():
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("top","dyjets")
+    plotter.stack_order("top","dyjets","zz")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
