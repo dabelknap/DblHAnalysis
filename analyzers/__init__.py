@@ -316,7 +316,7 @@ class TTControl4l(Analyzer4l):
 
         indices = [(i, j) for i in xrange(4) for j in xrange(i+1, 4)]
         mass_diffs = [abs(getattr(rtrow, "%s_%s_Mass" % (l[a[0]], l[a[1]])) - ZMASS) for a in indices
-                    if getattr(rtrow, "%s_%s_SS" % (l[a[0]], l[a[1]])) < 1]
+                    if getattr(rtrow, "%s_%s_SS" % (l[a[0]], l[a[1]])) < 1 and l[a[0]][0] == l[a[1]][0]]
 
         if mass_diffs:
             return min(mass_diffs) > 20
