@@ -46,6 +46,14 @@ def run_4l(args):
         analyzer.analyze()
 
 
+def run_zz_4l(args):
+    location, outfile = args
+    print "processing %s" % name
+    with anZZ.ZZAnalyzer4l(location, outfile) as Anlyzr:
+        Anlyzr.analyze()
+
+
+
 def run_ntuples(analyzer_type, samples):
 
     root_dir = './root_files'
@@ -70,6 +78,7 @@ def run_ntuples(analyzer_type, samples):
         p.map(run_z_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
 
     elif analyzer_type == "zz":
+        p.map(run_zz_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
         for name in sample_names:
             print "processing %s" % name
             with anZZ.ZZAnalyzer4l("%s/%s" % (root_dir, name),
