@@ -53,35 +53,30 @@ def tt_control():
 
     plotter.stack_order("top","dyjets")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 250,
-            title='sqrt{s}= 8 TeV, L = 19.7 fb-1',
-            xlab='M [GeV]',
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$M_{l^+l^+}$ [GeV]',
             label_bin_width=True, log=True)
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$M_{l^+l^+}$ [GeV]',
-    #        label_bin_width=True, log=True)
+    plotter.plot_stack('met.pdf', 'met', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$E_T^{miss}$ [GeV]',
+            label_bin_width=True, log=True)
 
-    #plotter.plot_stack('met.pdf', 'met', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$E_T^{miss}$ [GeV]',
-    #        label_bin_width=True, log=True)
+    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T(\Phi^{++})$ [GeV]',
+            label_bin_width=True, log=True)
 
-    #plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$s_T(\Phi^{++})$ [GeV]',
-    #        label_bin_width=True, log=True)
+    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T(\Phi^{--})$ [GeV]',
+            label_bin_width=True, log=True)
 
-    #plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$s_T(\Phi^{--})$ [GeV]',
-    #        label_bin_width=True, log=True)
-
-    #plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$s_T$ [GeV]',
-    #        label_bin_width=True, log=True)
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T$ [GeV]',
+            label_bin_width=True, log=True)
 
 def zz():
     channels = ["mmmm"]
