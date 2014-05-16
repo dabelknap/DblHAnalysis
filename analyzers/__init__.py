@@ -350,6 +350,39 @@ class TTControl4l(Analyzer4l):
         return cuts.evaluate(rtrow)
 
 
+class ZControl4l(Analyzer4l):
+
+    def __init__(self, sample_location, outfile):
+        super(ZControl4l, self).__init__(sample_location, outfile)
+        self.channel = "dblh4l_z_control"
+        self.final_states = ["mmmm", "eeee", "eemm"]
+
+    def zflag(self, rtrow):
+
+        l = self.leptons
+
+        indices = [(i, j) for i in xrange(4) for j in xrange(i+1, 4)]
+        mass_diffs = [abs(getattr(rtrow, "%s_%s_Mass" % (l[a[0]], l[a[1]])) - ZMASS) for a in indices
+                    if getattr(rtrow, "%s_%s_SS" % (l[a[0]], l[a[1]])) < 1 and l[a[0]][0] == l[a[1]][0]]
+
+        if mass_diffs:
+            return min(mass_diffs) < 20
+        else:
+            return False
+
+    def preselection(self, rtrow):
+        cuts = CutSequence()
+        cuts.add(self.trigger)
+        cuts.add(self.fiducial)
+        cuts.add(self.ID)
+        cuts.add(self.trigger_threshold)
+        cuts.add(self.qcd_rejection)
+        cuts.add(self.isolation)
+        cuts.add(self.zflag)
+
+        return cuts.evaluate(rtrow)
+
+
 def main():
     with Control4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",
                     "test.h5") as analyzer4l:
