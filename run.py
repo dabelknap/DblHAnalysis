@@ -10,40 +10,64 @@ import sys
 import glob
 import argparse
 
+from multiprocessing import Pool
+
 from analyzers import analyzeZZ as anZZ
 from analyzers import Analyzer4l
 from analyzers import Control4l
 from analyzers import TTControl4l
+from analyzers import ZControl4l
+
+def run_qcd_ctrl_4l(args):
+    location, outfile = args
+    print "Processing %s" % location
+    with Control4l(location, outfile) as analyzer:
+        analyzer.analyze()
+
+
+def run_z_ctrl_4l(args):
+    location, outfile = args
+    print "Processing %s" % location
+    with ZControl4l(location, outfile) as analyzer:
+        analyzer.analyze()
+
+
+def run_tt_ctrl_4l(args):
+    location, outfile = args
+    print "Processing %s" % location
+    with TTControl4l(location, outfile) as analyzer:
+        analyzer.analyze()
+
+
+def run_4l(args):
+    location, outfile = args
+    print "Processing %s" % location
+    with Analyzer4l(location, outfile) as analyzer:
+        analyzer.analyze()
 
 
 def run_ntuples(analyzer_type, samples):
+
     root_dir = './root_files'
     ntup_dir = './ntuples'
+
+    p = Pool(2)
 
     sample_names = [os.path.basename(fname)
                     for string in samples
                     for fname in glob.glob("%s/%s" % (root_dir, string))]
 
     if analyzer_type == "4l":
-        for name in sample_names:
-            print "Processing %s" % name
-            with Analyzer4l("%s/%s" % (root_dir, name),
-                            "%s/%s.h5" % (ntup_dir, name)) as analyzer:
-                analyzer.analyze()
+        p.map(run_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
 
     elif analyzer_type == "ctrl":
-        for name in sample_names:
-            print "Processing %s" % name
-            with Control4l("%s/%s" % (root_dir, name),
-                           "%s/%s.h5" % (ntup_dir, name)) as analyzer:
-                analyzer.analyze()
+        p.map(run_qcd_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
 
     elif analyzer_type == "tt":
-        for name in sample_names:
-            print "Processing %s" % name
-            with TTControl4l("%s/%s" % (root_dir, name),
-                           "%s/%s.h5" % (ntup_dir, name)) as analyzer:
-                analyzer.analyze()
+        p.map(run_tt_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
+
+    elif analyzer_type == "z":
+        p.map(run_z_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
 
     elif analyzer_type == "zz":
         for name in sample_names:
