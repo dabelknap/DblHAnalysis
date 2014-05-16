@@ -298,6 +298,7 @@ class Control4l(Analyzer4l):
         cuts.add(self.fiducial)
         cuts.add(self.ID)
         cuts.add(self.trigger_threshold)
+        cuts.add(self.qcd_rejection)
         cuts.add(self.isolation)
 
         return cuts.evaluate(rtrow)
@@ -342,6 +343,7 @@ class TTControl4l(Analyzer4l):
         cuts.add(self.fiducial)
         cuts.add(self.ID)
         cuts.add(self.trigger_threshold)
+        cuts.add(self.qcd_rejection)
         cuts.add(self.isolation)
         cuts.add(self.zveto)
 
