@@ -1,6 +1,41 @@
 from plotters.plotter import Plotter
 import sys
 
+def four_l():
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+                      channels=["dblh4l"], lumi=19.7)
+
+    plotter.add_group("hpp", "HPP", "HPlus*450*",
+                      facecolor='mediumorchid', edgecolor='indigo')
+    plotter.add_group("dyjets", "Z+Jets", "DYJets*",
+                      facecolor="orange", edgecolor="darkorange")
+    plotter.add_group("top", "Top", "T*",
+                      facecolor="mediumseagreen", edgecolor="darkgreen")
+    plotter.add_group("zz", "ZZ", "ZZTo*",
+                      facecolor="lightskyblue", edgecolor="darkblue")
+
+    plotter.stack_order("top", "dyjets", "zz", "hpp")
+
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$M_{l^+l^+}$ [GeV]',
+            label_bin_width=True, log=True)
+
+    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T(\Phi^{++})$ [GeV]',
+            label_bin_width=True, log=True)
+
+    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T(\Phi^{--})$ [GeV]',
+            label_bin_width=True, log=True)
+
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T$ [GeV]',
+            label_bin_width=True, log=True)
+
 def control():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/ctrl",
                       channels=["dblh4l_control"], lumi=19.7)
@@ -166,6 +201,8 @@ def main():
         tt_control()
     elif sys.argv[1] == "z":
         z_control()
+    elif sys.argv[1] == "4l":
+        four_l()
     else:
         raise ValueError("Incorrect option given: %s" % sys.argv[1])
 
