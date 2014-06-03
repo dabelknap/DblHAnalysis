@@ -91,27 +91,27 @@ def tt_control():
 
     plotter.stack_order("top","tt","dyjets")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 400,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('met.pdf', 'met', 25, 0, 500,
+    plotter.plot_stack('met.pdf', 'met', 10, 0, 400,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$E_T^{miss}$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+    plotter.plot_stack('st1.pdf', 'sT1', 10, 0, 400,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
+    plotter.plot_stack('st2.pdf', 'sT2', 10, 0, 400,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
+    plotter.plot_stack('st.pdf', 'sT', 10, 0, 400,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
@@ -134,27 +134,27 @@ def z_control():
 
     plotter.stack_order("top","dyjets","zz")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('met.pdf', 'met', 25, 0, 500,
+    plotter.plot_stack('met.pdf', 'met', 20, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$E_T^{miss}$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+    plotter.plot_stack('st1.pdf', 'sT1', 20, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
+    plotter.plot_stack('st2.pdf', 'sT2', 20, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
+    plotter.plot_stack('st.pdf', 'sT', 20, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
