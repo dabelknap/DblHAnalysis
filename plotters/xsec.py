@@ -39,6 +39,9 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola':    11.1 * PB,
          'Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola':     1.56 * PB,
          'Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola':     30.7 * PB,
-         'Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola': 11.1 * PB}
+         'Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola': 11.1 * PB,
+
+         'WZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola': 2.207 * PB,
+         'WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola':     1.058 * PB}
 
 nevents = json.load(open("./plotters/mc_events.json", 'r'))
