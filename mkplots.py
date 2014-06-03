@@ -87,9 +87,12 @@ def tt_control():
     plotter.add_group("top", "$t$", "T_*", "Tbar_*",
                       facecolor='lightseagreen', edgecolor='seagreen')
 
+    plotter.add_group("wz", "$WZ$", "WZJets*",
+                      facecolor='mediumpurple', edgecolor='midnightblue')
+
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("top","tt","dyjets")
+    plotter.stack_order("wz", "top", "tt", "dyjets")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 400,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
@@ -130,9 +133,12 @@ def z_control():
     plotter.add_group("zz", "ZZ", "ZZTo*",
                       facecolor='lightskyblue', edgecolor='darkblue')
 
+    plotter.add_group("wz", "$WZ$", "WZJets*",
+                      facecolor='mediumpurple', edgecolor='midnightblue')
+
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("top","dyjets","zz")
+    plotter.stack_order("wz", "top", "dyjets", "zz")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
