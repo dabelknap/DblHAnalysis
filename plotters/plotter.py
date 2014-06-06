@@ -1,6 +1,7 @@
 import sys
 import os
 import glob
+import logging
 
 import numpy as np
 import tables as tb
@@ -37,6 +38,9 @@ class Plotter(object):
         self.sample_order = []
         self.channels = channels
         self.lumi = lumi
+
+        self.log = logging.getLogger(__name__)
+        logging.basicConfig(level=logging.INFO)
 
         os.system("mkdir -p %s" % self.out_dir)
 
@@ -97,6 +101,8 @@ class Plotter(object):
             vals = []
             wgts = []
 
+            self.log.info("Processing MC: %s" % mc)
+
             for sample_name in self.sample_groups[mc]["sample_names"]:
                 with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
                         'r') as h5file:
@@ -113,6 +119,8 @@ class Plotter(object):
             labels += [self.sample_groups[mc]['label']]
 
         if 'data' in self.sample_groups:
+            self.log.info("Processing Data")
+
             vals = []
             evt_set = set()
             for sample_name in self.sample_groups['data']['sample_names']:
@@ -127,6 +135,8 @@ class Plotter(object):
 
             (n1, bins1, patches1) = plt.hist(vals, nbins, range=(xmin, xmax))
             plt.clf()
+
+        self.log.info("Generating Histogram: %s, %s/%s" % (var, self.out_dir, file_name))
 
         plt.figure(figsize=(5, 4))
         (n, bins, patches) = plt.hist(
