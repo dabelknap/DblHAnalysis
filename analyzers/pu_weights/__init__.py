@@ -16,7 +16,6 @@ class PileupWeights(object):
         with open(path, 'r') as pu_file:
             self.pu_weights = json.load(pu_file)
 
-
     def weight(self, rtrow):
         if rtrow.nTruePU < 0:
             return 1

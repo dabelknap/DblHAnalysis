@@ -9,14 +9,15 @@ sys.argv.pop()
 class LeptonScaleFactors(object):
 
     def __init__(self):
-        path = os.path.join(os.path.dirname(__file__), 'CombinedMethod_ScaleFactors_RecoIdIsoSip.root')
+        path = os.path.join(os.path.dirname(__file__),
+                            'CombinedMethod_ScaleFactors_RecoIdIsoSip.root')
         self.e_rtfile = rt.TFile(path, 'READ')
         self.e_hist = self.e_rtfile.Get("h_electronScaleFactor_RecoIdIsoSip")
 
-        path = os.path.join(os.path.dirname(__file__), 'MuonScaleFactors_2011_2012.root')
+        path = os.path.join(os.path.dirname(__file__),
+                            'MuonScaleFactors_2011_2012.root')
         self.m_rtfile = rt.TFile(path, 'READ')
         self.m_hist = self.m_rtfile.Get("TH2D_ALL_2012")
-
 
     def scale_factor(self, row, *lep_list):
         out = 1.0
@@ -34,7 +35,6 @@ class LeptonScaleFactors(object):
 
         return out
 
-
     def e_scale(self, row, l):
         pt = getattr(row, "%sPt" % l)
         eta = getattr(row, "%sEta" % l)
@@ -46,7 +46,6 @@ class LeptonScaleFactors(object):
 
         return scl
 
-
     def m_scale(self, row, l):
         pt = getattr(row, "%sPt" % l)
         eta = getattr(row, "%sEta" % l)
@@ -57,7 +56,6 @@ class LeptonScaleFactors(object):
             scl = 1.0
 
         return scl
-
 
     def close(self):
         self.e_rtfile.Close()
