@@ -1,5 +1,5 @@
-import unittest
-from datacard import Datacard
+import numpy.testing as npt
+from ..datacard import Datacard
 
 
 _TEST1 = (
@@ -24,7 +24,7 @@ bg_others   lnN      -        -        -       1.3
 ''')
 
 
-class TestDatacard(unittest.TestCase):
+class TestDatacard(npt.TestCase):
 
     def setUp(self):
         self.datacard = Datacard("test_card")
