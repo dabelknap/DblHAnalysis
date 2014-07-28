@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 import numpy.testing as npt
-from ..datacard import Datacard
+from DblHAnalysis.limits.datacard import Datacard
 
 
 _TEST1 = (
@@ -60,4 +62,4 @@ class TestDatacard(npt.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    npt.run_module_suit()
