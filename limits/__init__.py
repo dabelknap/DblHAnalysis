@@ -13,7 +13,8 @@ import numpy as np
 
 class Limits(object):
 
-    def __init__(self, analysis, base_selections, ntuple_dir, out_dir, channels=[], lumi=19.7, blinded=True):
+    def __init__(self, analysis, base_selections, ntuple_dir, out_dir,
+                 channels=[], lumi=19.7, blinded=True):
         self.base_selections = base_selections
         self.analysis = analysis
         self.out_dir = out_dir
@@ -40,11 +41,11 @@ class Limits(object):
         scale = kwargs.get('scale', 1.0)
 
         self.sample_groups[group_name] = {
-                'sample_names': [os.path.splitext(os.path.basename(x))[0]
-                                 for x in samples],
-                'scale': scale,
-                'isSig': is_sig,
-                'isData': is_data}
+            'sample_names': [os.path.splitext(os.path.basename(x))[0]
+                             for x in samples],
+            'scale': scale,
+            'isSig': is_sig,
+            'isData': is_data}
 
     def add_systematics(self, syst_name, syst_type, **kwargs):
         self.datacard.add_syst(syst_name, syst_type, **kwargs)
@@ -66,31 +67,41 @@ class Limits(object):
                 self.log.info("Processing MC: %s" % key)
 
                 for sample_name in self.sample_groups[key]["sample_names"]:
-                    with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') as h5file:
+                    with tb.open_file(
+                        "%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') \
+                            as h5file:
                         for chan in self.channels:
-                            table = getattr(getattr(h5file.root, self.analysis), chan)
+                            table = getattr(getattr(h5file.root,
+                                                    self.analysis), chan)
                             vals += [x[var] for x in table.where(cut)]
-                            scale = self.lumi * xsec.xsecs[sample_name] / xsec.nevents[sample_name]
-                            wgts += [x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)]
+                            scale = self.lumi * xsec.xsecs[sample_name] / \
+                                xsec.nevents[sample_name]
+                            wgts += [x['pu_weight'] * x['lep_scale'] * scale
+                                     for x in table.where(cut)]
 
                 if self.sample_groups[key]['isSig']:
                     self.datacard.add_sig(key, sum(wgts))
                 else:
                     self.datacard.add_bkg(key, sum(wgts))
-            
+
             elif is_data and not self.blinded:
                 self.log.info('Processing Data')
 
                 vals = []
                 evt_set = set()
                 for sample_name in self.sample_groups['data']['sample_names']:
-                    with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') as h5file:
+                    with tb.open_file(
+                        "%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') \
+                            as h5file:
                         for chan in self.channels:
-                            table = getattr(getattr(h5file.root, self.analysis), chan)
+                            table = getattr(getattr(h5file.root,
+                                                    self.analysis), chan)
                             for x in table.where(cut):
-                                if (x['evt'], x['run'], x['lumi']) not in evt_set:
+                                if (x['evt'], x['run'], x['lumi']) \
+                                        not in evt_set:
                                     vals.append(x[var])
-                                    evt_set.add((x['evt'], x['run'], x['lumi']))
+                                    evt_set.add(
+                                        (x['evt'], x['run'], x['lumi']))
 
                 self.datacard.set_observed(len(vals))
 

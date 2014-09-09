@@ -9,6 +9,7 @@ def four_l():
     limits.add_group("dyjets", "DYJets*")
     limits.add_group("zz", "ZZTo*")
     limits.add_group("top", "T*")
+    limits.add_group("data", "data_*", isData=True)
 
     lumi = {'hpp450': 0.026,
             'dyjets': 0.026,
