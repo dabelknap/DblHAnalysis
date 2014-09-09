@@ -37,6 +37,7 @@ class Datacard(object):
         out += "-" * 12 + "\n"
 
         fmt = "{:<17}" + "{:^9}" * (1 + jmax) + "\n"
+        fmt_f = "{:<17}" + "{:^9.3f}" * (1 + jmax) + "\n"
 
         row = ["1" for i in xrange(1+jmax)]
         out += fmt.format("bin", *row)
@@ -48,7 +49,7 @@ class Datacard(object):
         out += fmt.format("process", *row)
 
         row = [self.signal[1]] + [x[1] for x in self.bkg]
-        out += fmt.format("rate", *row)
+        out += fmt_f.format("rate", *row)
 
         out += "-" * 12 + "\n"
 
