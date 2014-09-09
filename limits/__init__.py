@@ -5,10 +5,10 @@ import os
 import glob
 import logging
 
-from datacard import Datacard
+from .datacard import Datacard
+import plotters.xsec as xsec
 import tables as tb
 import numpy as np
-import DblHAnalysis.plotters.xsec as xsec
 
 
 class Limits(object):
@@ -20,9 +20,10 @@ class Limits(object):
         self.ntuple_dir = ntuple_dir
         self.sample_groups = {}
         self.lumi = lumi
-        self.blinded = blind
+        self.blinded = blinded
         self.sytematic_list = []
-        self.datacard = Datacard(self.name)
+        self.datacard = Datacard(self.analysis)
+        self.channels = channels
 
         self.log = logging.getLogger(__name__)
         logging.basicConfig(level=logging.INFO)
@@ -39,11 +40,10 @@ class Limits(object):
         scale = kwargs.get('scale', 1.0)
 
         self.sample_groups[group_name] = {
-                'sample_names': [os.patch.splitext(os.path.basename(x))[0]
+                'sample_names': [os.path.splitext(os.path.basename(x))[0]
                                  for x in samples],
-                'label': label,
                 'scale': scale,
-                'isSig': is_signal,
+                'isSig': is_sig,
                 'isData': is_data}
 
     def add_systematics(self, syst_name, syst_type, **kwargs):
@@ -93,10 +93,6 @@ class Limits(object):
                                     evt_set.add((x['evt'], x['run'], x['lumi']))
 
                 self.datacard.set_observed(len(vals))
-
-            elif self.blinded:
-                self.datacard.set_observed(0)
-
 
         self.log.info("Saving card to file")
 

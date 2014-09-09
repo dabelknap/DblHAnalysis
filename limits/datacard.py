@@ -4,6 +4,7 @@ class Datacard(object):
         self.card_name = name
         self.bkg = []
         self.syst = []
+        self.observed = 0
 
     def add_sig(self, name, rate):
         self.signal = (name, rate)
