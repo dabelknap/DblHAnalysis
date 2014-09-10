@@ -15,7 +15,7 @@ def four_l(mass):
     cuts += '& (%f < sT)' % (0.6*mass + 130.0)
     cuts += '& (channel == "mmmm")'
 
-    limits = Limits("DblH", cuts, "./ntuples", "./datacards/4l",
+    limits = Limits("DblH", cuts, "./ntuples", "./datacards/4l/%i" % mass,
             channels=["dblh4l"], lumi=19.7, blinded=True)
 
     limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True)
@@ -24,19 +24,19 @@ def four_l(mass):
     limits.add_group("top", "T*")
     limits.add_group("data", "data_*", isData=True)
 
-    lumi = {'hpp%i' % mass: 0.026,
-            'dyjets':       0.026,
-            'zz':           0.026,
-            'top':          0.026}
+    lumi = {'hpp%i' % mass: 1.026,
+            'dyjets':       1.026,
+            'zz':           1.026,
+            'top':          1.026}
     limits.add_systematics("lumi", "lnN", **lumi)
 
-    mu_eff = {'hpp%i' % mass: 0.043,
-              'dyjets':       0.043,
-              'zz':           0.043,
-              'top':          0.043}
+    mu_eff = {'hpp%i' % mass: 1.043,
+              'dyjets':       1.043,
+              'zz':           1.043,
+              'top':          1.043}
     limits.add_systematics("mu_eff", "lnN", **mu_eff)
 
-    limits.gen_card("%i.txt" % mass)
+    limits.gen_card("mmmm.txt")
 
 
 def main():
