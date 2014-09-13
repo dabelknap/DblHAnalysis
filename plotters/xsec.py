@@ -10,9 +10,18 @@ TT_XSEC = 252.89 * PB
 import json
 
 xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-130_8TeV-pythia6': 186.21 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-150_8TeV-pythia6': 106.55 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-170_8TeV-pythia6': 64.641 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-200_8TeV-pythia6': 33.209 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-250_8TeV-pythia6': 12.724 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-300_8TeV-pythia6': 5.5458 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-350_8TeV-pythia6': 2.6413 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-400_8TeV-pythia6': 1.3414 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6': 0.71531 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-500_8TeV-pythia6': 0.39604 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-600_8TeV-pythia6': 0.13271 * FB,
+         'HPlusPlusHMinusMinusHTo4L_M-700_8TeV-pythia6': 0.48382e-1 * FB,
 
          'DYJetsToLL_M-10To50filter_8TeV-madgraph':          915.0 * PB,
          'DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball': 3503.71 * PB,
