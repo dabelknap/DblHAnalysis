@@ -1,4 +1,5 @@
 from limits import Limits
+from plotters.limits import plot_limits
 import logging
 import sys
 
@@ -39,10 +40,18 @@ def four_l(mass):
     limits.gen_card("mmmm.txt")
 
 
+def plot_mmmm():
+    plot_limits("test.pdf", _4L_MASSES, "datacards/4l", blinded=False,
+                x_label=r"$\Phi^{++}$ Mass [GeV]",
+                y_label=r"95% CL Upper Limit on $\sigma/\sigma_{SM}$")
+
+
 def main():
 
-    for mass in _4L_MASSES:
-        four_l(mass)
+    plot_mmmm()
+
+    #for mass in _4L_MASSES:
+    #    four_l(mass)
 
 
 if __name__ == "__main__":
