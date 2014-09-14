@@ -9,17 +9,17 @@ logging.basicConfig(level=logging.INFO)
 _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
-def four_l(mass):
+def mmmm_100(mass):
     logger.info("Processing mass-point %i" % mass)
 
     cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     cuts += '& (%f < sT)' % (0.6*mass + 130.0)
     cuts += '& (channel == "mmmm")'
 
-    limits = Limits("DblH", cuts, "./ntuples", "./datacards/4l/%i" % mass,
+    limits = Limits("DblH", cuts, "./ntuples", "./datacards/mmmm100/%i" % mass,
             channels=["dblh4l"], lumi=19.7, blinded=True)
 
-    limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True)
+    limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=36.0)
     limits.add_group("dyjets", "DYJets*")
     limits.add_group("zz", "ZZTo*")
     limits.add_group("top", "T*")
@@ -51,7 +51,7 @@ def main():
     plot_mmmm()
 
     #for mass in _4L_MASSES:
-    #    four_l(mass)
+    #    mmmm_100(mass)
 
 
 if __name__ == "__main__":

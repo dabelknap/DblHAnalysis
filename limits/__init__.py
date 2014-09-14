@@ -63,6 +63,7 @@ class Limits(object):
             is_data = self.sample_groups[key]['isData']
             vals = []
             wgts = []
+            scale_factor = self.sample_groups[key]['scale']
             if not is_data:
                 self.log.info("Processing MC: %s" % key)
 
@@ -74,8 +75,8 @@ class Limits(object):
                             table = getattr(getattr(h5file.root,
                                                     self.analysis), chan)
                             vals += [x[var] for x in table.where(cut)]
-                            scale = self.lumi * xsec.xsecs[sample_name] / \
-                                xsec.nevents[sample_name]
+                            scale = self.lumi * xsec.xsecs[sample_name] * \
+                                scale_factor / xsec.nevents[sample_name]
                             wgts += [x['pu_weight'] * x['lep_scale'] * scale
                                      for x in table.where(cut)]
 
