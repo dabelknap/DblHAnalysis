@@ -41,7 +41,7 @@ def four_l(mass):
 
 
 def plot_mmmm():
-    plot_limits("test.pdf", _4L_MASSES, "datacards/4l", blinded=False,
+    plot_limits("test.pdf", _4L_MASSES, "datacards/4l", blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95% CL Upper Limit on $\sigma/\sigma_{SM}$")
 

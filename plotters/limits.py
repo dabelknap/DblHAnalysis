@@ -63,6 +63,8 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, x_label="", 
 
     plt.plot(masses, np.ones(masses.shape), 'k', lw=1)
 
+    plt.legend(legend_handles, legend_labels, loc='upper left')
+
     ax = plt.gca()
     ax.grid(True, which="both", axis='y')
     ax.grid(True, which="major", axis='x')
