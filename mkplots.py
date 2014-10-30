@@ -5,7 +5,7 @@ def four_l():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
 
-    plotter.add_group("hpp", "HPP", "HPlus*450*",
+    plotter.add_group("hpp", "HPP", "HPlus*500*",
                       facecolor='mediumorchid', edgecolor='indigo')
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
                       facecolor="orange", edgecolor="darkorange")
