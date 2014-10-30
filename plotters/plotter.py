@@ -74,6 +74,57 @@ class Plotter(object):
                 raise ValueError("%s not defined" % sample)
             self.sample_order.append(sample)
 
+    def cut_flow(self, file_name, cuts, labels, **kwargs):
+        log_scale = kwargs.get('log', False)
+        title = kwargs.get('title', '')
+        ylab = kwargs.get('ylab', '')
+        legend_loc = kwargs.get('legend_loc', 'best')
+
+        ind = np.arange(len(cuts))
+        counts = np.zeros((len(cuts),))
+
+        plots = []
+        leg_labs = []
+        plt.figure(figsize=(5, 4))
+
+        for mc in self.sample_order:
+            self.log.info('Processing MC: %s' % mc)
+
+            tmp = np.zeros((len(cuts),))
+            for sample_name in self.sample_groups[mc]["sample_names"]:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis), chan)
+
+                        for i, ct in enumerate(cuts):
+                            cut = '%s & %s' % (self.base_selections, ct)
+                            scale = self.lumi * xsec.xsecs[sample_name] / \
+                                    xsec.nevents[sample_name]
+                            cnts = sum([x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)])
+
+                            tmp[i] += cnts
+
+            plots.append(plt.bar(ind, tmp, 1, bottom=counts, color=self.sample_groups[mc]['facecolor'], log=log_scale))
+            leg_labs.append(self.sample_groups[mc]['label'])
+            counts += tmp
+
+
+        plt.legend( [p[0] for p in plots], leg_labs, loc=legend_loc )
+        #plt.legend(loc=legend_loc)
+        #if log_scale:
+        #    plt.ylim(ymin=0.1)
+        #    self.log.info('Applying log scale')
+        #else:
+        #    plt.ylim(ymin=0)
+
+        plt.title(title)
+        plt.xticks(ind+1/2., labels )
+        plt.ylabel("Events")
+
+        plt.tight_layout(1.0)
+
+        plt.savefig("%s/%s" % (self.out_dir, file_name))
+
     def plot_stack(self, file_name, var, nbins, xmin, xmax, **kwargs):
         """
         Plot a stacked histogram
