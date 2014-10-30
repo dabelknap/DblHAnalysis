@@ -26,15 +26,30 @@ def four_l():
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            xlab=r'$s_T(\Phi^{--})$ [GeV]',
-            label_bin_width=True, log=True)
+def cut_flow():
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+                      channels=["dblh4l"], lumi=19.7)
 
-    plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            xlab=r'$s_T$ [GeV]',
-            label_bin_width=True, log=True)
+    plotter.add_group("hpp", "HPP (500)", "HPlus*500*",
+                      facecolor='mediumorchid', edgecolor='indigo')
+    plotter.add_group("dyjets", "Z+Jets", "DYJets*",
+                      facecolor="orange", edgecolor="darkorange")
+    plotter.add_group("top", "Top", "T*",
+                      facecolor="mediumseagreen", edgecolor="darkgreen")
+    plotter.add_group("zz", "ZZ", "ZZTo*",
+                      facecolor="lightskyblue", edgecolor="darkblue")
+
+    plotter.stack_order("top", "dyjets", "zz", "hpp")
+
+    cuts = ["(True)",
+            "(%f < sT)" % (0.6*500 + 130.),
+            "(%f < sT) & (%f < h1mass) & (h1mass < %f)" % ((0.6*500 + 130.), 0.9*500, 1.1*500)]
+
+    labels = ["Preselection",
+              "sT",
+              "Mass Window"]
+
+    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True, title="19.7 fb-1 (8 TeV)")
 
 def control():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/ctrl",
@@ -209,6 +224,8 @@ def main():
         z_control()
     elif sys.argv[1] == "4l":
         four_l()
+    elif sys.argv[1] == "flow":
+        cut_flow()
     else:
         raise ValueError("Incorrect option given: %s" % sys.argv[1])
 
