@@ -122,8 +122,14 @@ class Analyzer(object):
     def choose_leptons(self, rtrow):
 
         def lep_order(a, b):
-            a_index = int(a[1])
-            b_index = int(b[1])
+            try:
+                a_index = int(a[1])
+            except IndexError:
+                a_index = 1
+            try:
+                b_index = int(b[1])
+            except IndexError:
+                b_index = 1
             return a_index > b_index or a[0] > b[0]
 
         cands = [(0, float('inf'), [])]
@@ -154,7 +160,10 @@ class Analyzer(object):
         out = []
         for i in ['e', 'm', 't']:
             N = final_state.count(i)
-            out += ['%s%i' % (i, n) for n in xrange(1,N+1)]
+            if N == 1:
+                out += [i]
+            else:
+                out += ['%s%i' % (i, n) for n in xrange(1,N+1)]
         return out
 
     @staticmethod
@@ -208,7 +217,7 @@ class Analyzer4l(Analyzer):
 
     def __init__(self, sample_location, outfile):
         self.channel = "dblh4l"
-        self.final_states = ["mmmm", "eeee", "eemm"]
+        self.final_states = ["mmmm", "eeee", "eemm", "emmm", "eeem"]
         super(Analyzer4l, self).__init__(sample_location, outfile)
 
     def trigger(self, rtrow):
@@ -277,7 +286,7 @@ class Control4l(Analyzer4l):
     def __init__(self, sample_location, outfile):
         super(Control4l, self).__init__(sample_location, outfile)
         self.channel = "dblh4l_control"
-        self.final_states = ["mmmm", "eeee", "eemm"]
+        self.final_states = ["mmmm", "eeee", "eemm", "eeem", "emmm"]
 
     def ID(self, rtrow):
         return lepId.lep_id(rtrow, *self.leptons)
@@ -309,7 +318,7 @@ class TTControl4l(Analyzer4l):
     def __init__(self, sample_location, outfile):
         super(TTControl4l, self).__init__(sample_location, outfile)
         self.channel = "dblh4l_tt_control"
-        self.final_states = ["mmmm", "eeee", "eemm"]
+        self.final_states = ["mmmm", "eeee", "eemm", "eeem", "emmm"]
 
     def zveto(self, rtrow):
 
@@ -355,7 +364,7 @@ class ZControl4l(Analyzer4l):
     def __init__(self, sample_location, outfile):
         super(ZControl4l, self).__init__(sample_location, outfile)
         self.channel = "dblh4l_z_control"
-        self.final_states = ["mmmm", "eeee", "eemm"]
+        self.final_states = ["mmmm", "eeee", "eemm", "eeem", "emmm"]
 
     def zflag(self, rtrow):
 
