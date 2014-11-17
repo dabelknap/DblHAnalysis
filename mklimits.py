@@ -21,7 +21,7 @@ class Scales(object):
         self.m = np.outer(x, x) * 36.0
         self.index = {"ee": 0, "em": 1, "et": 2, "mm": 3, "mt": 4, "tt": 5}
 
-    def scale(hpp, hmm):
+    def scale(self, hpp, hmm):
         i = self.index[hpp]
         j = self.index[hmm]
         return self.m[i,j]
@@ -31,7 +31,7 @@ def four_lepton(name, channels, directory, scale=1.0):
     for mass in _4L_MASSES:
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
         cuts += '& (%f < sT)' % (0.6*mass + 130.0)
-        cuts += '& (%s)' % ' | '.join(['channel == "%s"' % channel for channel in channels])
+        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
 
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
                 channels=["dblh4l"], lumi=19.7, blinded=True)
