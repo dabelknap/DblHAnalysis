@@ -182,7 +182,7 @@ def plot_mmmm():
 
 
 def plot_4l():
-    plot_limits("test_4l_all.pdf", _4L_MASSES, "datacards/light_lep_all", blinded=True,
+    plot_limits("test_bp1.pdf", _4L_MASSES, "datacards/BP1", blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 
@@ -193,11 +193,14 @@ def plot_3l():
 
 def main():
 
+    #BP1()
+    plot_4l()
+
     #plot_mmmm()
-    plot_3l()
+    #plot_3l()
 
     #for mass in _4L_MASSES:
-    #    fourl(mass)
+    #    mmmm_100(mass)
 
 
 if __name__ == "__main__":
