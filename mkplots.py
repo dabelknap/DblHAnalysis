@@ -13,17 +13,35 @@ def four_l():
                       facecolor="mediumseagreen", edgecolor="darkgreen")
     plotter.add_group("zz", "ZZ", "ZZTo*",
                       facecolor="lightskyblue", edgecolor="darkblue")
+    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+                      facecolor="tomato", edgecolor="red")
+    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+                      facecolor="springgreen", edgecolor="seagreen")
 
-    plotter.stack_order("top", "dyjets", "zz", "hpp")
+    plotter.stack_order("wwv", "ttv", "top", "dyjets", "zz", "hpp")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 600,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
+            #title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
+            #xlab='M(++) [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 600,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
+            label_bin_width=True, log=True)
+
+    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 600,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T(\Phi^{--})$ [GeV]',
+            label_bin_width=True, log=True)
+
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 600,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            xlab=r'$s_T$ [GeV]',
+            #title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
+            #xlab='sT [GeV]',
             label_bin_width=True, log=True)
 
 def cut_flow():
@@ -38,8 +56,12 @@ def cut_flow():
                       facecolor="mediumseagreen", edgecolor="darkgreen")
     plotter.add_group("zz", "ZZ", "ZZTo*",
                       facecolor="lightskyblue", edgecolor="darkblue")
+    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+                      facecolor="tomato", edgecolor="red")
+    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+                      facecolor="springgreen", edgecolor="seagreen")
 
-    plotter.stack_order("top", "dyjets", "zz", "hpp")
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
 
     cuts = ["(True)",
             "(%f < sT)" % (0.6*500 + 130.),

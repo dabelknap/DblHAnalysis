@@ -41,6 +41,11 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'TTJetsFullLepMGDecays': TT_XSEC * BR_WLNU * BR_WLNU,
          'TTJetsSemiLepMGDecays': TT_XSEC * BR_WJJ * BR_WLNU * 2,
 
+         'TTGJets':  2.166 * PB,
+         'TTWJets':  0.2057 * PB,
+         'TTWWJets': 0.002 * PB,
+         'TTZJets':  0.232 * PB,
+
          'ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola': 0.1296 * PB,
 
          'T_s-channel_TuneZ2star_8TeV-powheg-tauola':        3.79 * PB,
@@ -51,6 +56,13 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola': 11.1 * PB,
 
          'WZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola': 2.207 * PB,
-         'WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola':     1.058 * PB}
+         'WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola':     1.058 * PB,
+
+         'WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola': 54.838*(0.1075+0.1057+0.1125)*(0.1075+0.1057+0.1125) * PB,
+
+         'ZZZNoGstarJets': 0.0192 * PB,
+         'WWZNoGstarJets': 0.0633 * PB,
+         'WWWJets':        0.08217 * PB,
+         'WWGJets':        1.44 * PB}
 
 nevents = json.load(open("./plotters/mc_events.json", 'r'))
