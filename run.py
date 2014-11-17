@@ -54,12 +54,12 @@ def run_zz_4l(args):
 
 
 
-def run_ntuples(analyzer_type, samples):
+def run_ntuples(analyzer_type, samples, njobs=1):
 
     root_dir = './root_files'
     ntup_dir = './ntuples'
 
-    p = Pool(2)
+    p = Pool(njobs)
 
     sample_names = [os.path.basename(fname)
                     for string in samples
@@ -99,6 +99,10 @@ def parse_command_line(argv):
     parser.add_argument('analyzer', type=str, help='4l, ctrl, or zz')
     parser.add_argument('sample_names', nargs='+',
                         help='Sample names w/ UNIX wildcards')
+    parser.add_argument('-n', '--n-jobs', type=int, default=1,
+                        help='Number of instances to run at one time. '
+                             'Default is 1.')
+
     args = parser.parse_args(argv)
 
     return args
@@ -110,7 +114,7 @@ def main(argv=None):
 
     args = parse_command_line(argv)
 
-    run_ntuples(args.analyzer, args.sample_names)
+    run_ntuples(args.analyzer, args.sample_names, njobs=args.n_jobs)
 
     return 0
 
