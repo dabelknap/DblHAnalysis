@@ -2,6 +2,7 @@ from limits import Limits
 from plotters.limits import plot_limits
 import logging
 import sys
+import numpy as np
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -11,6 +12,20 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
 
 _3L_MASSES = [170, 200, 250, 300, 350, 400, 450,
               500, 600, 700]
+
+
+class Scales(object):
+
+    def __init__(self, br_ee, br_em, br_et, br_mm, br_mt, br_tt):
+        x = np.array([br_ee, br_em, br_et, br_mm, br_mt, br_tt], dtype=float)
+        self.m = np.outer(x, x) * 36.0
+        self.index = {"ee": 0, "em": 1, "et": 2, "mm": 3, "mt": 4, "tt": 5}
+
+    def scale(hpp, hmm):
+        i = self.index[hpp]
+        j = self.index[hmm]
+        return self.m[i,j]
+
 
 def mmmm_100(mass):
     logger.info("Processing mass-point %i" % mass)
