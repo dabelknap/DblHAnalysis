@@ -57,6 +57,47 @@ def four_lepton(name, channels, directory, scale=1.0):
         limits.gen_card("%s.txt" % name)
 
 
+def fourl_100():
+    four_lepton("card", ["mmmm"], "./datacards/mmmm_100", scale=36.0)
+    four_lepton("card", ["eeee"], "./datacards/eeee_100", scale=36.0)
+    four_lepton("card", ["emem","emme", "meem", "meme"], "./datacards/emem_100", scale=36.0)
+
+
+def BP1():
+    s = Scales(0, 0.1, 0.1, 0.3, 0.38, 0.3)
+    four_lepton("emem", ["emem", "emme", "meme", "meem"], "./datacards/BP1", scale=s.scale("em","em"))
+    four_lepton("emmm", ["emmm", "memm"], "./datacards/BP1", scale=s.scale("em","mm"))
+    four_lepton("mmem", ["mmem", "mmme"], "./datacards/BP1", scale=s.scale("mm","em"))
+    four_lepton("mmmm", ["mmmm"], "./datacards/BP1", scale=s.scale("mm","mm"))
+
+
+def BP2():
+    s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
+    four_lepton("eemm", ["eemm"], "./datacards/BP2", scale=s.scale("ee","mm"))
+    four_lepton("mmee", ["mmee"], "./datacards/BP2", scale=s.scale("mm","ee"))
+    four_lepton("eeee", ["eeee"], "./datacards/BP2", scale=s.scale("ee","ee"))
+    four_lepton("mmmm", ["mmmm"], "./datacards/BP2", scale=s.scale("mm","mm"))
+
+
+def BP3():
+    s = Scales(0.34, 0, 0, 0.33, 0, 0.33)
+    four_lepton("eemm", ["eemm"], "./datacards/BP3", scale=s.scale("ee","mm"))
+    four_lepton("mmee", ["mmee"], "./datacards/BP3", scale=s.scale("mm","ee"))
+    four_lepton("eeee", ["eeee"], "./datacards/BP3", scale=s.scale("ee","ee"))
+    four_lepton("mmmm", ["mmmm"], "./datacards/BP3", scale=s.scale("mm","mm"))
+
+
+def BP4():
+    s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
+    four_lepton("emem", ["emem", "emme", "meme", "meem"], "./datacards/BP4", scale=s.scale("em","em"))
+    four_lepton("emmm", ["emmm", "memm"], "./datacards/BP4", scale=s.scale("em","mm"))
+    four_lepton("mmem", ["mmem", "mmme"], "./datacards/BP4", scale=s.scale("mm","em"))
+    four_lepton("mmmm", ["mmmm"], "./datacards/BP4", scale=s.scale("mm","mm"))
+    four_lepton("eeee", ["eeee"], "./datacards/BP4", scale=s.scale("ee","ee"))
+    four_lepton("eemm", ["eemm"], "./datacards/BP4", scale=s.scale("ee","mm"))
+    four_lepton("mmee", ["mmee"], "./datacards/BP4", scale=s.scale("mm","ee"))
+
+
 def mmmm_100(mass):
     logger.info("Processing mass-point %i" % mass)
 
