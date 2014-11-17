@@ -27,6 +27,36 @@ class Scales(object):
         return self.m[i,j]
 
 
+def four_lepton(name, channels, directory, scale=1.0):
+    for mass in _4L_MASSES:
+        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts += '& (%f < sT)' % (0.6*mass + 130.0)
+        cuts += '& (%s)' % ' | '.join(['channel == "%s"' % channel for channel in channels])
+
+        limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
+                channels=["dblh4l"], lumi=19.7, blinded=True)
+
+        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale)
+        limits.add_group("dyjets", "DYJets*")
+        limits.add_group("zz", "ZZTo*")
+        limits.add_group("top", "T*")
+        limits.add_group("data", "data_*", isData=True)
+
+        lumi = {'hpp%i' % mass: 1.026,
+                'dyjets':       1.026,
+                'zz':           1.026,
+                'top':          1.026}
+        limits.add_systematics("lumi", "lnN", **lumi)
+
+        mu_eff = {'hpp%i' % mass: 1.043,
+                  'dyjets':       1.043,
+                  'zz':           1.043,
+                  'top':          1.043}
+        limits.add_systematics("mu_eff", "lnN", **mu_eff)
+
+        limits.gen_card("%s.txt" % name)
+
+
 def mmmm_100(mass):
     logger.info("Processing mass-point %i" % mass)
 
