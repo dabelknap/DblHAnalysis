@@ -106,7 +106,7 @@ class Limits(object):
 
                 self.datacard.set_observed(len(vals))
 
-        self.log.info("Saving card to file")
+        self.log.info("Saving card to file: %s/%s" % (self.out_dir, file_name))
 
         with open("%s/%s" % (self.out_dir, file_name), 'w') as outfile:
             outfile.write(self.datacard.dump())
