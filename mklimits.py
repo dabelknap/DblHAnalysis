@@ -3,6 +3,7 @@ from plotters.limits import plot_limits
 import logging
 import sys
 import numpy as np
+import argparse
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -181,8 +182,8 @@ def plot_mmmm():
                 y_label=r"95% CL Upper Limit on $\sigma/\sigma_{SM}$")
 
 
-def plot_4l():
-    plot_limits("test_bp1.pdf", _4L_MASSES, "datacards/BP1", blinded=True,
+def plot(BP):
+    plot_limits("./plots/limits/%s.pdf" % BP, _4L_MASSES, "datacards/%s" % BP, blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 
@@ -191,10 +192,34 @@ def plot_3l():
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 
-def main():
+
+def parse_command_line(argv):
+    parser = argparse.ArgumentParser(description="")
+
+    parser.add_argument('operation', type=str)
+    parser.add_argument('BP', type=str, default='')
+
+    args = parser.parse_args(argv)
+
+    return args
+
+
+
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+
+    args = parse_command_line(argv)
+
+    if args.operation == "plot":
+        globals()[args.operation](args.BP)
+    else:
+        globals()[args.operation]()
+
+    return 0
 
     #BP1()
-    plot_4l()
+    #plot_4l()
 
     #plot_mmmm()
     #plot_3l()
@@ -204,4 +229,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    status = main()
+    sys.exit(status)
