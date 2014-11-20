@@ -127,7 +127,7 @@ def mmmm_100(mass):
               'top':          1.043}
     limits.add_systematics("mu_eff", "lnN", **mu_eff)
 
-    limits.gen_card("mmmm.txt")
+    limits.gen_card("test.txt")
 
 
 def fourl(mass):
@@ -177,7 +177,7 @@ def fourl(mass):
 
 
 def plot_mmmm():
-    plot_limits("test.pdf", _4L_MASSES, "datacards/4l", blinded=True,
+    plot_limits("test.pdf", _4L_MASSES, "datacards/mmmm100", blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95% CL Upper Limit on $\sigma/\sigma_{SM}$")
 
@@ -196,8 +196,7 @@ def plot_3l():
 def parse_command_line(argv):
     parser = argparse.ArgumentParser(description="")
 
-    parser.add_argument('operation', type=str)
-    parser.add_argument('BP', type=str, default='')
+    parser.add_argument('operation', type=str, nargs="+")
 
     args = parser.parse_args(argv)
 
@@ -211,21 +210,12 @@ def main(argv=None):
 
     args = parse_command_line(argv)
 
-    if args.operation == "plot":
-        globals()[args.operation](args.BP)
+    if args.operation[0] == "plot":
+        globals()[args.operation[0]](args.operation[1])
     else:
-        globals()[args.operation]()
+        globals()[args.operation[0]]()
 
     return 0
-
-    #BP1()
-    #plot_4l()
-
-    #plot_mmmm()
-    #plot_3l()
-
-    #for mass in _4L_MASSES:
-    #    mmmm_100(mass)
 
 
 if __name__ == "__main__":
