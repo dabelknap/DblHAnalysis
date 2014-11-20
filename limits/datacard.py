@@ -1,3 +1,5 @@
+_EPSILON = 1.0e-10
+
 class Datacard(object):
 
     def __init__(self, name):
@@ -13,6 +15,8 @@ class Datacard(object):
         self.observed = obs
 
     def add_bkg(self, name, rate):
+        if rate == 0.0:
+            rate = _EPSILON
         self.bkg.append((name, rate))
 
     def add_syst(self, name, syst_type, **chans):
@@ -36,8 +40,8 @@ class Datacard(object):
 
         out += "-" * 12 + "\n"
 
-        fmt = "{:<17}" + "{:^9}" * (1 + jmax) + "\n"
-        fmt_f = "{:<17}" + "{:^9.3f}" * (1 + jmax) + "\n"
+        fmt = "{:<17}" + "{:^11}" * (1 + jmax) + "\n"
+        fmt_f = "{:<17}" + "{:^11.3e}" * (1 + jmax) + "\n"
 
         row = ["1" for i in xrange(1+jmax)]
         out += fmt.format("bin", *row)
@@ -53,7 +57,7 @@ class Datacard(object):
 
         out += "-" * 12 + "\n"
 
-        fmt = "{:<12}" + "{:<5}" + "{:^9}" * (1 + jmax) + "\n"
+        fmt = "{:<12}" + "{:<5}" + "{:^11}" * (1 + jmax) + "\n"
 
         for syst in self.syst:
             names = [self.signal[0]] + [x[0] for x in self.bkg]
