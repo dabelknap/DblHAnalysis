@@ -99,6 +99,18 @@ def BP4():
     four_lepton("mmee", ["mmee"], "./datacards/BP4", scale=s.scale("mm","ee"))
 
 
+def mm100():
+    four_lepton("mmmm", ["mmmm"], "./datacards/mm100", scale=36.0)
+
+
+def ee100():
+    four_lepton("eeee", ["eeee"], "./datacards/ee100", scale=36.0)
+
+
+def em100():
+    four_lepton("emem", ["emem", "emme", "meem", "meme"], "./datacards/em100", scale=36.0)
+
+
 def mmmm_100(mass):
     logger.info("Processing mass-point %i" % mass)
 
