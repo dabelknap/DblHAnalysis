@@ -11,7 +11,7 @@ To produce the FSA n-tuples used by this package, you run
 make_ntuples_cfg.py rerunFSA=1 channels="zz" dblhMode=1
 ```
 
-within `FinalStateAnalysis/NtupleTools/test`. The `run.py` script runs on the
+within `FinalStateAnalysis/NtupleTools/test`. The `mkntuples.py` script runs on the
 FSA n-tuples to produce n-tuples with the preselection and event reconstruction
 applied. These n-tuples are stored as HDF5 files.
 
@@ -34,7 +34,7 @@ same-sign leptons, not necessarily of the same flavor.
  - PF Relative Isolation < 0.4 for all leptons
 
 ###tt-bar Control Region
-Run with `python run.py tt [samples,...]`. We make the following modifications to the
+Run with `python mkntuples.py tt [samples,...]`. We make the following modifications to the
 pre-selection:
 
  - Two best isolated leptons < 0.4 and worst > 0.4
@@ -44,7 +44,7 @@ pre-selection:
 Make plots with `python mkplots.py tt`.
 
 ###Z Control Region
-Run with `python run.py z [sample,...]`. We make the following modifications to
+Run with `python mkntuples.py z [sample,...]`. We make the following modifications to
 the pre-selection:
 
  - Z-flag: Require at least one OSSF pair with |m(ll) - Mz| < 20.0
