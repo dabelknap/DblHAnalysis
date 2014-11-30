@@ -10,11 +10,10 @@ import numpy as np
 
 class Yields(object):
 
-    def __init__(self, analysis, base_selections, ntuple_dir, out_dir,
+    def __init__(self, analysis, base_selections, ntuple_dir,
             channels=[], lumi=19.7):
         self.base_selections = base_selections
         self.analysis = analysis
-        self.out_dir = out_dir
         self.ntuple_dir = ntuple_dir
         self.sample_groups = {}
         self.lumi = lumi
@@ -28,7 +27,7 @@ class Yields(object):
         for name in sample_names:
             samples += glob.glob("%s/%s" % (self.ntuple_dir, name))
 
-        if_data = kwargs.get('isData', False)
+        is_data = kwargs.get('isData', False)
         is_sig = kwargs.get('isSignal', False)
         scale = kwargs.get('scale', 1.0)
 
@@ -39,7 +38,7 @@ class Yields(object):
             'isSig': is_sig,
             'isData': is_data}
 
-    def yield(self, group_name):
+    def yields(self, group_name, **kwargs):
         values = []
         weights = []
 
@@ -70,7 +69,10 @@ class Yields(object):
                                  for x in table.where(cut)]
 
             counts = sum(wgts)
-            err = counts / np.sqrt(float(len(wgts)))
+            if counts == 0:
+                err = 0
+            else:
+                err = counts / np.sqrt(float(len(wgts)))
 
         else:
             self.log.info('Processing Data')
