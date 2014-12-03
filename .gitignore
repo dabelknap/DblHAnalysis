@@ -6,5 +6,6 @@
 *.root
 *.pyc
 *.txt
+*.json
 ntuples
 datacards
