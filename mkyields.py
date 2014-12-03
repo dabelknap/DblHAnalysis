@@ -4,9 +4,9 @@ from numpy import sqrt
 import numpy as np
 
 
-def data_sideband(mass):
-    cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
-    cuts+= '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+_4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
+              350, 400, 450, 500, 600, 700]
+
 
 def data_sideband(mass, cuts='(True)'):
     # Define mass window
@@ -87,5 +87,41 @@ def test():
     print (zz + top)/(z)
 
 
+def mktable():
+
+    out = np.zeros((len(_4L_MASSES), 4))
+
+    for i, mass in enumerate(_4L_MASSES):
+        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts+= '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts += '& (channel == "mmmm")'
+        mc_bkg = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                        lumi=19.7)
+        mc_bkg.add_group("zz", "ZZTo*")
+        mc_bkg.add_group("top", "T*")
+        mc_bkg.add_group("dyjets", "Z[1234]jets*M50")
+
+        bkg_rate = ufloat(*mc_bkg.yields("zz")) + ufloat(*mc_bkg.yields("top"))\
+                   + ufloat(*mc_bkg.yields("dyjets"))
+
+        bkg_est = bkg_estimate(mass, cuts='(channel == "mmmm")')
+
+        out[i,0] = bkg_rate.nominal_value
+        out[i,1] = bkg_rate.std_dev
+        out[i,2] = bkg_est[0]
+        out[i,3] = bkg_est[2]
+
+    return out
+
+
+def table2latex(table):
+    nrows = table.shape[0]
+
+    for i in range(nrows):
+        row = table[i,:]
+        line = ' & '.join(['%.3e' % k for k in row])
+        print line, r'\\'
+
+
 if __name__ == "__main__":
-    print bkg_estimate(300)
+    table2latex(mktable())
