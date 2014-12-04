@@ -18,7 +18,7 @@ def data_sideband(mass, channel, cuts='(True)'):
                "./ntuples", channels=["dblh4l"], lumi=19.7)
     x.add_group("data", "data_*", isData=True)
 
-    return ufloat(*x.yields("data"))
+    return ufloat(*x.yields("data")).nominal_value
 
 
 def alpha(mass, channel):
@@ -46,14 +46,18 @@ def alpha(mass, channel):
     bkg = ufloat(*outer.yields("zz")) + ufloat(*outer.yields("top")) + \
         ufloat(*outer.yields("dyjets"))
 
-    return sig/bkg
+    if bkg.nominal_value == 0:
+        return sig.nominal_value
+    if sig.nominal_value < sig.std_dev:
+        return sig.std_dev
+    else:
+        return (sig/bkg).nominal_value
 
 
 def bkg_estimate(mass, channel, cuts='(True)'):
     Nbgsr = alpha(mass, channel) * (data_sideband(mass, channel, cuts=cuts) + 1)
 
-    return (Nbgsr.nominal_value, Nbgsr.std_dev,
-            Nbgsr.nominal_value/sqrt(Nbgsr.nominal_value + 1))
+    return (Nbgsr, Nbgsr/sqrt(Nbgsr + 1.0))
 
 
 def test():
