@@ -8,23 +8,22 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
 
-def data_sideband(mass, cuts='(True)'):
+def data_sideband(mass, channel, cuts='(True)'):
     # Define mass window
     window = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     window += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
     bounds = '(12 < h1mass) & (h1mass < 700) & (12 < h2mass) & (h2mass < 700)'
 
-    x = Yields("DblH", "~(%s) & (%s) & (%s)" % (window, bounds, cuts),
+    x = Yields("DblH", "~(%s) & (%s) & (%s) & (%s)" % (window, bounds, cuts, channel),
                "./ntuples", channels=["dblh4l"], lumi=19.7)
     x.add_group("data", "data_*", isData=True)
 
     return ufloat(*x.yields("data"))
 
 
-def alpha(mass):
+def alpha(mass, channel):
     cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
-    channel = '(channel == "mmmm")'
 
     inner = Yields("DblH", "(%s) & (%s)" % (cuts, channel), "./ntuples",
                    channels=["dblh4l"], lumi=19.7)
@@ -50,8 +49,8 @@ def alpha(mass):
     return sig/bkg
 
 
-def bkg_estimate(mass, cuts='(True)'):
-    Nbgsr = alpha(mass) * (data_sideband(mass, cuts=cuts) + 1)
+def bkg_estimate(mass, channel, cuts='(True)'):
+    Nbgsr = alpha(mass, channel) * (data_sideband(mass, channel, cuts=cuts) + 1)
 
     return (Nbgsr.nominal_value, Nbgsr.std_dev,
             Nbgsr.nominal_value/sqrt(Nbgsr.nominal_value + 1))
@@ -104,7 +103,7 @@ def mktable():
         bkg_rate = ufloat(*mc_bkg.yields("zz")) + ufloat(*mc_bkg.yields("top"))\
                    + ufloat(*mc_bkg.yields("dyjets"))
 
-        bkg_est = bkg_estimate(mass, cuts='(channel == "mmmm")')
+        bkg_est = bkg_estimate(mass, '(channel == "mmmm")')
 
         out[i,0] = bkg_rate.nominal_value
         out[i,1] = bkg_rate.std_dev
