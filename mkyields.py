@@ -112,7 +112,7 @@ def mktable():
         out[i,0] = bkg_rate.nominal_value
         out[i,1] = bkg_rate.std_dev
         out[i,2] = bkg_est[0]
-        out[i,3] = bkg_est[2]
+        out[i,3] = bkg_est[1]
 
     return out
 
