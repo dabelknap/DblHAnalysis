@@ -8,23 +8,22 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
 
-def data_sideband(mass, cuts='(True)'):
+def data_sideband(mass, channel, cuts='(True)'):
     # Define mass window
     window = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     window += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
     bounds = '(12 < h1mass) & (h1mass < 700) & (12 < h2mass) & (h2mass < 700)'
 
-    x = Yields("DblH", "~(%s) & (%s) & (%s)" % (window, bounds, cuts),
+    x = Yields("DblH", "~(%s) & (%s) & (%s) & (%s)" % (window, bounds, cuts, channel),
                "./ntuples", channels=["dblh4l"], lumi=19.7)
     x.add_group("data", "data_*", isData=True)
 
-    return ufloat(*x.yields("data"))
+    return ufloat(*x.yields("data")).nominal_value
 
 
-def alpha(mass):
+def alpha(mass, channel):
     cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
-    channel = '(channel == "mmmm")'
 
     inner = Yields("DblH", "(%s) & (%s)" % (cuts, channel), "./ntuples",
                    channels=["dblh4l"], lumi=19.7)
@@ -47,14 +46,18 @@ def alpha(mass):
     bkg = ufloat(*outer.yields("zz")) + ufloat(*outer.yields("top")) + \
         ufloat(*outer.yields("dyjets"))
 
-    return sig/bkg
+    if bkg.nominal_value == 0:
+        return sig.nominal_value
+    if sig.nominal_value < sig.std_dev:
+        return sig.std_dev
+    else:
+        return (sig/bkg).nominal_value
 
 
-def bkg_estimate(mass, cuts='(True)'):
-    Nbgsr = alpha(mass) * (data_sideband(mass, cuts=cuts) + 1)
+def bkg_estimate(mass, channel, cuts='(True)'):
+    Nbgsr = alpha(mass, channel) * (data_sideband(mass, channel, cuts=cuts) + 1)
 
-    return (Nbgsr.nominal_value, Nbgsr.std_dev,
-            Nbgsr.nominal_value/sqrt(Nbgsr.nominal_value + 1))
+    return (Nbgsr, Nbgsr/sqrt(Nbgsr + 1.0))
 
 
 def test():
@@ -104,12 +107,12 @@ def mktable():
         bkg_rate = ufloat(*mc_bkg.yields("zz")) + ufloat(*mc_bkg.yields("top"))\
                    + ufloat(*mc_bkg.yields("dyjets"))
 
-        bkg_est = bkg_estimate(mass, cuts='(channel == "mmmm")')
+        bkg_est = bkg_estimate(mass, '(channel == "mmmm")')
 
         out[i,0] = bkg_rate.nominal_value
         out[i,1] = bkg_rate.std_dev
         out[i,2] = bkg_est[0]
-        out[i,3] = bkg_est[2]
+        out[i,3] = bkg_est[1]
 
     return out
 
