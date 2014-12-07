@@ -8,19 +8,24 @@ from matplotlib.patches import Patch
 
 # Use PFG/Tikz backend to generate plots
 # Enables Latex, with better performance
-mpl.use("pgf")
-pgf_with_pdflatex = {
-        "pgf.texsystem": "pdflatex",
-        "pgf.preamble": [
-            r"\usepackage[utf8x]{inputenc}",
-            r"\usepackage[T1]{fontenc}",
-            r"\usepackage{libertine}",
-            r"\usepackage[libertine,cmintegrals,cmbraces]{newtxmath}"
-            ]
-        }
-mpl.rcParams.update(pgf_with_pdflatex)
+#mpl.use("pgf")
+#pgf_with_pdflatex = {
+#        "pgf.texsystem": "pdflatex",
+#        "pgf.preamble": [
+#            r"\usepackage[utf8x]{inputenc}",
+#            r"\usepackage[T1]{fontenc}",
+#            r"\usepackage{libertine}",
+#            r"\usepackage[libertine,cmintegrals,cmbraces]{newtxmath}"
+#            ]
+#        }
+#mpl.rcParams.update(pgf_with_pdflatex)
 
 import matplotlib.pyplot as plt
+
+
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans-serif')
+
 
 sys.argv.append('-b')
 import ROOT as rt
