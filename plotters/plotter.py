@@ -11,19 +11,26 @@ import matplotlib as mpl
 
 # Use PFG/Tikz backend to generate plots
 # Enables Latex, with better performance
-mpl.use("pgf")
-pgf_with_pdflatex = {
-        "pgf.texsystem": "pdflatex",
-        "pgf.preamble": [
-            r"\usepackage[utf8x]{inputenc}",
-            r"\usepackage[T1]{fontenc}",
-            r"\usepackage{libertine}",
-            r"\usepackage[libertine,cmintegrals,cmbraces]{newtxmath}"
-            ]
-        }
-mpl.rcParams.update(pgf_with_pdflatex)
+# mpl.use("pgf")
+# pgf_with_pdflatex = {
+#         "pgf.texsystem": "pdflatex",
+#         "pgf.preamble": [
+#             r"\usepackage[utf8x]{inputenc}",
+#             r"\usepackage[T1]{fontenc}",
+#             r"\usepackage{cmbright}",
+#             r"\usepackage{amsmath}",
+#             #r"\usepackage{arev}",
+#             r"\usepackage{libertine}",
+#             r"\usepackage[libertine,cmintegrals,cmbraces]{newtxmath}"
+#             ]
+#         }
+# mpl.rcParams.update(pgf_with_pdflatex)
 
 import matplotlib.pyplot as plt
+
+
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans-serif')
 
 
 class Plotter(object):
@@ -85,7 +92,7 @@ class Plotter(object):
 
         plots = []
         leg_labs = []
-        plt.figure(figsize=(5, 4))
+        plt.figure(figsize=(9, 9))
 
         for mc in self.sample_order:
             self.log.info('Processing MC: %s' % mc)
@@ -121,7 +128,7 @@ class Plotter(object):
         plt.xticks(ind+1/2., labels )
         plt.ylabel("Events")
 
-        plt.tight_layout(1.0)
+        plt.tight_layout(0.5)
 
         plt.savefig("%s/%s" % (self.out_dir, file_name))
 
@@ -189,7 +196,7 @@ class Plotter(object):
 
         self.log.info("Generating Histogram: %s, %s/%s" % (var, self.out_dir, file_name))
 
-        plt.figure(figsize=(5, 4))
+        plt.figure(figsize=(6, 5))
         (n, bins, patches) = plt.hist(
                 values, nbins, weights=weights, range=(xmin, xmax),
                 label=labels, **hist_style)
@@ -222,7 +229,7 @@ class Plotter(object):
         plt.xlabel(xlab)
         plt.title(title)
 
-        plt.tight_layout(1.0)
+        plt.tight_layout(0.5)
 
         plt.savefig("%s/%s" % (self.out_dir, file_name))
 
