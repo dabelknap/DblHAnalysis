@@ -5,7 +5,7 @@ def four_l():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
 
-    plotter.add_group("hpp", "HPP", "HPlus*500*",
+    plotter.add_group("hpp", r"$\Phi^{++}(500)$", "HPlus*500*",
                       facecolor='mediumorchid', edgecolor='indigo')
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
                       facecolor="orange", edgecolor="darkorange")
@@ -18,30 +18,27 @@ def four_l():
     plotter.add_group("ttv", "TTV", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    plotter.stack_order("wwv", "ttv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("wwv", "ttv", "top", "dyjets", "zz", "hpp")
+    plotter.stack_order("top", "dyjets", "zz", "hpp")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 600,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textsf{fb}^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
-            #title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
-            #xlab='M(++) [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 600,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 600,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 25, 0, 600,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T$ [GeV]',
-            #title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
-            #xlab='sT [GeV]',
             label_bin_width=True, log=True)
 
 def cut_flow():
@@ -73,6 +70,7 @@ def cut_flow():
 
     plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True, title="19.7 fb-1 (8 TeV)")
 
+
 def control():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/ctrl",
                       channels=["dblh4l_control"], lumi=19.7)
@@ -91,23 +89,27 @@ def control():
     plotter.stack_order("top","dyjets")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
+            #title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            #xlab=r'$M_{l^+l^+}$ [GeV]',
+            title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
+            xlab='M(++) [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            xlab=r'$s_T(\Phi^{++})$ [GeV]',
-            label_bin_width=True, log=True)
+    #plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$s_T(\Phi^{++})$ [GeV]',
+    #        label_bin_width=True, log=True)
 
-    plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            xlab=r'$s_T(\Phi^{--})$ [GeV]',
-            label_bin_width=True, log=True)
+    #plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+    #        xlab=r'$s_T(\Phi^{--})$ [GeV]',
+    #        label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            xlab=r'$s_T$ [GeV]',
+            #title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            #xlab=r'$s_T$ [GeV]',
+            title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
+            xlab='sT [GeV]',
             label_bin_width=True, log=True)
 
 def tt_control():
@@ -127,32 +129,38 @@ def tt_control():
     plotter.add_group("wz", "$WZ$", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
 
+    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+                      facecolor="tomato", edgecolor="red")
+
+    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+                      facecolor="springgreen", edgecolor="seagreen")
+
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("wz", "top", "tt", "dyjets")
+    plotter.stack_order("ttv", "wz", "top", "tt", "dyjets")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 400,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('met.pdf', 'met', 10, 0, 400,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$E_T^{miss}$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st1.pdf', 'sT1', 10, 0, 400,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st2.pdf', 'sT2', 10, 0, 400,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 10, 0, 400,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
 
@@ -178,27 +186,27 @@ def z_control():
     plotter.stack_order("wz", "top", "dyjets", "zz")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('met.pdf', 'met', 20, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$E_T^{miss}$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st1.pdf', 'sT1', 20, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{++})$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st2.pdf', 'sT2', 20, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 20, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
 
