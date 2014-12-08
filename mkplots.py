@@ -36,7 +36,7 @@ def four_l():
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st.pdf', 'sT', 25, 0, 600,
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 800,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
