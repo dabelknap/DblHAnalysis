@@ -47,6 +47,9 @@ class Limits(object):
             'isSig': is_sig,
             'isData': is_data}
 
+    def add_bkg_rate(self, name, rate):
+        self.datacard.add_bkg(name, rate)
+
     def add_systematics(self, syst_name, syst_type, **kwargs):
         self.datacard.add_syst(syst_name, syst_type, **kwargs)
 
