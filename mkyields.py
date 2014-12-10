@@ -55,9 +55,11 @@ def alpha(mass, channel):
 
 
 def bkg_estimate(mass, channel, cuts='(True)'):
-    Nbgsr = alpha(mass, channel) * (data_sideband(mass, channel, cuts=cuts) + 1)
+    Nsb = data_sideband(mass, channel, cuts=cuts)
+    Nbgsr = alpha(mass, channel) * (Nsb + 1.0)
+    Err = alpha(mass, channel) * sqrt(Nsb + 1.0)
 
-    return (Nbgsr, Nbgsr/sqrt(Nbgsr + 1.0))
+    return (Nbgsr, Err)
 
 
 def test():
@@ -123,7 +125,7 @@ def table2latex(table):
     for i in range(nrows):
         row = table[i,:]
         line = ' & '.join(['%.3e' % k for k in row])
-        print line, r'\\'
+        print _4L_MASSES[i], '&', line, r'\\'
 
 
 if __name__ == "__main__":
