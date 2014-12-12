@@ -238,12 +238,12 @@ def plot_mmmm():
 def plot(BP):
     plot_limits("./plots/limits/%s.pdf" % BP, _4L_MASSES, "datacards/%s" % BP, blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
-                y_label=r"95% CLs Upper Limit on $\sigma/\sigma_{SM}$")
+                y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 
 def plot_3l():
     plot_limits("test_3l.pdf", _3L_MASSES, "datacards/3l", blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
-                y_label=r"95% CLs Upper Limit on $\sigma/\sigma_{SM}$")
+                y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 
 
 def parse_command_line(argv):
