@@ -263,7 +263,16 @@ def main(argv=None):
     args = parse_command_line(argv)
 
     if args.operation[0] == "plot":
-        globals()[args.operation[0]](args.operation[1])
+        if args.operation[1] == "all":
+            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+                globals()["plot"](i)
+        else:
+            globals()["plot"](args.operation[1])
+
+    elif args.operation[0] == "all":
+        for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+            globals()[i]()
+
     else:
         globals()[args.operation[0]]()
 
