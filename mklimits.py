@@ -59,8 +59,9 @@ def four_lepton(name, channels, directory, scale=1.0):
             mass,
             '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
 
-        limits.add_bkg_rate("bkg_sb", float(N_db_data) * alpha)
-        limits.add_systematics("bkg_err", "gmN %i" % N_db_data, bkg_sb=alpha)
+        limits.add_bkg_rate("bkg_sb_%s" % channels[0], float(N_db_data) * alpha)
+        kwargs = {"bkg_sb_%s" % channels[0]: alpha}
+        limits.add_systematics("bkg_err_%s" % channels[0], "gmN %i" % N_db_data, **kwargs)
 
         limits.gen_card("%s.txt" % name)
 
