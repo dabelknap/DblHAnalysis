@@ -18,7 +18,7 @@ def data_sideband(mass, channel, cuts='(True)'):
                "./ntuples", channels=["dblh4l"], lumi=19.7)
     x.add_group("data", "data_*", isData=True)
 
-    return ufloat(*x.yields("data")).nominal_value
+    return x.yields("data")[0]
 
 
 def alpha(mass, channel):

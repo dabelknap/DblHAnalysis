@@ -38,10 +38,10 @@ class Datacard(object):
         out += "bin 1\n"
         out += "observation %i\n" % self.observed
 
-        out += "-" * 12 + "\n"
+        out += "-" * 14 + "\n"
 
-        fmt = "{:<17}" + "{:^11}" * (1 + jmax) + "\n"
-        fmt_f = "{:<17}" + "{:^11.3e}" * (1 + jmax) + "\n"
+        fmt = "{:<19}" + "{:^13}" * (1 + jmax) + "\n"
+        fmt_f = "{:<19}" + "{:^13.3e}" * (1 + jmax) + "\n"
 
         row = ["1" for i in xrange(1+jmax)]
         out += fmt.format("bin", *row)
@@ -55,9 +55,9 @@ class Datacard(object):
         row = [self.signal[1]] + [x[1] for x in self.bkg]
         out += fmt_f.format("rate", *row)
 
-        out += "-" * 12 + "\n"
+        out += "-" * 14 + "\n"
 
-        fmt = "{:<12}" + "{:<5}" + "{:^11}" * (1 + jmax) + "\n"
+        fmt = "{:<14}" + "{:<5}" + "{:^13}" * (1 + jmax) + "\n"
 
         for syst in self.syst:
             names = [self.signal[0]] + [x[0] for x in self.bkg]
