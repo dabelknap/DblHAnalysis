@@ -64,7 +64,7 @@ different branching ratio benchpoints.
  - 100% to em
  - 100% to mm
 
-    | ee   | em   | et   | mm    | mt   | tt
+Name| ee   | em   | et   | mm    | mt   | tt
 ----|------|------|------|-------|------|------
 BP1 | 0    | 0.01 | 0.01 | 0.3   | 0.38 | 0.3
 BP2 | 0.5  | 0    | 0    | 0.125 | 0.25 | 0.125
