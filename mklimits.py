@@ -106,7 +106,7 @@ def fourl_100():
 
 
 def BP1():
-    s = Scales(0, 0.1, 0.1, 0.3, 0.38, 0.3)
+    s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
     four_lepton("emem", ["emem", "emme", "meme", "meem"], "./datacards/BP1", scale=s.scale("em","em"))
     four_lepton("emmm", ["emmm", "memm"], "./datacards/BP1", scale=s.scale("em","mm"))
     four_lepton("mmem", ["mmem", "mmme"], "./datacards/BP1", scale=s.scale("mm","em"))
