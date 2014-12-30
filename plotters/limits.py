@@ -81,3 +81,5 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, x_label="", 
     plt.ylabel(y_label)
 
     plt.savefig(out_fname)
+
+    plt.clf()
