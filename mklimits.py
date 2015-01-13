@@ -238,6 +238,7 @@ def plot_mmmm():
 
 def plot(BP):
     plot_limits("./plots/limits/%s.pdf" % BP, _4L_MASSES, "datacards/%s" % BP, blinded=True,
+                title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 

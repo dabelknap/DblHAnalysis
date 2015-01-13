@@ -32,7 +32,7 @@ import ROOT as rt
 sys.argv.pop() # remove '-b' from cmd-line args
 
 
-def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, x_label="", y_label=""):
+def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, title="", x_label="", y_label=""):
     masses = np.asarray(masses, dtype=int)
 
     q = np.empty((6, masses.size), dtype=float)
@@ -79,6 +79,7 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, x_label="", 
 
     plt.xlabel(x_label)
     plt.ylabel(y_label)
+    plt.title(title)
 
     plt.savefig(out_fname)
 
