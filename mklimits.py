@@ -9,7 +9,7 @@ import argparse
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-_4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
+_4L_MASSES = [130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
 _3L_MASSES = [170, 200, 250, 300, 350, 400, 450,
