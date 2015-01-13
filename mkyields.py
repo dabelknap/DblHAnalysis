@@ -9,6 +9,23 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
 
 
 def data_sideband(mass, channel, cuts='(True)'):
+    """
+    Compute the number of data events in the sidebands.
+
+    Parameters
+    ----------
+    mass : float
+    channel : str
+        Must be 'eeee', 'emem', or 'mmmm', etc.
+    cuts : str
+        Additional sideband selections
+
+    Returns
+    -------
+    N : int
+        Number of events in sideband from data
+    """
+
     # Define mass window
     window = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     window += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
@@ -22,6 +39,27 @@ def data_sideband(mass, channel, cuts='(True)'):
 
 
 def alpha(mass, channel):
+    """
+    Compute alpha used in sideband method background estimation
+
+    Parameters
+    ----------
+    mass : float
+    channel : str
+        Must be 'eeee', 'emem', or 'mmmm', etc.
+    cuts : str
+        Additional sideband selections
+
+    Returns
+    -------
+        alpha : float
+            If the sideband has 0 MC statistics, return MC value in signal region
+            If the error in the signal region is greater than nominal value,
+                return the standard deviaiton in signal region
+            Otherwise, return the ratio of the events in the signal region to
+                the sidebands
+    """
+
     cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
     cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
 
@@ -55,6 +93,22 @@ def alpha(mass, channel):
 
 
 def bkg_estimate(mass, channel, cuts='(True)'):
+    """
+    Compute the background estimate using the sideband method
+
+    Parameters
+    ----------
+    mass : float
+    channel : str
+    cuts : str
+
+    Returns
+    -------
+    Nbgsr : float
+        Number of background events in signal region
+    Err : float
+        Error on background estimate in signal region
+    """
     Nsb = data_sideband(mass, channel, cuts=cuts)
     Nbgsr = alpha(mass, channel) * (Nsb + 1.0)
     Err = alpha(mass, channel) * sqrt(Nsb + 1.0)
