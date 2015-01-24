@@ -52,12 +52,12 @@ def alpha(mass, channel):
 
     Returns
     -------
-        alpha : float
-            If the sideband has 0 MC statistics, return MC value in signal region
-            If the error in the signal region is greater than nominal value,
-                return the standard deviaiton in signal region
-            Otherwise, return the ratio of the events in the signal region to
-                the sidebands
+    alpha : float
+        If the sideband has 0 MC statistics, return MC value in signal region
+        If the error in the signal region is greater than nominal value,
+            return the standard deviaiton in signal region
+        Otherwise, return the ratio of the events in the signal region to
+            the sidebands
     """
 
     cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
