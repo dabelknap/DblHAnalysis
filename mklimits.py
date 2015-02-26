@@ -1,5 +1,5 @@
 from limits import Limits
-from plotters.limits import plot_limits
+from plotters.limits import plot_limits, exclusion
 import mkyields as mky
 import logging
 import sys
@@ -242,6 +242,11 @@ def plot(BP):
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM}$")
 
+
+def exclude(BP):
+    print BP, exclusion(_4L_MASSES, "datacards/%s" % BP, blinded=True)
+
+
 def plot_3l():
     plot_limits("test_3l.pdf", _3L_MASSES, "datacards/3l", blinded=True,
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
@@ -270,6 +275,13 @@ def main(argv=None):
                 globals()["plot"](i)
         else:
             globals()["plot"](args.operation[1])
+
+    if args.operation[0] == "exclude":
+        if args.operation[1] == "all":
+            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+                globals()["exclude"](i)
+        else:
+            globals()["exclude"](args.operation[1])
 
     elif args.operation[0] == "all":
         for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
