@@ -191,6 +191,32 @@ def mktable(channels):
     return out
 
 
+def lepscale(channels):
+
+    print "mass, diff_e, diff_mu"
+
+    for mass in (_4L_MASSES):
+        log.info("Processing signal mass: %s" % mass)
+
+        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
+                                       in channels])
+
+        mc_sig = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                        lumi=19.7)
+        mc_sig.add_group("sig", "HPlus*M-%i_8TeV*" % mass)
+
+        nominal = mc_sig.yields("sig")[0]
+        e_up    = mc_sig.yields("sig", scale = "lep_scale_e_up")[0]
+        mu_up   = mc_sig.yields("sig", scale = "lep_scale_m_up")[0]
+
+        diff_e = (e_up - nominal)/nominal * 100.0
+        diff_mu = (mu_up - nominal)/nominal * 100.0
+
+        print mass, diff_e, diff_mu
+
+
 def table2latex(table):
     nrows = table.shape[0]
 
@@ -201,4 +227,12 @@ def table2latex(table):
 
 
 if __name__ == "__main__":
-    table2latex(mktable())
+    #table2latex(mktable())
+    #out = mktable(["emem", "meme", "emme", "meem"])
+    #out = mktable(["mmmm"])
+    #out = mktable(["eeee"])
+    #print "mass mc_sig sigma(mc_sig) mc_bkg sigma(mc_bkg) sb_bkg sigma(sb_bkg)"
+    #for i, mass in enumerate(_4L_MASSES):
+    #    print mass, out[i,0], out[i,1], out[i,2], out[i,3], out[i,4], out[i,5]
+
+    lepscale(["mmmm"])
