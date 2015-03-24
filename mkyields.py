@@ -192,14 +192,21 @@ def mktable(channels):
 
 
 def lepscale(channels):
+    """
+    Print a table of the %-change in the signal yields (for each mass point)
+    for the provided channel.
+    """
 
     print "mass, diff_e, diff_mu"
 
     for mass in (_4L_MASSES):
         log.info("Processing signal mass: %s" % mass)
 
+        # Apply 2D mass window for the given mass point
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
         cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+
+        # Select which channels to look at
         cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
                                        in channels])
 
@@ -207,10 +214,14 @@ def lepscale(channels):
                         lumi=19.7)
         mc_sig.add_group("sig", "HPlus*M-%i_8TeV*" % mass)
 
+        # compute the nominal yields with the normal scale factors
         nominal = mc_sig.yields("sig")[0]
+
+        # compute the yields with the scaled-up scale factors
         e_up    = mc_sig.yields("sig", scale = "lep_scale_e_up")[0]
         mu_up   = mc_sig.yields("sig", scale = "lep_scale_m_up")[0]
 
+        # compute the %-change in the yields
         diff_e = (e_up - nominal)/nominal * 100.0
         diff_mu = (mu_up - nominal)/nominal * 100.0
 
@@ -235,4 +246,5 @@ if __name__ == "__main__":
     #for i, mass in enumerate(_4L_MASSES):
     #    print mass, out[i,0], out[i,1], out[i,2], out[i,3], out[i,4], out[i,5]
 
-    lepscale(["mmmm"])
+    #lepscale(["mmmm"])
+    lepscale(["eeee"])
