@@ -48,7 +48,7 @@ def run_4l(args):
 
 def run_zz_4l(args):
     location, outfile = args
-    print "processing %s" % name
+    print "processing %s" % location
     with anZZ.ZZAnalyzer4l(location, outfile) as Anlyzr:
         Anlyzr.analyze()
 
@@ -79,11 +79,11 @@ def run_ntuples(analyzer_type, samples, njobs=1):
 
     elif analyzer_type == "zz":
         p.map(run_zz_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
-        for name in sample_names:
-            print "processing %s" % name
-            with anZZ.ZZAnalyzer4l("%s/%s" % (root_dir, name),
-                                     "%s/%s.h5" % (ntup_dir, name)) as Anlyzr:
-                Anlyzr.analyze()
+        #for name in sample_names:
+        #    print "processing %s" % name
+        #    with anZZ.ZZAnalyzer4l("%s/%s" % (root_dir, name),
+        #                             "%s/%s.h5" % (ntup_dir, name)) as Anlyzr:
+        #        Anlyzr.analyze()
 
     else:
         raise ValueError("%s is invalid option" % analyzer_type)

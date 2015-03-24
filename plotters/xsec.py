@@ -23,6 +23,8 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-600_8TeV-pythia6': 0.13271 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-700_8TeV-pythia6': 0.48382e-1 * FB,
 
+         'GluGluToHToZZTo4L_M-125_8TeV-powheg-pythia6': 2.44 * FB,
+
          'DYJetsToLL_M-10To50filter_8TeV-madgraph':          915.0 * PB,
          'DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball': 3503.71 * PB,
 
