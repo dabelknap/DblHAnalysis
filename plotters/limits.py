@@ -2,6 +2,9 @@ import sys
 import os
 
 import numpy as np
+import scipy as sp
+import scipy.interpolate as spi
+import scipy.optimize as spo
 
 import matplotlib as mpl
 from matplotlib.patches import Patch
@@ -84,3 +87,29 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, title="", x_
     plt.savefig(out_fname)
 
     plt.clf()
+
+
+def exclusion(masses, datacard_base_dir, blinded=True):
+    masses = np.asarray(masses, dtype=int)
+
+    q = np.empty((6, masses.size), dtype=float)
+
+    for j, mass in enumerate(masses):
+        fname = os.path.join(datacard_base_dir, str(mass),
+                             "higgsCombineTest.Asymptotic.mH%i.root" % mass)
+        rtfile = rt.TFile(fname, "READ")
+        tree = rtfile.Get("limit")
+
+        for i, row in enumerate(tree):
+            q[i,j] = row.limit
+
+    fun_exp = spi.interp1d(masses, q[2]-1) # expected
+    fun_obs = spi.interp1d(masses, q[5]-1) # observed
+
+    ecl_exp = spo.newton(fun_exp, 600)
+    ecl_obs = spo.newton(fun_obs, 600)
+
+    if blinded:
+        return (ecl_exp, None)
+    else:
+        return (ecl_exp, ecl_obs)
