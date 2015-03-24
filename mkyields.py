@@ -149,14 +149,17 @@ def test():
     print (zz + top)/(z)
 
 
-def mktable():
+def mktable(channels):
 
-    out = np.zeros((len(_4L_MASSES), 4))
+    out = np.zeros((len(_4L_MASSES), 6))
 
     for i, mass in enumerate(_4L_MASSES):
+
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
         cuts+= '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
-        cuts += '& (channel == "mmmm")'
+        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
+                                       in channels])
+
         mc_bkg = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
                         lumi=19.7)
         mc_bkg.add_group("zz", "ZZTo*")
@@ -166,12 +169,24 @@ def mktable():
         bkg_rate = ufloat(*mc_bkg.yields("zz")) + ufloat(*mc_bkg.yields("top"))\
                    + ufloat(*mc_bkg.yields("dyjets"))
 
-        bkg_est = bkg_estimate(mass, '(channel == "mmmm")')
 
-        out[i,0] = bkg_rate.nominal_value
-        out[i,1] = bkg_rate.std_dev
-        out[i,2] = bkg_est[0]
-        out[i,3] = bkg_est[1]
+        bkg_est = bkg_estimate(mass, '(%s)' % ' | '.join(['(channel == "%s")' %
+                                                          channel for channel
+                                                          in channels]))
+
+        mc_sig = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                        lumi=19.7)
+        mc_sig.add_group("sig", "HPlus*M-%i_8TeV*" % mass)
+
+        sig_rate = ufloat(*mc_sig.yields("sig"))*36.0
+
+
+        out[i,0] = sig_rate.nominal_value
+        out[i,1] = sig_rate.std_dev
+        out[i,2] = bkg_rate.nominal_value
+        out[i,3] = bkg_rate.std_dev
+        out[i,4] = bkg_est[0]
+        out[i,5] = bkg_est[1]
 
     return out
 
