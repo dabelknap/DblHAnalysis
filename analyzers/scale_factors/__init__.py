@@ -20,42 +20,54 @@ class LeptonScaleFactors(object):
         self.m_hist = self.m_rtfile.Get("TH2D_ALL_2012")
 
     def scale_factor(self, row, *lep_list):
-        out = 1.0
+        scl = 1.0
+        mup = 1.0
+        eup = 1.0
         for l in lep_list:
             lep_type = l[0]
 
             if lep_type == 'm':
-                out *= self.m_scale(row, l)
+                mscale = self.m_scale(row, l)
+                scl *= mscale[0]
+                mup *= mscale[0] + mscale[1]
+                eup *= mscale[0]
 
             elif lep_type == 'e':
-                out *= self.e_scale(row, l)
+                escale = self.e_scale(row, l)
+                scl *= escale[0]
+                mup *= escale[0]
+                eup *= escale[0] + escale[1]
 
             else:
                 raise TypeError("Lepton type %s not recognized" % lep_type)
 
-        return out
+        return (scl, mup, eup)
 
     def e_scale(self, row, l):
         pt = getattr(row, "%sPt" % l)
         eta = getattr(row, "%sEta" % l)
         global_bin = self.e_hist.FindBin(pt, eta)
         scl = self.e_hist.GetBinContent(global_bin)
+        err = self.e_hist.GetBinError(global_bin)
 
         if scl < 0.1:
             scl = 1.0
+            err = 0.0
 
-        return scl
+        return (scl, err)
 
     def m_scale(self, row, l):
         pt = getattr(row, "%sPt" % l)
         eta = getattr(row, "%sEta" % l)
         global_bin = self.m_hist.FindBin(pt, eta)
         scl = self.m_hist.GetBinContent(global_bin)
+        err = self.m_hist.GetBinError(global_bin)
 
         if scl < 0.1:
             scl = 1.0
+            err = 0.0
 
-        return scl
+        return (scl, err)
 
     def close(self):
         self.e_rtfile.Close()

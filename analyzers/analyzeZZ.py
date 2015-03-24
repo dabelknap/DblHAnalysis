@@ -177,8 +177,10 @@ class ZZAnalyzer(object):
         h5row["lumi"] = rtrow.lumi
         h5row["run"] = rtrow.run
 
-        h5row["lep_scale"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
-        h5row["pu_weight"] = self.pu_weights.weight(rtrow)
+        h5row["lep_scale"]      = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)[0]
+        h5row["lep_scale_m_up"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)[1]
+        h5row["lep_scale_e_up"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)[2]
+        h5row["pu_weight"]      = self.pu_weights.weight(rtrow)
 
         h5row["channel"] = "%s%s%s%s" % (l1[0], l2[0], l3[0], l4[0])
 

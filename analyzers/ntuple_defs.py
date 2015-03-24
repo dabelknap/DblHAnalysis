@@ -2,16 +2,18 @@ import tables as tb
 
 
 class EventBase(tb.IsDescription):
-    evt     = tb.Int32Col()
-    run     = tb.Int32Col()
-    lumi    = tb.Int32Col()
+    evt            = tb.Int32Col()
+    run            = tb.Int32Col()
+    lumi           = tb.Int32Col()
 
-    nvtx    = tb.Int32Col()
+    nvtx           = tb.Int32Col()
 
-    channel = tb.StringCol(4)
+    channel        = tb.StringCol(4)
 
-    lep_scale = tb.Float32Col()
-    pu_weight = tb.Float32Col()
+    lep_scale      = tb.Float32Col()
+    lep_scale_e_up = tb.Float32Col()
+    lep_scale_m_up = tb.Float32Col()
+    pu_weight      = tb.Float32Col()
 
 
 class Event4l(EventBase):
