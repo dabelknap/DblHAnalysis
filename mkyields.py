@@ -2,11 +2,14 @@ from yields import Yields
 from uncertainties import ufloat
 from numpy import sqrt
 import numpy as np
+import logging
 
 
 _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 def data_sideband(mass, channel, cuts='(True)'):
     """
