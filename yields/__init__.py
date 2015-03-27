@@ -47,11 +47,16 @@ class Yields(object):
         cuts = kwargs.get('cuts', '(True)')
         cut = "%s & %s" % (self.base_selections, cuts)
 
+        # choose which lepton scale-factor to use
+        # e.g. lep_scale, lep_scale_e_up, lep_scale_m_up, ...
         lep_scale = kwargs.get('scale', 'lep_scale')
 
         is_data = self.sample_groups[group_name]['isData']
         vals = []
         wgts = []
+
+        # Scale the yields globally by the given factor
+        # Indented for adjusting yields for different BR scenarios
         scale_factor = self.sample_groups[group_name]['scale']
 
         if not is_data:
