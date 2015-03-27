@@ -1,6 +1,7 @@
 from yields import Yields
 from uncertainties import ufloat
 from numpy import sqrt
+from tabulate import tabulate
 import numpy as np
 import logging
 
@@ -228,6 +229,48 @@ def lepscale(channels):
         print mass, diff_e, diff_mu
 
 
+def lepscale_ZZ():
+    """
+    Print a table of the %-change in the signal yields (for each mass point)
+    for the provided channel.
+    """
+
+    chan = [["mmmm"],["eeee"],["eemm","mmee"]]
+
+    out = []
+
+    for channels in chan:
+
+        # HZZ4L phase space cuts
+        cuts = ('(mass > 0) '
+                '& (40 < z1mass) & (z1mass < 120) '
+                '& (12 < z2mass) & (z2mass < 120)')
+
+        # Select which channels to look at
+        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
+                                       in channels])
+
+        mc_sig = Yields("ZZ4l", cuts, "./ntuples", channels=["zz4l"], lumi=19.7)
+        mc_sig.add_group("sig", "GluGluToH*")
+
+        # compute the nominal yields with the normal scale factors
+        nominal = mc_sig.yields("sig")[0]
+
+        # compute the yields with the scaled-up scale factors
+        e_up    = mc_sig.yields("sig", scale = "lep_scale_e_up")[0]
+        mu_up   = mc_sig.yields("sig", scale = "lep_scale_m_up")[0]
+
+        # compute the %-change in the yields
+        diff_e = (e_up - nominal)/nominal * 100.0
+        diff_mu = (mu_up - nominal)/nominal * 100.0
+
+        out.append([channels[0], nominal, e_up, mu_up, diff_e, diff_mu])
+
+    print ""
+    print tabulate(out, headers=["Channels", "Nominal Yield", "Yield e Up",
+                                 "Yield mu Up", "%-Diff e", "%-Diff mu"])
+
+
 def table2latex(table):
     nrows = table.shape[0]
 
@@ -247,4 +290,4 @@ if __name__ == "__main__":
     #    print mass, out[i,0], out[i,1], out[i,2], out[i,3], out[i,4], out[i,5]
 
     #lepscale(["mmmm"])
-    lepscale(["eeee"])
+    lepscale_ZZ()
