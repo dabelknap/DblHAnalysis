@@ -312,7 +312,7 @@ def main(argv=None):
         else:
             globals()["plot"](args.operation[1])
 
-    if args.operation[0] == "exclude":
+    elif args.operation[0] == "exclude":
         if args.operation[1] == "all":
             for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
                 globals()["exclude"](i)
