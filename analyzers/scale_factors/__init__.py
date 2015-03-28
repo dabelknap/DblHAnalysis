@@ -31,7 +31,7 @@ class LeptonScaleFactors(object):
         mup = 1.0
         eup = 1.0
 
-        log_mssg = "[evt: %i, lumi: %i, run %i]  " % \
+        log_mssg = "[evt: %i, lumi: %i, run %i]\n" % \
                (row.evt, row.lumi, row.run)
 
         for l in lep_list:
@@ -43,8 +43,9 @@ class LeptonScaleFactors(object):
                 mup *= mscale[0] + mscale[1]
                 eup *= mscale[0]
 
-                log_mssg += " m: {scale: %f, sigma: %f}, " % \
-                    (mscale[0], mscale[1])
+                log_mssg += "    m: {pt: %f, eta: %f, scale: %f, sigma: %f}\n" % \
+                    (getattr(row, "%sPt" % l), getattr(row, "%sEta" % l),
+                     mscale[0], mscale[1])
 
             elif lep_type == 'e':
                 escale = self.e_scale(row, l)
@@ -52,13 +53,14 @@ class LeptonScaleFactors(object):
                 mup *= escale[0]
                 eup *= escale[0] + escale[1]
 
-                log_mssg += " e: {scale: %f, sigma: %f}, " % \
-                    (escale[0], escale[1])
+                log_mssg += "    e: {pt: %f, eta: %f, scale: %f, sigma: %f}\n" % \
+                    (getattr(row, "%sPt" % l), getattr(row, "%sEta" % l),
+                     escale[0], escale[1])
 
             else:
                 raise TypeError("Lepton type %s not recognized" % lep_type)
 
-        log_mssg += " scale: %f, scale_mu_up: %f, scale_e_up: %f" % \
+        log_mssg += "    scale: %f, scale_mu_up: %f, scale_e_up: %f\n" % \
             (scl, mup, eup)
 
         self.logger.debug(log_mssg)
