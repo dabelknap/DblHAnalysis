@@ -47,7 +47,10 @@ class Analyzer(object):
         self.finish()
 
     def begin(self):
-        self.lepscaler = LeptonScaleFactors()
+        lepscaler_logfile = os.path.splitext(
+                os.path.basename(self.outfile))[0] + ".log"
+
+        self.lepscaler = LeptonScaleFactors(logfile=lepscaler_logfile)
         self.pu_weights = PileupWeights()
 
         self.h5file = tb.open_file(self.outfile, mode='a')
@@ -58,7 +61,8 @@ class Analyzer(object):
             pass
 
         try:
-            self.group = self.h5file.create_group('/', 'DblH', 'Doubly-Charged Higgs Analysis')
+            self.group = self.h5file.create_group(
+                    '/', 'DblH', 'Doubly-Charged Higgs Analysis')
         except tb.NodeError:
             self.group = self.h5file.root.DblH
 

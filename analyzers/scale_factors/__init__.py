@@ -9,7 +9,7 @@ sys.argv.pop()
 
 class LeptonScaleFactors(object):
 
-    def __init__(self):
+    def __init__(self, logfile="scalefactors.log"):
         path = os.path.join(os.path.dirname(__file__),
                             'CombinedMethod_ScaleFactors_RecoIdIsoSip.root')
         self.e_rtfile = rt.TFile(path, 'READ')
@@ -23,7 +23,7 @@ class LeptonScaleFactors(object):
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(
                 level=logging.DEBUG,
-                filename='analyzers/scale_factors/scalefactors.log',
+                filename='analyzers/scale_factors/logs/%s' % logfile,
                 filemode='w')
 
     def scale_factor(self, row, *lep_list):
@@ -31,7 +31,8 @@ class LeptonScaleFactors(object):
         mup = 1.0
         eup = 1.0
 
-        log_mssg = ""
+        log_mssg = "[evt: %i, lumi: %i, run %i]  " % \
+               (row.evt, row.lumi, row.run)
 
         for l in lep_list:
             lep_type = l[0]
