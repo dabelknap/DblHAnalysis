@@ -198,7 +198,7 @@ def lepscale(channels):
     for the provided channel.
     """
 
-    print "mass, diff_e, diff_mu"
+    out = []
 
     for mass in (_4L_MASSES):
         log.info("Processing signal mass: %s" % mass)
@@ -226,7 +226,12 @@ def lepscale(channels):
         diff_e = (e_up - nominal)/nominal * 100.0
         diff_mu = (mu_up - nominal)/nominal * 100.0
 
-        print mass, diff_e, diff_mu
+        out.append([mass, nominal, e_up, mu_up, diff_e, diff_mu])
+
+    print ""
+    print channels[0]
+    print tabulate(out, headers=["Mass", "Nominal Yield", "Yield e Up",
+                                 "Yield mu Up", "%-Diff e", "%-Diff mu"])
 
 
 def lepscale_ZZ():
@@ -289,5 +294,10 @@ if __name__ == "__main__":
     #for i, mass in enumerate(_4L_MASSES):
     #    print mass, out[i,0], out[i,1], out[i,2], out[i,3], out[i,4], out[i,5]
 
-    #lepscale(["mmmm"])
-    lepscale_ZZ()
+    lepscale(["mmmm"])
+    lepscale(["eeee"])
+    lepscale(["emem","emme","meem","meme"])
+    lepscale(["eemm","mmee"])
+    lepscale(["eeem","eeme","emee","meee"])
+    lepscale(["mmme","mmem","memm","emmm"])
+    #lepscale_ZZ()
