@@ -177,9 +177,10 @@ class Analyzer(object):
 
         h5row["nvtx"] = rtrow.nvtx
 
-        h5row["lep_scale"]      = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)[0]
-        h5row["lep_scale_m_up"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)[1]
-        h5row["lep_scale_e_up"] = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)[2]
+        scales = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
+        h5row["lep_scale"]      = scales[0]
+        h5row["lep_scale_m_up"] = scales[1]
+        h5row["lep_scale_e_up"] = scales[2]
         h5row["pu_weight"]      = self.pu_weights.weight(rtrow)
 
         h5row["channel"] = "%s%s%s%s" % (l1[0], l2[0], l3[0], l4[0])
