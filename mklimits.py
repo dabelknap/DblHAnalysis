@@ -6,6 +6,7 @@ import sys
 import numpy as np
 import argparse
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -14,6 +15,29 @@ _4L_MASSES = [130, 150, 170, 200, 250, 300,
 
 _3L_MASSES = [170, 200, 250, 300, 350, 400, 450,
               500, 600, 700]
+
+_EFFICIENCY_SYST = {"mmmm": {"m": 1.003},
+                    "eeee": {"e": 1.061},
+                    "eemm": {"m": 1.002, "e": 1.030},
+                    "eeem": {"m": 1.001, "e": 1.042},
+                    "emmm": {"m": 1.002, "e": 1.047}}
+
+
+def efficiency_systematic(channel):
+    # sort the characters so e's come before m's
+    # normalize the channel format so it works with the dictionary
+    chan = ''.join(sorted(channel))
+    try:
+        m_syst = _EFFICIENCY_SYST[chan]['m']
+    except KeyError:
+        m_syst = None
+
+    try:
+        e_syst = _EFFICIENCY_SYST[chan]['e']
+    except KeyError:
+        e_syst = None
+
+    return (m_syst, e_syst)
 
 
 class Scales(object):
@@ -47,8 +71,20 @@ def four_lepton(name, channels, directory, scale=1.0):
         hpp_sys = {'hpp%i' % mass: 1.15}
         limits.add_systematics("sig_mc_err", "lnN", **hpp_sys)
 
-        mu_eff = {'hpp%i' % mass: 1.043}
-        limits.add_systematics("mu_eff", "lnN", **mu_eff)
+        #mu_eff = {'hpp%i' % mass: 1.043}
+        #limits.add_systematics("mu_eff", "lnN", **mu_eff)
+
+        eff_syst = efficiency_systematic(name)
+
+        # Add the muon efficiency systematic if it exists for this channel
+        if eff_syst[0]:
+            mu_eff = {'hpp%i' % mass: eff_syst[0]}
+            limits.add_systematics("mu_eff", "lnN", **mu_eff)
+
+        # Add the electron efficiency systematic if it exists for this channel
+        if eff_syst[1]:
+            e_eff = {'hpp%i' % mass: eff_syst[1]}
+            limits.add_systematics("e_eff", "lnN", **e_eff)
 
         N_db_data = mky.data_sideband(
             mass,
