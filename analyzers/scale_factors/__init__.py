@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 
 sys.argv.append('-b')
 import ROOT as rt
@@ -19,10 +20,19 @@ class LeptonScaleFactors(object):
         self.m_rtfile = rt.TFile(path, 'READ')
         self.m_hist = self.m_rtfile.Get("TH2D_ALL_2012")
 
+        self.logger = logging.getLogger(__name__)
+        logging.basicConfig(
+                level=logging.DEBUG,
+                filename='analyzers/scale_factors/scalefactors.log',
+                filemode='w')
+
     def scale_factor(self, row, *lep_list):
         scl = 1.0
         mup = 1.0
         eup = 1.0
+
+        log_mssg = ""
+
         for l in lep_list:
             lep_type = l[0]
 
@@ -32,14 +42,25 @@ class LeptonScaleFactors(object):
                 mup *= mscale[0] + mscale[1]
                 eup *= mscale[0]
 
+                log_mssg += " m: {scale: %f, sigma: %f}, " % \
+                    (mscale[0], mscale[1])
+
             elif lep_type == 'e':
                 escale = self.e_scale(row, l)
                 scl *= escale[0]
                 mup *= escale[0]
                 eup *= escale[0] + escale[1]
 
+                log_mssg += " e: {scale: %f, sigma: %f}, " % \
+                    (escale[0], escale[1])
+
             else:
                 raise TypeError("Lepton type %s not recognized" % lep_type)
+
+        log_mssg += " scale: %f, scale_mu_up: %f, scale_e_up: %f" % \
+            (scl, mup, eup)
+
+        self.logger.debug(log_mssg)
 
         return (scl, mup, eup)
 
