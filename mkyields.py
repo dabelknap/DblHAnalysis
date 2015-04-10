@@ -200,7 +200,8 @@ def lepscale(channels):
 
     out = []
 
-    for mass in (_4L_MASSES):
+    #for mass in (_4L_MASSES):
+    for mass in ([110]):
         log.info("Processing signal mass: %s" % mass)
 
         # Apply 2D mass window for the given mass point
@@ -223,15 +224,16 @@ def lepscale(channels):
         mu_up   = mc_sig.yields("sig", scale = "lep_scale_m_up")[0]
 
         # compute the %-change in the yields
-        diff_e = (e_up - nominal)/nominal * 100.0
-        diff_mu = (mu_up - nominal)/nominal * 100.0
+        diff_e = (e_up - nominal)/nominal + 1.0
+        diff_mu = (mu_up - nominal)/nominal + 1.0
 
         out.append([mass, nominal, e_up, mu_up, diff_e, diff_mu])
 
     print ""
     print channels[0]
     print tabulate(out, headers=["Mass", "Nominal Yield", "Yield e Up",
-                                 "Yield mu Up", "%-Diff e", "%-Diff mu"])
+                                 "Yield mu Up", "%-Diff e", "%-Diff mu"],
+                   floatfmt=".3f")
 
 
 def lepscale_ZZ():
