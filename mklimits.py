@@ -5,6 +5,7 @@ import logging
 import sys
 import numpy as np
 import argparse
+from tabulate import tabulate
 
 
 logger = logging.getLogger(__name__)
@@ -280,7 +281,7 @@ def plot(BP):
 
 
 def exclude(BP):
-    print BP, exclusion(_4L_MASSES, "datacards/%s" % BP, blinded=True)
+     return exclusion(_4L_MASSES, "datacards/%s" % BP, blinded=True)
 
 
 def plot_3l():
@@ -314,10 +315,15 @@ def main(argv=None):
 
     elif args.operation[0] == "exclude":
         if args.operation[1] == "all":
+            out = []
             for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
-                globals()["exclude"](i)
+                exp, obs = globals()["exclude"](i)
+                out.append([i,exp,obs])
+            print tabulate(out,
+                           headers=["BP", "Expected", "Observed"],
+                           floatfmt=".0f")
         else:
-            globals()["exclude"](args.operation[1])
+            print globals()["exclude"](args.operation[1])
 
     elif args.operation[0] == "all":
         for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
