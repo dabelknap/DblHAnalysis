@@ -129,11 +129,21 @@ def four_lepton_mc(name, channels, directory, scale=1.0):
         hpp_sys = {'hpp%i' % mass: 1.15}
         limits.add_systematics("sig_mc_err", "lnN", **hpp_sys)
 
-        mu_eff = {'hpp%i' % mass: 1.043,
-                  'dyjets':       1.043,
-                  'zz':           1.043,
-                  'top':          1.043}
-        limits.add_systematics("mu_eff", "lnN", **mu_eff)
+        eff_syst = efficiency_systematic(name)
+
+        if eff_syst[0]:
+            mu_eff = {'hpp%i' % mass: eff_syst[0],
+                      'dyjets':       eff_syst[0],
+                      'zz':           eff_syst[0],
+                      'top':          eff_syst[0]}
+            limits.add_systematics("mu_eff", "lnN", **mu_eff)
+
+        if eff_syst[1]:
+            e_eff = {'hpp%i' % mass: eff_syst[1],
+                     'dyjets':       eff_syst[1],
+                     'zz':           eff_syst[1],
+                     'top':          eff_syst[1]}
+            limits.add_systematics("e_eff", "lnN", **e_eff)
 
         limits.gen_card("%s.txt" % name)
 
