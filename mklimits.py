@@ -3,6 +3,7 @@ from plotters.limits import plot_limits, exclusion
 import mkyields as mky
 import logging
 import sys
+import os
 import numpy as np
 import argparse
 from tabulate import tabulate
@@ -154,51 +155,51 @@ def fourl_100():
     four_lepton("card", ["emem","emme", "meem", "meme"], "./datacards/emem_100", scale=36.0)
 
 
-def BP1():
+def BP1(directory):
     s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
-    four_lepton("emem", ["emem", "emme", "meme", "meem"], "./datacards/BP1", scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm", "memm"], "./datacards/BP1", scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem", "mmme"], "./datacards/BP1", scale=s.scale("mm","em"))
-    four_lepton("mmmm", ["mmmm"], "./datacards/BP1", scale=s.scale("mm","mm"))
+    four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP1"), scale=s.scale("em","em"))
+    four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP1"), scale=s.scale("em","mm"))
+    four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP1"), scale=s.scale("mm","em"))
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s.scale("mm","mm"))
 
 
-def BP2():
+def BP2(directory):
     s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
-    four_lepton("eemm", ["eemm"], "./datacards/BP2", scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], "./datacards/BP2", scale=s.scale("mm","ee"))
-    four_lepton("eeee", ["eeee"], "./datacards/BP2", scale=s.scale("ee","ee"))
-    four_lepton("mmmm", ["mmmm"], "./datacards/BP2", scale=s.scale("mm","mm"))
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP2"), scale=s.scale("ee","mm"))
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP2"), scale=s.scale("mm","ee"))
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP2"), scale=s.scale("ee","ee"))
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP2"), scale=s.scale("mm","mm"))
 
 
-def BP3():
+def BP3(directory):
     s = Scales(0.34, 0, 0, 0.33, 0, 0.33)
-    four_lepton("eemm", ["eemm"], "./datacards/BP3", scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], "./datacards/BP3", scale=s.scale("mm","ee"))
-    four_lepton("eeee", ["eeee"], "./datacards/BP3", scale=s.scale("ee","ee"))
-    four_lepton("mmmm", ["mmmm"], "./datacards/BP3", scale=s.scale("mm","mm"))
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s.scale("ee","mm"))
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s.scale("mm","ee"))
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s.scale("ee","ee"))
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP3"), scale=s.scale("mm","mm"))
 
 
-def BP4():
+def BP4(directory):
     s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
-    four_lepton("emem", ["emem", "emme", "meme", "meem"], "./datacards/BP4", scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm", "memm"], "./datacards/BP4", scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem", "mmme"], "./datacards/BP4", scale=s.scale("mm","em"))
-    four_lepton("mmmm", ["mmmm"], "./datacards/BP4", scale=s.scale("mm","mm"))
-    four_lepton("eeee", ["eeee"], "./datacards/BP4", scale=s.scale("ee","ee"))
-    four_lepton("eemm", ["eemm"], "./datacards/BP4", scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], "./datacards/BP4", scale=s.scale("mm","ee"))
+    four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP4"), scale=s.scale("em","em"))
+    four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP4"), scale=s.scale("em","mm"))
+    four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP4"), scale=s.scale("mm","em"))
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s.scale("mm","mm"))
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s.scale("ee","ee"))
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s.scale("ee","mm"))
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP4"), scale=s.scale("mm","ee"))
 
 
-def mm100():
-    four_lepton("mmmm", ["mmmm"], "./datacards/mm100", scale=36.0)
+def mm100(directory):
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "mm100"), scale=36.0)
 
 
-def ee100():
-    four_lepton("eeee", ["eeee"], "./datacards/ee100", scale=36.0)
+def ee100(directory):
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "ee100"), scale=36.0)
 
 
-def em100():
-    four_lepton("emem", ["emem", "emme", "meem", "meme"], "./datacards/em100", scale=36.0)
+def em100(directory):
+    four_lepton("emem", ["emem", "emme", "meem", "meme"], os.path.join(directory, "em100"), scale=36.0)
 
 
 def mmmm_100(mass):
@@ -339,10 +340,10 @@ def main(argv=None):
 
     elif args.operation[0] == "all":
         for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
-            globals()[i]()
+            globals()[i]("./datacards")
 
     else:
-        globals()[args.operation[0]]()
+        globals()[args.operation[0]]("./datacards")
 
     return 0
 
