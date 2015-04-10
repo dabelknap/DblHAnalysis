@@ -8,7 +8,7 @@ import argparse
 from tabulate import tabulate
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("mklimits")
 logging.basicConfig(level=logging.INFO)
 
 _4L_MASSES = [130, 150, 170, 200, 250, 300,
@@ -274,6 +274,7 @@ def plot_mmmm():
 
 
 def plot(BP):
+    logger.info("Plotting %s" % BP)
     plot_limits("./plots/limits/%s.pdf" % BP, _4L_MASSES, "datacards/%s" % BP, blinded=True,
                 title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
