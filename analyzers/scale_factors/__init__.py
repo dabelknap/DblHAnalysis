@@ -76,7 +76,7 @@ class LeptonScaleFactors(object):
 
         if scl < 0.1:
             scl = 1.0
-            err = 0.0
+            err = 0.02
 
         return (scl, err)
 
@@ -89,7 +89,7 @@ class LeptonScaleFactors(object):
 
         if scl < 0.1:
             scl = 1.0
-            err = 0.0
+            err = 0.005
 
         return (scl, err)
 
