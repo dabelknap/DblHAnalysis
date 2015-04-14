@@ -55,57 +55,57 @@ class Scales(object):
         return self.m[i,j]
 
 
+#def four_lepton(name, channels, directory, scale=1.0):
+#    for mass in _4L_MASSES:
+#        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+#        cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+#        cuts += '& (%f < sT)' % (0.6*mass + 130.0)
+#        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
+#
+#        limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
+#                channels=["dblh4l"], lumi=19.7, blinded=True)
+#
+#        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale)
+#        limits.add_group("data", "data_*", isData=True)
+#
+#        lumi = {'hpp%i' % mass: 1.026}
+#        limits.add_systematics("lumi", "lnN", **lumi)
+#
+#        hpp_sys = {'hpp%i' % mass: 1.15}
+#        limits.add_systematics("sig_mc_err", "lnN", **hpp_sys)
+#
+#        #mu_eff = {'hpp%i' % mass: 1.043}
+#        #limits.add_systematics("mu_eff", "lnN", **mu_eff)
+#
+#        eff_syst = efficiency_systematic(name)
+#
+#        # Add the muon efficiency systematic if it exists for this channel
+#        if eff_syst[0]:
+#            mu_eff = {'hpp%i' % mass: eff_syst[0]}
+#            limits.add_systematics("mu_eff", "lnN", **mu_eff)
+#
+#        # Add the electron efficiency systematic if it exists for this channel
+#        if eff_syst[1]:
+#            e_eff = {'hpp%i' % mass: eff_syst[1]}
+#            limits.add_systematics("e_eff", "lnN", **e_eff)
+#
+#        N_db_data = mky.data_sideband(
+#            mass,
+#            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+#            cuts='(%f < sT)' % (0.6*mass + 130.0))
+#
+#        alpha = mky.alpha(
+#            mass,
+#            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
+#
+#        limits.add_bkg_rate("bkg_sb_%s" % channels[0], float(N_db_data) * alpha)
+#        kwargs = {"bkg_sb_%s" % channels[0]: alpha}
+#        limits.add_systematics("bkg_err_%s" % channels[0], "gmN %i" % N_db_data, **kwargs)
+#
+#        limits.gen_card("%s.txt" % name)
+
+
 def four_lepton(name, channels, directory, scale=1.0):
-    for mass in _4L_MASSES:
-        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
-        cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
-        cuts += '& (%f < sT)' % (0.6*mass + 130.0)
-        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
-
-        limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
-                channels=["dblh4l"], lumi=19.7, blinded=True)
-
-        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale)
-        limits.add_group("data", "data_*", isData=True)
-
-        lumi = {'hpp%i' % mass: 1.026}
-        limits.add_systematics("lumi", "lnN", **lumi)
-
-        hpp_sys = {'hpp%i' % mass: 1.15}
-        limits.add_systematics("sig_mc_err", "lnN", **hpp_sys)
-
-        #mu_eff = {'hpp%i' % mass: 1.043}
-        #limits.add_systematics("mu_eff", "lnN", **mu_eff)
-
-        eff_syst = efficiency_systematic(name)
-
-        # Add the muon efficiency systematic if it exists for this channel
-        if eff_syst[0]:
-            mu_eff = {'hpp%i' % mass: eff_syst[0]}
-            limits.add_systematics("mu_eff", "lnN", **mu_eff)
-
-        # Add the electron efficiency systematic if it exists for this channel
-        if eff_syst[1]:
-            e_eff = {'hpp%i' % mass: eff_syst[1]}
-            limits.add_systematics("e_eff", "lnN", **e_eff)
-
-        N_db_data = mky.data_sideband(
-            mass,
-            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
-            cuts='(%f < sT)' % (0.6*mass + 130.0))
-
-        alpha = mky.alpha(
-            mass,
-            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
-
-        limits.add_bkg_rate("bkg_sb_%s" % channels[0], float(N_db_data) * alpha)
-        kwargs = {"bkg_sb_%s" % channels[0]: alpha}
-        limits.add_systematics("bkg_err_%s" % channels[0], "gmN %i" % N_db_data, **kwargs)
-
-        limits.gen_card("%s.txt" % name)
-
-
-def four_lepton_mc(name, channels, directory, scale=1.0):
     for mass in _4L_MASSES:
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
         cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
@@ -294,7 +294,7 @@ def plot(BP):
 
 
 def exclude(BP):
-     return exclusion(_4L_MASSES, "datacards/%s" % BP, blinded=True)
+     return exclusion(_4L_MASSES, "datacards/mc/%s" % BP, blinded=True)
 
 
 def plot_3l():
@@ -340,10 +340,10 @@ def main(argv=None):
 
     elif args.operation[0] == "all":
         for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
-            globals()[i]("./datacards")
+            globals()[i]("./datacards/mc")
 
     else:
-        globals()[args.operation[0]]("./datacards")
+        globals()[args.operation[0]]("./datacards/mc")
 
     return 0
 
