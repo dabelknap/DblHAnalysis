@@ -437,6 +437,7 @@ def zz_all():
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
             xlab=r'$\eta(l_4)$ [GeV]',
             label_bin_width=True, log=False)
+
 def main():
 
     if sys.argv[1] == "zz4mu":
