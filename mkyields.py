@@ -128,9 +128,11 @@ def bkg_estimate(mass, channel, cuts='(True)'):
     Err : float
         Error on background estimate in signal region
     """
+    alp = alpha(mass, channel)
+
     Nsb = data_sideband(mass, channel, cuts=cuts)
-    Nbgsr = alpha(mass, channel) * (Nsb + 1.0)
-    Err = alpha(mass, channel) * sqrt(Nsb + 1.0)
+    Nbgsr = alp * (Nsb + 1.0)
+    Err = alp * sqrt(Nsb + 1.0)
 
     return (Nbgsr, Err)
 
