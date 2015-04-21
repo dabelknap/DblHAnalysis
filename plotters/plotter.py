@@ -135,6 +135,7 @@ class Plotter(object):
     def plot_stack(self, file_name, var, nbins, xmin, xmax, **kwargs):
         """
         Plot a stacked histogram
+        shade=[(xmin1,xmax1,color1), (xmin2,xmax2,color2), ...]
         """
         values = []
         weights = []
@@ -147,6 +148,7 @@ class Plotter(object):
         xlab = kwargs.get('xlab', '')
         title = kwargs.get('title', '')
         log_scale = kwargs.get('log', False)
+        shade = kwargs.get('shade', None)
 
         hist_style = {'histtype': 'stepfilled',
                       'linewidth': 1.5,
@@ -228,6 +230,11 @@ class Plotter(object):
             plt.ylabel(ylab)
         plt.xlabel(xlab)
         plt.title(title)
+
+        if shade:
+            for specs in shade:
+                xmin, xmax, color = specs
+                plt.axvspan(xmin, xmax, facecolor=color, alpha=0.2)
 
         plt.tight_layout(0.5)
 

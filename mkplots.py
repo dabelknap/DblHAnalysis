@@ -5,7 +5,7 @@ def four_l():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
 
-    plotter.add_group("hpp", r"$\Phi^{++}(500)$", "HPlus*500*",
+    plotter.add_group("hpp", r"$\Phi^{++}(250)$", "HPlus*250*",
                       facecolor='mediumorchid', edgecolor='indigo')
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
                       facecolor="orange", edgecolor="darkorange")
@@ -40,6 +40,12 @@ def four_l():
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
             xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
+
+    plotter.plot_stack('sideband.pdf', 'h1mass', 24, 0, 600,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{l^+l^+}$ [GeV]',
+            label_bin_width=True, log=True,
+            shade=[(225.0, 275.0, 'r'),(12.0,225.0,'k'),(275.0,700.,'k')])
 
 def cut_flow():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
