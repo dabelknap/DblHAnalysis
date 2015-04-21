@@ -12,6 +12,21 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+
+class Scales(object):
+
+    def __init__(self, br_ee, br_em, br_et, br_mm, br_mt, br_tt):
+        x = np.array([br_ee, br_em, br_et, br_mm, br_mt, br_tt], dtype=float)
+        self.m = np.outer(x, x) * 36.0
+        self.index = {"ee": 0, "em": 1, "et": 2, "mm": 3, "mt": 4, "tt": 5}
+
+    def scale(self, hpp, hmm):
+        i = self.index[hpp]
+        j = self.index[hmm]
+        return self.m[i,j]
+
+
+
 def data_sideband(mass, channel, cuts='(True)'):
     """
     Compute the number of data events in the sidebands.
@@ -192,6 +207,152 @@ def mktable(channels):
     return out
 
 
+def bkg_compare(mass, channels, scale=36.0):
+
+    cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+    cuts+= '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+    cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
+                                   in channels])
+
+    mc_bkg = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                    lumi=19.7)
+    mc_bkg.add_group("zz", "ZZTo*")
+    mc_bkg.add_group("top", "T*")
+    mc_bkg.add_group("dyjets", "Z[1234]jets*M50")
+
+    bkg_rate = ufloat(*mc_bkg.yields("zz")) + ufloat(*mc_bkg.yields("top"))\
+               + ufloat(*mc_bkg.yields("dyjets"))
+
+
+    bkg_est = bkg_estimate(mass, '(%s)' % ' | '.join(['(channel == "%s")' %
+                                                      channel for channel
+                                                      in channels]))
+
+    mc_sig = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                    lumi=19.7)
+    mc_sig.add_group("sig", "HPlus*M-%i_8TeV*" % mass)
+
+    sig_rate = ufloat(*mc_sig.yields("sig")) * ufloat(1.0, 0.15) * scale
+
+    return np.array([bkg_rate, ufloat(bkg_est[0], bkg_est[1]), ufloat(0.0,0.0), sig_rate])
+
+
+def bkg_table_BP1(mass):
+    s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
+    out =  bkg_compare(mass, ["emem", "emme", "meme", "meem"], scale=s.scale("em","em"))
+    out += bkg_compare(mass, ["emmm", "memm"], scale=s.scale("em","mm"))
+    out += bkg_compare(mass, ["mmem", "mmme"], scale=s.scale("mm","em"))
+    out += bkg_compare(mass, ["mmmm"], scale=s.scale("mm","mm"))
+    return out
+
+
+def bkg_table_BP2(mass):
+    s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
+    out =  bkg_compare(mass, ["eemm"], scale=s.scale("ee","mm"))
+    out += bkg_compare(mass, ["mmee"], scale=s.scale("mm","ee"))
+    out += bkg_compare(mass, ["eeee"], scale=s.scale("ee","ee"))
+    out += bkg_compare(mass, ["mmmm"], scale=s.scale("mm","mm"))
+    return out
+
+
+def bkg_table_BP3(mass):
+    s = Scales(0.34, 0, 0, 0.33, 0, 0.33)
+    out =  bkg_compare(mass, ["eemm"], scale=s.scale("ee","mm"))
+    out += bkg_compare(mass, ["mmee"], scale=s.scale("mm","ee"))
+    out += bkg_compare(mass, ["eeee"], scale=s.scale("ee","ee"))
+    out += bkg_compare(mass, ["mmmm"], scale=s.scale("mm","mm"))
+    return out
+
+
+def bkg_table_BP4(mass):
+    s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
+    out =  bkg_compare(mass, ["emem", "emme", "meme", "meem"], scale=s.scale("em","em"))
+    out += bkg_compare(mass, ["emmm", "memm"], scale=s.scale("em","mm"))
+    out += bkg_compare(mass, ["mmem", "mmme"], scale=s.scale("mm","em"))
+    out += bkg_compare(mass, ["mmmm"], scale=s.scale("mm","mm"))
+    out += bkg_compare(mass, ["eeee"], scale=s.scale("ee","ee"))
+    out += bkg_compare(mass, ["eemm"], scale=s.scale("ee","mm"))
+    out += bkg_compare(mass, ["mmee"], scale=s.scale("mm","ee"))
+    return out
+
+
+def bkg_table_mm100(mass):
+    out = bkg_compare(mass, ["mmmm"], scale=36.0)
+    return out
+
+
+def bkg_table_ee100(mass):
+    out = bkg_compare(mass, ["eeee"], scale=36.0)
+    return out
+
+
+def bkg_table_em100(mass):
+    out = bkg_compare(mass, ["emem", "emme", "meem", "meme"], scale=36.0)
+    return out
+
+
+def generate_bkg_tables():
+    functions = [bkg_table_ee100, bkg_table_em100, bkg_table_mm100,
+                 bkg_table_BP1, bkg_table_BP2, bkg_table_BP3, bkg_table_BP4]
+
+    with open('bkg_tables.txt', 'w') as outfile:
+        for fun in functions:
+            log.info("Processing BP: %s" % fun.func_name)
+
+            header = "\n" + fun.func_name + "\n"
+            header += "\\hline\n"
+            header += r"Mass (GeV) & MC Estimate & Sideband Estimate & Observation & Signal \\" + "\n"
+            header += "\\hline\n"
+
+            outfile.write(header)
+
+            for mass in _4L_MASSES:
+                values = fun(mass)
+                string = ("%i &"
+                          " $%.2f \\pm %.2f$ &"
+                          " $%.2f \\pm %.2f$ &"
+                          " $%.2f \\pm %.2f$ &"
+                          " $%.2f \\pm %.2f$ \\\\\n" %
+                          (mass,
+                           values[0].nominal_value, values[0].std_dev,
+                           values[1].nominal_value, values[1].std_dev,
+                           values[2].nominal_value, values[2].std_dev,
+                           values[3].nominal_value, values[3].std_dev))
+
+                outfile.write(string)
+
+
+def sidebands(channels):
+
+    out = []
+
+    for i, mass in enumerate(_4L_MASSES):
+
+        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts+= '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
+                                       in channels])
+
+        # sideband alpha
+        a = alpha(mass,
+                  '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
+        sb = data_sideband(mass,
+                  '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+                  cuts='(%f < sT)' % (0.6*mass + 130.0))
+        bkg = bkg_estimate(mass,
+                  '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+                  cuts='(%f < sT)' % (0.6*mass + 130.0))
+
+        out.append([mass, "%.4f" % a, sb, r"$%.4f \pm %.4f$" % (bkg[0], bkg[1]), 0])
+
+    print ""
+    print tabulate(out, headers=["Mass (GeV)", r"\alpha",
+                                 "Sideband Events (data)",
+                                 "Signal Region Background Estimation",
+                                 "Signal Region Events (data)"],
+                   tablefmt="latex")
+
+
 def lepscale(channels):
     """
     Print a table of the %-change in the signal yields (for each mass point)
@@ -296,10 +457,32 @@ if __name__ == "__main__":
     #for i, mass in enumerate(_4L_MASSES):
     #    print mass, out[i,0], out[i,1], out[i,2], out[i,3], out[i,4], out[i,5]
 
-    lepscale(["mmmm"])
-    lepscale(["eeee"])
-    lepscale(["emem","emme","meem","meme"])
-    lepscale(["eemm","mmee"])
-    lepscale(["eeem","eeme","emee","meee"])
-    lepscale(["mmme","mmem","memm","emmm"])
+    #lepscale(["mmmm"])
+    #lepscale(["eeee"])
+    #lepscale(["emem","emme","meem","meme"])
+    #lepscale(["eemm","mmee"])
+    #lepscale(["eeem","eeme","emee","meee"])
+    #lepscale(["mmme","mmem","memm","emmm"])
     #lepscale_ZZ()
+
+    #print "100mm"
+    #sidebands(["mmmm"])
+    #print "100ee"
+    #sidebands(["eeee"])
+    #print "100em"
+    #sidebands(["emem","emme","meem","meme"])
+    #print "BP1"
+    #sidebands(["emem","emme","meem","meme",
+    #           "mmmm"
+    #           "mmme","mmem","memm","emmm"])
+    #print "BP2"
+    #sidebands(["eeee","mmmm","eemm","mmee"])
+    #print "BP3"
+    #sidebands(["eeee","mmmm","eemm","mmee"])
+    #print "BP4"
+    #sidebands(["emem","emme","meem","meme",
+    #           "mmmm","eeee"
+    #           "eemm","mmee",
+    #           "eeem","eeme","emee","meee",
+    #           "mmme","mmem","memm","emmm"])
+    generate_bkg_tables()
