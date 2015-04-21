@@ -288,16 +288,16 @@ def plot_mmmm():
                 y_label=r"95% CL Upper Limit on $\sigma/\sigma_{SM}$")
 
 
-def plot(BP):
+def plot(BP, directory="datacards", out=""):
     logger.info("Plotting %s" % BP)
-    plot_limits("./plots/limits/%s.pdf" % BP, _4L_MASSES, "datacards/%s" % BP, blinded=True,
+    plot_limits("./plots/limits/%s/%s.pdf" % (out,BP), _4L_MASSES, "%s/%s" % (directory, BP), blinded=True,
                 title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
                 x_label=r"$\Phi^{++}$ Mass [GeV]",
                 y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM+\Phi^{\pm\pm}}$")
 
 
-def exclude(BP):
-     return exclusion(_4L_MASSES, "datacards/%s" % BP, blinded=True)
+def exclude(BP, directory="datacards"):
+     return exclusion(_4L_MASSES, "%s/%s" % (directory, BP), blinded=True)
 
 
 def plot_3l():
@@ -329,6 +329,13 @@ def main(argv=None):
         else:
             globals()["plot"](args.operation[1])
 
+    elif args.operation[0] == "plotcomb":
+        if args.operation[1] == "all":
+            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+                globals()["plot"](i, directory="combination", out="comb")
+        else:
+            globals()["plot"](args.operation[1], directory="combination", out="comb")
+
     elif args.operation[0] == "exclude":
         if args.operation[1] == "all":
             out = []
@@ -340,6 +347,18 @@ def main(argv=None):
                            floatfmt=".0f")
         else:
             print globals()["exclude"](args.operation[1])
+
+    elif args.operation[0] == "excludecomb":
+        if args.operation[1] == "all":
+            out = []
+            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+                exp, obs = globals()["exclude"](i, directory="combination")
+                out.append([i,exp,obs])
+            print tabulate(out,
+                           headers=["BP", "Expected", "Observed"],
+                           floatfmt=".0f")
+        else:
+            print globals()["exclude"](args.operation[1], directory="combination")
 
     elif args.operation[0] == "all":
         for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
