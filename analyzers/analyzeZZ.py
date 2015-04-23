@@ -187,6 +187,9 @@ class ZZAnalyzer(object):
         h5row["mass"] = rtrow.Mass
         h5row["z1mass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2))
         h5row["z2mass"] = getattr(rtrow, "%s_%s_Mass" % (l3, l4))
+        h5row["sT"] = getattr(rtrow, "%sPt" % l1) + getattr(rtrow, "%sPt" % l2) \
+                    + getattr(rtrow, "%sPt" % l3) + getattr(rtrow, "%sPt" % l4)
+
 
         for i, l in enumerate([l1, l2, l3, l4]):
             j = i + 1

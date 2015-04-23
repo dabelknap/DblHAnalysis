@@ -67,6 +67,7 @@ class EventZZ(EventBase):
     mass    = tb.Float32Col()
     z1mass  = tb.Float32Col()
     z2mass  = tb.Float32Col()
+    sT      = tb.Float32Col()
 
     l1Pt    = tb.Float32Col()
     l1Eta   = tb.Float32Col()

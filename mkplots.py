@@ -388,6 +388,11 @@ def zz_all():
             xlab=r'$M_{4l}$ [GeV]',
             label_bin_width=True, log=False)
 
+    plotter.plot_stack('st.pdf', 'sT', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$s_T$ [GeV]',
+            label_bin_width=True, log=False)
+
     plotter.plot_stack('mz1.pdf', 'z1mass', 30, 60, 120,
             title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
             xlab=r'$M_{Z_1}$ [GeV]',
