@@ -1,5 +1,45 @@
 from plotters.plotter import Plotter
 import sys
+from numpy import linspace
+
+_4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
+              350, 400, 450, 500, 600, 700]
+
+
+def signal_shapes():
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+                      channels=["dblh4l"], lumi=19.7)
+
+    masses = _4L_MASSES
+
+    colors = [(i,0,0) for i in linspace(0,1,len(_4L_MASSES))]
+
+    for i, mass in enumerate(masses):
+        plotter.add_group("hpp%i" % mass, r"$\Phi^{++}(%i)$" % mass,
+                "HPlus*%i*" % mass, edgecolor=colors[i])
+
+    order = ["hpp%i" % mass for mass in masses]
+    plotter.stack_order(*order)
+
+    plotter.plot_compare('h1masses.png', 'h1mass', 200, 0, 1000,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{l^+l^+}$ [GeV]',
+            ylab=r'A.U.', log=False)
+
+    plotter2 = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+                      channels=["dblh4l"], lumi=19.7)
+
+    plotter2.add_group("hpp500", r"$\Phi^{++}(500)$",
+                "HPlus*500*", edgecolor=(1,0,0))
+
+    plotter2.stack_order("hpp500")
+
+    plotter2.plot_compare('h1500.png', 'h1mass', 200, 300, 700,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{l^+l^+}$ [GeV]',
+            ylab=r'A.U.', log=False,
+            shade=[(450.0, 550.0, 'r')])
+
 
 def four_l():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
@@ -460,6 +500,8 @@ def main():
         z_control()
     elif sys.argv[1] == "4l":
         four_l()
+    elif sys.argv[1] == "sigshapes":
+        signal_shapes()
     elif sys.argv[1] == "flow":
         cut_flow()
     else:
