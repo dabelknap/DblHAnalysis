@@ -320,52 +320,54 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
 
+    BPS = ["ee100", "em100", "mm100", "BP1", "BP2", "BP3", "BP4"]
+
     args = parse_command_line(argv)
 
     if args.operation[0] == "plot":
         if args.operation[1] == "all":
-            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+            for i in BPS:
                 globals()["plot"](i)
         else:
-            globals()["plot"](args.operation[1])
+            globals()["plot"](args.operation[1], directory="datacards/4l_8tev")
 
     elif args.operation[0] == "plotcomb":
         if args.operation[1] == "all":
-            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
+            for i in BPS:
                 globals()["plot"](i, directory="combination", out="comb")
         else:
-            globals()["plot"](args.operation[1], directory="combination", out="comb")
+            globals()["plot"](args.operation[1], directory="datacards/comb_8tev", out="comb")
 
     elif args.operation[0] == "exclude":
         if args.operation[1] == "all":
             out = []
-            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
-                exp, obs = globals()["exclude"](i)
+            for i in BPS:
+                exp, obs = globals()["exclude"](i, directory="datacards/4l_8tev")
                 out.append([i,exp,obs])
             print tabulate(out,
                            headers=["BP", "Expected", "Observed"],
                            floatfmt=".0f")
         else:
-            print globals()["exclude"](args.operation[1])
+            print globals()["exclude"](args.operation[1], directory="datacards/4l_8tev")
 
     elif args.operation[0] == "excludecomb":
         if args.operation[1] == "all":
             out = []
-            for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
-                exp, obs = globals()["exclude"](i, directory="combination")
+            for i in BPS:
+                exp, obs = globals()["exclude"](i, directory="datacards/comb_8tev")
                 out.append([i,exp,obs])
             print tabulate(out,
                            headers=["BP", "Expected", "Observed"],
                            floatfmt=".0f")
         else:
-            print globals()["exclude"](args.operation[1], directory="combination")
+            print globals()["exclude"](args.operation[1], directory="datacards/comb_8tev")
 
     elif args.operation[0] == "all":
-        for i in ["BP1", "BP2", "BP3", "BP4", "mm100", "ee100", "em100"]:
-            globals()[i]("./datacards")
+        for i in BPS:
+            globals()[i]("./datacards/4l_8tev")
 
     else:
-        globals()[args.operation[0]]("./datacards")
+        globals()[args.operation[0]]("./datacards/4l_8tev")
 
     return 0
 
