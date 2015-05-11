@@ -244,6 +244,115 @@ class Plotter(object):
         plt.savefig("%s/%s" % (self.out_dir, file_name))
 
 
+    def plot_compare(self, file_name, var, nbins, xmin, xmax, **kwargs):
+        """
+        Plot a stacked histogram
+        shade=[(xmin1,xmax1,color1), (xmin2,xmax2,color2), ...]
+        """
+        values = []
+        weights = []
+        labels = []
+
+        cuts = kwargs.get('cuts', '(True)')
+        legend_loc = kwargs.get('legend_loc', 'best')
+        ylab_width = kwargs.get('label_bin_width', False)
+        ylab = kwargs.get('ylab', '')
+        xlab = kwargs.get('xlab', '')
+        title = kwargs.get('title', '')
+        log_scale = kwargs.get('log', False)
+        shade = kwargs.get('shade', None)
+        legend_size = kwargs.get('legend_size', None)
+
+        hist_style = {'histtype': 'step',
+                      'linewidth': 1.5,
+                      'normed': True,
+                      'log': log_scale}
+
+        cut = "%s & %s" % (self.base_selections, cuts)
+
+        for mc in self.sample_order:
+            vals = []
+            wgts = []
+
+            self.log.info("Processing MC: %s" % mc)
+
+            for sample_name in self.sample_groups[mc]["sample_names"]:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis),
+                                        chan)
+                        vals += [x[var] for x in table.where(cut)]
+                        scale = self.lumi * xsec.xsecs[sample_name] / \
+                                xsec.nevents[sample_name]
+                        wgts += [x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)]
+
+            values.append(vals)
+            weights.append(wgts)
+            labels += [self.sample_groups[mc]['label']]
+
+        if 'data' in self.sample_groups:
+            self.log.info("Processing Data")
+
+            vals = []
+            evt_set = set()
+            for sample_name in self.sample_groups['data']['sample_names']:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis), chan)
+                        for x in table.where(cut):
+                            if (x['evt'], x['run'], x['lumi']) not in evt_set:
+                                vals.append(x[var])
+                                evt_set.add((x['evt'], x['run'], x['lumi']))
+
+            (n1, bins1, patches1) = plt.hist(vals, nbins, range=(xmin, xmax))
+            plt.clf()
+
+        self.log.info("Generating Histogram: %s, %s/%s" % (var, self.out_dir, file_name))
+
+        plt.figure(figsize=(6, 5))
+        (n, bins, patches) = plt.hist(
+                values, nbins, weights=weights, range=(xmin, xmax),
+                label=labels, **hist_style)
+
+        if log_scale:
+            plt.yscale('log')
+
+        if 'data' in self.sample_groups:
+            plt.errorbar(0.5*(bins[1:]+bins[:-1]), n1, yerr=[np.sqrt(n1)*0.99,np.sqrt(n1)],
+                         fmt='ko', capsize=0, linewidth=1, ms=5, label="Observed")
+
+        for i, name in enumerate(self.sample_order):
+            try:
+                for p in patches[i]:
+                    p.set_facecolor(self.sample_groups[name]['facecolor'])
+                    p.set_edgecolor(self.sample_groups[name]['edgecolor'])
+            except TypeError:
+                patches[i].set_facecolor(self.sample_groups[name]['facecolor'])
+                patches[i].set_edgecolor(self.sample_groups[name]['edgecolor'])
+
+        plt.legend(loc=legend_loc, prop={'size':10})
+        if log_scale:
+            plt.ylim(ymin=0.1)
+        else:
+            plt.ylim(ymin=0)
+        if ylab_width:
+            plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
+        else:
+            plt.ylabel(ylab)
+        plt.xlabel(xlab)
+        plt.title(title)
+
+        if shade:
+            for specs in shade:
+                xmin, xmax, color = specs
+                plt.axvspan(xmin, xmax, facecolor=color, alpha=0.2)
+
+        plt.tight_layout(0.5)
+
+        plt.savefig("%s/%s" % (self.out_dir, file_name), dpi=300)
+
 def main():
     plotter = Plotter("DblH4l", "(mass > 80)", "../ntuples", "../plots/test",
                       channels=["mmmm"], lumi=19.7)
