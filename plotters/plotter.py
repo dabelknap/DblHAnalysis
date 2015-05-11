@@ -92,7 +92,7 @@ class Plotter(object):
 
         plots = []
         leg_labs = []
-        plt.figure(figsize=(9, 9))
+        plt.figure(figsize=(6, 5))
 
         for mc in self.sample_order:
             self.log.info('Processing MC: %s' % mc)
@@ -129,6 +129,9 @@ class Plotter(object):
         plt.ylabel("Events")
 
         plt.tight_layout(0.5)
+
+        self.log.info("Generating Histogram: cut flow, %s/%s" % (self.out_dir,
+            file_name))
 
         plt.savefig("%s/%s" % (self.out_dir, file_name))
 

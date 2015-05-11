@@ -74,7 +74,8 @@ def cut_flow():
               "sT",
               "Mass Window"]
 
-    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True, title="19.7 fb-1 (8 TeV)")
+    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$')
 
 
 def control():
