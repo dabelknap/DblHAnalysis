@@ -152,6 +152,7 @@ class Plotter(object):
         title = kwargs.get('title', '')
         log_scale = kwargs.get('log', False)
         shade = kwargs.get('shade', None)
+        legend_size = kwargs.get('legend_size', None)
 
         hist_style = {'histtype': 'stepfilled',
                       'linewidth': 1.5,
@@ -222,7 +223,11 @@ class Plotter(object):
                 patches[i].set_facecolor(self.sample_groups[name]['facecolor'])
                 patches[i].set_edgecolor(self.sample_groups[name]['edgecolor'])
 
-        plt.legend(loc=legend_loc)
+        if legend_size:
+            plt.legend(loc=legend_loc, prop={'size': legend_size})
+        else:
+            plt.legend(loc=legend_loc)
+
         if log_scale:
             plt.ylim(ymin=0.1)
         else:

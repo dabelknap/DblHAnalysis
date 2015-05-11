@@ -58,8 +58,8 @@ def four_l():
     plotter.add_group("ttv", "TTV", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    #plotter.stack_order("wwv", "ttv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("top", "dyjets", "zz", "hpp")
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("top", "dyjets", "zz", "hpp")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 600,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
@@ -105,6 +105,7 @@ def cut_flow():
                       facecolor="springgreen", edgecolor="seagreen")
 
     plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("top", "dyjets", "zz", "hpp")
 
     cuts = ["(True)",
             "(%f < sT)" % (0.6*500 + 130.),
@@ -184,11 +185,16 @@ def tt_control():
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("ttv", "wz", "top", "tt", "dyjets")
+    plotter.stack_order("ttv", "wwv", "wz", "top", "tt", "dyjets")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 400,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 800,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
+            label_bin_width=True, log=True)
+
+    plotter.plot_stack('st.pdf', 'sT', 10, 0, 800,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('met.pdf', 'met', 10, 0, 400,
@@ -206,11 +212,6 @@ def tt_control():
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
             label_bin_width=True, log=True)
 
-    plotter.plot_stack('st.pdf', 'sT', 10, 0, 400,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
-            label_bin_width=True, log=True)
-
 def z_control():
     cut = '(sT > 150)'
     plotter = Plotter("DblH", cut, "./ntuples", "./plots/z_ctrl",
@@ -225,17 +226,28 @@ def z_control():
     plotter.add_group("zz", "ZZ", "ZZTo*",
                       facecolor='lightskyblue', edgecolor='darkblue')
 
-    plotter.add_group("wz", "$WZ$", "WZJets*",
+    plotter.add_group("wz", "WZ", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
+
+    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+                      facecolor="tomato", edgecolor="red")
+
+    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+                      facecolor="springgreen", edgecolor="seagreen")
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("wz", "top", "dyjets", "zz")
+    plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "zz")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
             xlab=r'$M_{l^+l^+}$ [GeV]',
-            label_bin_width=True, log=True)
+            label_bin_width=True, log=True, legend_size=10)
+
+    plotter.plot_stack('st.pdf', 'sT', 20, 0, 500,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$s_T$ [GeV]',
+            label_bin_width=True, log=True, legend_size=10)
 
     plotter.plot_stack('met.pdf', 'met', 20, 0, 500,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
@@ -250,11 +262,6 @@ def z_control():
     plotter.plot_stack('st2.pdf', 'sT2', 20, 0, 500,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
             xlab=r'$s_T(\Phi^{--})$ [GeV]',
-            label_bin_width=True, log=True)
-
-    plotter.plot_stack('st.pdf', 'sT', 20, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
             label_bin_width=True, log=True)
 
 def zz_4mu():
