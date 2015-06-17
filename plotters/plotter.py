@@ -36,7 +36,7 @@ plt.rc('font', family='sans-serif')
 class Plotter(object):
 
     def __init__(self, analysis, base_selections, ntuple_dir, out_dir,
-            channels=[], lumi=19.7):
+            channels=[], lumi=19.7, partial_blind=False):
         self.base_selections = base_selections
         self.analysis = analysis
         self.out_dir = out_dir
@@ -45,6 +45,7 @@ class Plotter(object):
         self.sample_order = []
         self.channels = channels
         self.lumi = lumi
+        self.partial_blind = partial_blind
 
         self.log = logging.getLogger(__name__)
         logging.basicConfig(level=logging.INFO)
@@ -153,6 +154,7 @@ class Plotter(object):
         log_scale = kwargs.get('log', False)
         shade = kwargs.get('shade', None)
         legend_size = kwargs.get('legend_size', None)
+        mc_err = kwargs.get('mc_err', False)
 
         hist_style = {'histtype': 'stepfilled',
                       'linewidth': 1.5,
@@ -183,6 +185,12 @@ class Plotter(object):
             labels += [self.sample_groups[mc]['label']]
 
         if 'data' in self.sample_groups:
+
+            if self.partial_blind:
+                data_cut = cut + "& (h1mass < 120) & (h2mass < 120)"
+            else:
+                data_cut = cut
+
             self.log.info("Processing Data")
 
             vals = []
@@ -192,7 +200,7 @@ class Plotter(object):
                         'r') as h5file:
                     for chan in self.channels:
                         table = getattr(getattr(h5file.root, self.analysis), chan)
-                        for x in table.where(cut):
+                        for x in table.where(data_cut):
                             if (x['evt'], x['run'], x['lumi']) not in evt_set:
                                 vals.append(x[var])
                                 evt_set.add((x['evt'], x['run'], x['lumi']))
