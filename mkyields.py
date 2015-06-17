@@ -4,6 +4,7 @@ from numpy import sqrt
 from tabulate import tabulate
 import numpy as np
 import logging
+import sys
 
 
 _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
@@ -451,7 +452,6 @@ def table2latex(table):
 
 
 if __name__ == "__main__":
-    #table2latex(mktable())
     #out = mktable(["emem", "meme", "emme", "meem"])
     #out = mktable(["mmmm"])
     #out = mktable(["eeee"])
@@ -459,32 +459,66 @@ if __name__ == "__main__":
     #for i, mass in enumerate(_4L_MASSES):
     #    print mass, out[i,0], out[i,1], out[i,2], out[i,3], out[i,4], out[i,5]
 
-    #lepscale(["mmmm"])
-    #lepscale(["eeee"])
-    #lepscale(["emem","emme","meem","meme"])
-    #lepscale(["eemm","mmee"])
-    #lepscale(["eeem","eeme","emee","meee"])
-    #lepscale(["mmme","mmem","memm","emmm"])
-    #lepscale_ZZ()
+    arg = sys.argv[1]
 
-    #print "100mm"
-    #sidebands(["mmmm"])
-    #print "100ee"
-    #sidebands(["eeee"])
-    #print "100em"
-    #sidebands(["emem","emme","meem","meme"])
-    #print "BP1"
-    #sidebands(["emem","emme","meem","meme",
-    #           "mmmm"
-    #           "mmme","mmem","memm","emmm"])
-    #print "BP2"
-    #sidebands(["eeee","mmmm","eemm","mmee"])
-    #print "BP3"
-    #sidebands(["eeee","mmmm","eemm","mmee"])
-    #print "BP4"
-    #sidebands(["emem","emme","meem","meme",
-    #           "mmmm","eeee"
-    #           "eemm","mmee",
-    #           "eeem","eeme","emee","meee",
-    #           "mmme","mmem","memm","emmm"])
-    generate_bkg_tables()
+    if arg == "lepscale":
+        arg2 = sys.argv[2]
+
+        if arg2 == "mmmm":
+            lepscale(["mmmm"])
+
+        elif arg2 == "eeee":
+            lepscale(["eeee"])
+
+        elif arg2 == "emem":
+            lepscale(["emem","emme","meem","meme"])
+
+        elif arg2 == "eemm":
+            lepscale(["eemm","mmee"])
+
+        elif arg2 == "eeem":
+            lepscale(["eeem","eeme","emee","meee"])
+
+        elif arg2 == "emmm":
+            lepscale(["mmme","mmem","memm","emmm"])
+
+        elif arg2 == "zz":
+            lepscale_ZZ()
+
+        else:
+            raise ValueError("invalid argument")
+
+    elif arg == "sidebands":
+        arg2 = sys.argv[2]
+
+        if arg2 == "mm100":
+            sidebands(["mmmm"])
+
+        elif arg2 == "ee100":
+            sidebands(["eeee"])
+
+        elif arg2 == "em100":
+            sidebands(["emem","emme","meem","meme"])
+
+        elif arg2 == "BP1":
+            sidebands(["emem","emme","meem","meme",
+                       "mmmm"
+                       "mmme","mmem","memm","emmm"])
+
+        elif arg2 == "BP2":
+            sidebands(["eeee","mmmm","eemm","mmee"])
+
+        elif arg2 == "BP3":
+            sidebands(["eeee","mmmm","eemm","mmee"])
+
+        elif arg2 == "BP4":
+            sidebands(["emem","emme","meem","meme",
+                       "mmmm","eeee"
+                       "eemm","mmee",
+                       "eeem","eeme","emee","meee",
+                       "mmme","mmem","memm","emmm"])
+        else:
+            raise ValueError("invalid argument")
+
+    elif arg == "bkg_tables":
+        generate_bkg_tables()
