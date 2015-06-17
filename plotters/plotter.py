@@ -210,10 +210,19 @@ class Plotter(object):
 
         self.log.info("Generating Histogram: %s, %s/%s" % (var, self.out_dir, file_name))
 
+        # Plot stacked MC
         plt.figure(figsize=(6, 5))
         (n, bins, patches) = plt.hist(
                 values, nbins, weights=weights, range=(xmin, xmax),
                 label=labels, **hist_style)
+
+        if mc_err:
+            n_total = n
+            N = np.histogram(values, bins=bins)[0]
+            plt.plot(0.5*(bins[1:] + bins[:-1]), n_total + n_total/np.sqrt(N) + 0.05*n_total,
+                color='k', alpha=0.5, drawstyle='steps-mid')
+            plt.plot(0.5*(bins[1:] + bins[:-1]), n_total - n_total/np.sqrt(N) - 0.05*n_total,
+                color='k', alpha=0.5, drawstyle='steps-mid')
 
         if log_scale:
             plt.yscale('log')
