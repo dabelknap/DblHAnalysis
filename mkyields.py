@@ -86,7 +86,7 @@ def alpha(mass, channel):
     inner = Yields("DblH", "(%s) & (%s)" % (cuts, channel), "./ntuples",
                    channels=["dblh4l"], lumi=19.7)
 
-    inner.add_group("zz", "ZZTo*")
+    inner.add_group("zz", "ZZTo*", "ggZZ*")
     inner.add_group("top", "T*")
     inner.add_group("dyjets", "Z[1234]jets*M50")
 
@@ -97,7 +97,7 @@ def alpha(mass, channel):
     outer = Yields("DblH", "~(%s) & (%s) & (%s)" % (cuts, bounds, channel),
                    "./ntuples", channels=["dblh4l"], lumi=19.7)
 
-    outer.add_group("zz", "ZZTo*")
+    outer.add_group("zz", "ZZTo*", "ggZZ*")
     outer.add_group("top", "T*")
     outer.add_group("dyjets", "Z[1234]jets*M50")
 
