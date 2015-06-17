@@ -255,9 +255,13 @@ class ZZAnalyzer4l(ZZAnalyzer):
         return pts[0] > 20.0 and pts[1] > 10.0
 
     def qcd_rejection(self, rtrow):
-        qcd_pass = [getattr(rtrow, "%s_%s_Mass" % (l[0], l[1])) > 4.0 or
-                    getattr(rtrow, "%s_%s_SS" % (l[0], l[1])) > 0.0
-                    for l in combinations(self.leptons, 2)]
+        qcd_pass = []
+        for l in combinations(self.leptons, 2):
+            if getattr(rtrow, "%s_%s_SS" % (l[0], l[1])) < 1.0:
+                qcd_pass.append(getattr(rtrow, "%s_%s_Mass" % (l[0], l[1])) > 4.0)
+        #qcd_pass = [getattr(rtrow, "%s_%s_Mass" % (l[0], l[1])) > 4.0 or
+        #            getattr(rtrow, "%s_%s_SS" % (l[0], l[1])) > 0.0
+        #            for l in combinations(self.leptons, 2)]
         return all(qcd_pass)
 
     def preselection(self, rtrow):
