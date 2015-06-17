@@ -51,7 +51,8 @@ def four_l():
                       facecolor="orange", edgecolor="darkorange")
     plotter.add_group("top", "Top", "T*",
                       facecolor="mediumseagreen", edgecolor="darkgreen")
-    plotter.add_group("zz", "ZZ", "ZZTo*",
+
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
                       facecolor="lightskyblue", edgecolor="darkblue")
     plotter.add_group("wwv", "WWV", "WW[WZ]*",
                       facecolor="tomato", edgecolor="red")
@@ -97,7 +98,7 @@ def cut_flow():
                       facecolor="orange", edgecolor="darkorange")
     plotter.add_group("top", "Top", "T*",
                       facecolor="mediumseagreen", edgecolor="darkgreen")
-    plotter.add_group("zz", "ZZ", "ZZTo*",
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
                       facecolor="lightskyblue", edgecolor="darkblue")
     plotter.add_group("wwv", "WWV", "WW[WZ]*",
                       facecolor="tomato", edgecolor="red")
@@ -213,18 +214,32 @@ def tt_control():
             label_bin_width=True, log=True)
 
 def z_control():
-    cut = '(sT > 150)'
+    channels = ["eemm","mmee","emme","meem","emem","meme","mmmm","eeee"]
+    tmp = ["channel == '%s'" % c for c in channels]
+    #cut = '(sT > 150) & ((%s))' % (") | (".join(tmp))
+    cut = '(sT > 50) & ((%s))' % (") | (".join(tmp))
+    #cut += '& (l1Pt > 15)'
+    #cut += '& (l2Pt > 15)'
+    #cut += '& (l3Pt > 15)'
+    #cut += '& (l4Pt > 15)'
+
     plotter = Plotter("DblH", cut, "./ntuples", "./plots/z_ctrl",
                       channels=["dblh4l_z_control"], lumi=19.7)
 
     plotter.add_group("dyjets", r"Z+Jets", "Z[1234]jets*",
                       facecolor='orange', edgecolor='darkorange')
 
+    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+                      facecolor='lightcoral', edgecolor='maroon')
+
     plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",
                       facecolor='mediumseagreen', edgecolor='darkgreen')
 
-    plotter.add_group("zz", "ZZ", "ZZTo*",
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
+
+#    plotter.add_group("ggzz", "ZZ(gg)", "ggZZ*",
+#                      facecolor='deepskyblue', edgecolor='navy')
 
     plotter.add_group("wz", "WZ", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
@@ -272,10 +287,10 @@ def zz_4mu():
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4mu",
                       channels=["zz4l"], lumi=19.7)
 
-    plotter.add_group("zz", "ZZ", "ZZTo*",
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
-    plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
-                      facecolor='orange', edgecolor='darkorange')
+    #plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
+    #                  facecolor='orange', edgecolor='darkorange')
     plotter.add_group("ggH", "H(125)", "GluGlu*125*",
                       facecolor='lightcoral', edgecolor='maroon')
 
@@ -342,11 +357,12 @@ def zz_4e():
     channels = ["eeee"]
     tmp = ["channel == '%s'" % c for c in channels]
     cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & (%s)" % (") | (".join(tmp))
+    print cut
 
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4e",
                       channels=["zz4l"], lumi=19.7)
 
-    plotter.add_group("zz", "ZZ", "ZZTo*",
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
     plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
                       facecolor='orange', edgecolor='darkorange')
@@ -415,13 +431,21 @@ def zz_4e():
 def zz_all():
     channels = ["eeee", "mmmm", "eemm", "mmee"]
     tmp = ["channel == '%s'" % c for c in channels]
-    cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & (%s)" % (") | (".join(tmp))
+    cut = "(0 < mass) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
 
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/all",
                       channels=["zz4l"], lumi=19.7)
 
-    plotter.add_group("zz", "ZZ", "ZZTo*",
+    plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",
+                      facecolor='mediumseagreen', edgecolor='darkgreen')
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
+    plotter.add_group("wz", "WZ", "WZJets*",
+                      facecolor='mediumpurple', edgecolor='midnightblue')
+    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+                      facecolor="tomato", edgecolor="red")
+    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+                      facecolor="springgreen", edgecolor="seagreen")
     plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
                       facecolor='orange', edgecolor='darkorange')
     plotter.add_group("ggH", "H(125)", "GluGlu*125*",
