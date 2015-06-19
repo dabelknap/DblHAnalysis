@@ -361,7 +361,7 @@ def zz_smp_m4l():
 def zz_4mu():
     channels = ["mmmm"]
     tmp = ["channel == '%s'" % c for c in channels]
-    cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & (%s)" % (") | (".join(tmp))
+    cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
 
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4mu",
                       channels=["zz4l"], lumi=19.7)
@@ -459,7 +459,7 @@ def zz_4mu():
 def zz_4e():
     channels = ["eeee"]
     tmp = ["channel == '%s'" % c for c in channels]
-    cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & (%s)" % (") | (".join(tmp))
+    cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
     print cut
 
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4e",
