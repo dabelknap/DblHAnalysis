@@ -23,7 +23,7 @@ xsecs = {'HPlusPlusHMinusMinusHTo4L_M-110_8TeV-pythia6': 352.49 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-600_8TeV-pythia6': 0.13271 * FB,
          'HPlusPlusHMinusMinusHTo4L_M-700_8TeV-pythia6': 0.48382e-1 * FB,
 
-         'GluGluToHToZZTo4L_M-125_8TeV-powheg-pythia6': 2.44 * FB,
+         'GluGluToHToZZTo4L_M-125_8TeV-powheg-pythia6': 19.27 * 2.76e-04 * PB,
 
          'ggZZ4L': 4.8 * FB,
          'ggZZ2L2L': 12.03 * FB,
