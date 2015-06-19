@@ -117,7 +117,7 @@ def four_lepton(name, channels, directory, scale=1.0):
 
         limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale)
         limits.add_group("dyjets", "DYJets*")
-        limits.add_group("zz", "ZZTo*")
+        limits.add_group("zz", "ZZTo*", "ggZZ*")
         limits.add_group("top", "T*")
         limits.add_group("data", "data_*", isData=True)
 
