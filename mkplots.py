@@ -554,6 +554,31 @@ def zz_4e():
             xlab=r'$\eta(l_4)$ [GeV]',
             label_bin_width=True, log=False)
 
+
+def zz_2e2mu():
+    channels = ["eemm", "mmee"]
+    tmp = ["channel == '%s'" % c for c in channels]
+    cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
+
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/2e2mu",
+                      channels=["zz4l"], lumi=19.7)
+
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+                      facecolor='lightcoral', edgecolor='maroon')
+
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
+
+    plotter.stack_order("zz", "ggH")
+
+    plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False)
+
+
 def zz_all():
     channels = ["eeee", "mmmm", "eemm", "mmee"]
     tmp = ["channel == '%s'" % c for c in channels]
@@ -641,12 +666,127 @@ def zz_all():
             xlab=r'$\eta(l_4)$ [GeV]',
             label_bin_width=True, log=False)
 
+
+def zz_powheg_breakdown():
+    channels = ["eeee", "mmmm", "eemm", "mmee"]
+    tmp = ["channel == '%s'" % c for c in channels]
+    cut = "(0 < mass) & (60 < z1mass) & (z1mass < 120) & (60 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
+    #cut = "(0 < mass) & (60 < z1mass) & (z1mass < 120) & (60 < z2mass) & (z2mass < 120)"
+
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/powheg",
+                      channels=["zz4l"], lumi=19.7)
+
+    plotter.add_group("4e", "ZZ to 4e", "ZZTo4e*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("4mu", "ZZ to 4mu", "ZZTo4mu*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("4tau", "ZZ to 4tau", "ZZTo4tau*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("2e2mu", "ZZ to 2e2mu", "ZZTo2e2mu*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("2e2tau", "ZZ to 2e2tau", "ZZTo2e2tau*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("2mu2tau", "ZZ to 2mu2tau", "ZZTo2mu2tau*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.stack_order("4e")
+    plotter.plot_stack('m4l_4e.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False)
+
+    plotter.stack_order("4mu")
+    plotter.plot_stack('m4l_4mu.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False)
+
+    #plotter.stack_order("4tau")
+    #plotter.plot_stack('m4l_4tau.pdf', 'mass', 50, 0, 500,
+    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+    #        xlab=r'$M_{4l}$ [GeV]',
+    #        label_bin_width=True, log=False)
+
+    plotter.stack_order("2e2mu")
+    plotter.plot_stack('m4l_2e2mu.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False)
+
+    plotter.stack_order("2e2tau")
+    plotter.plot_stack('m4l_2e2tau.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False)
+
+    plotter.stack_order("2mu2tau")
+    plotter.plot_stack('m4l_2mu2tau.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False)
+
+
+def zz_breakdown():
+    channels = ["eeee", "mmmm", "eemm", "mmee"]
+    tmp = ["channel == '%s'" % c for c in channels]
+    #cut = "(0 < mass) & (60 < z1mass) & (z1mass < 120) & (60 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
+    cut = "(0 < mass) & (l1Pt > 20) & (l2Pt > 10) & (l3Pt > 10) & (l4Pt < 10) & ((%s))" % (") | (".join(tmp))
+    #cut = "(0 < mass) & (60 < z1mass) & (z1mass < 120) & (60 < z2mass) & (z2mass < 120)"
+
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/powheg",
+                      channels=["zz4l"], lumi=19.7)
+
+    plotter.add_group("4e", "ZZ to 4e", "ZZTo4e*",
+                      facecolor='mediumseagreen', edgecolor='darkgreen')
+
+    plotter.add_group("4mu", "ZZ to 4mu", "ZZTo4mu*",
+                      facecolor='lightskyblue', edgecolor='darkblue')
+
+    plotter.add_group("4tau", "ZZ to 4tau", "ZZTo4tau*",
+                      facecolor='mediumpurple', edgecolor='midnightblue')
+
+    plotter.add_group("2e2mu", "ZZ to 2e2mu", "ZZTo2e2mu*",
+                      facecolor='tomato', edgecolor='red')
+
+    plotter.add_group("2e2tau", "ZZ to 2e2tau", "ZZTo2e2tau*",
+                      facecolor='springgreen', edgecolor='seagreen')
+
+    plotter.add_group("2mu2tau", "ZZ to 2mu2tau", "ZZTo2mu2tau*",
+                      facecolor='orange', edgecolor='darkorange')
+
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
+
+    plotter.stack_order("4tau","2e2tau","2mu2tau", "2e2mu", "4e", "4mu")
+
+    plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{4l}$ [GeV]',
+            label_bin_width=True, log=False, legend_size=10)
+
+    plotter.plot_stack('mz1.pdf', 'z1mass', 36, 0, 120,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{Z_1}$ [GeV]',
+            label_bin_width=True, log=False)
+
+    plotter.plot_stack('mz2.pdf', 'z2mass', 36, 0, 120,
+            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{Z_2}$ [GeV]',
+            label_bin_width=True, log=False)
+
+
 def main():
 
     if sys.argv[1] == "zz4mu":
         zz_4mu()
     elif sys.argv[1] == "zz4e":
         zz_4e()
+    elif sys.argv[1] == "zz2e2mu":
+        zz_2e2mu()
     elif sys.argv[1] == "zz":
         zz_all()
     elif sys.argv[1] == "ctrl":
@@ -663,6 +803,10 @@ def main():
         signal_shapes()
     elif sys.argv[1] == "flow":
         cut_flow()
+    elif sys.argv[1] == "powheg":
+        zz_powheg_breakdown()
+    elif sys.argv[1] == "breakdown":
+        zz_breakdown()
     else:
         raise ValueError("Incorrect option given: %s" % sys.argv[1])
 
