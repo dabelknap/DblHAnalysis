@@ -202,7 +202,9 @@ def ee100(directory):
 
 
 def em100(directory):
-    four_lepton("emem", ["emem", "emme", "meem", "meme"], os.path.join(directory, "em100"), scale=36.0)
+    four_lepton("emem", ["emem"],
+            os.path.join(directory, "em100"),
+            scale=36.0)
 
 
 def mmmm_100(mass):

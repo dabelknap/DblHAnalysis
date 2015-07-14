@@ -89,6 +89,7 @@ class Analyzer(object):
             file_path = os.path.join(self.sample_location, filename)
             rtFile = rt.TFile(file_path, "READ")
 
+            # For each FSA final state
             for fs in self.final_states:
                 tree = rtFile.Get("%s/final/Ntuple" % fs)
 
@@ -96,8 +97,10 @@ class Analyzer(object):
 
                 best_cand = (0, float('inf'), [])
 
+                # For each row in the ROOT tree
                 for rtrow in tree:
 
+                    # Check for duplicate events
                     if event_set:
                         if (rtrow.evt, rtrow.lumi, rtrow.run) not in event_set and best_cand[0]:
                             self.h5row.append()

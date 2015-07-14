@@ -93,6 +93,41 @@ def four_l():
             label_bin_width=True, log=True,
             shade=[(225.0, 275.0, 'r'),(12.0,225.0,'k'),(275.0,700.,'k')])
 
+def four_l_em():
+    channels = ["mmm"]
+    tmp = ["channel == '%s'" % c for c in channels]
+    cut = "((mass > 0) & (%s))" % (") | (".join(tmp))
+
+    plotter = Plotter("DblH", cut, "./ntuples", "./plots/4l_em",
+                      channels=["dblh4l"], lumi=19.7, partial_blind=True)
+
+    plotter.add_group("hpp", r"$\Phi^{++}(250)$", "HPlus*250*",
+                      facecolor='mediumorchid', edgecolor='indigo')
+
+    plotter.add_group("dyjets", "Z+Jets", "DYJets*",
+                      facecolor="orange", edgecolor="darkorange")
+
+    plotter.add_group("top", "Top", "T*",
+                      facecolor="mediumseagreen", edgecolor="darkgreen")
+
+    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+                      facecolor="lightskyblue", edgecolor="darkblue")
+
+    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+                      facecolor="tomato", edgecolor="red")
+
+    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+                      facecolor="springgreen", edgecolor="seagreen")
+
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
+
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
+            xlab=r'$M_{l^+l^+}$ [GeV]',
+            label_bin_width=True, log=False)
+
 def cut_flow():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
@@ -240,11 +275,11 @@ def z_control():
     plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",
                       facecolor='mediumseagreen', edgecolor='darkgreen')
 
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", "ZZ", "ZZTo*", #"ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
 
-#    plotter.add_group("ggzz", "ZZ(gg)", "ggZZ*",
-#                      facecolor='deepskyblue', edgecolor='navy')
+    plotter.add_group("ggzz", "ZZ(gg)", "ggZZ*",
+                      facecolor='deepskyblue', edgecolor='navy')
 
     plotter.add_group("wz", "WZ", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
@@ -257,7 +292,7 @@ def z_control():
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "ggH", "zz")
+    plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "ggH", "zz", "ggzz")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
             title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
@@ -799,6 +834,8 @@ def main():
         z_control()
     elif sys.argv[1] == "4l":
         four_l()
+    elif sys.argv[1] == "4l_em":
+        four_l_em()
     elif sys.argv[1] == "sigshapes":
         signal_shapes()
     elif sys.argv[1] == "flow":

@@ -352,8 +352,8 @@ def sidebands(channels):
     print tabulate(out, headers=["Mass (GeV)", r"\alpha",
                                  "Sideband Events (data)",
                                  "Signal Region Background Estimation",
-                                 "Signal Region Events (data)"],
-                   tablefmt="latex")
+                                 "Signal Region Events (data)"])
+                   #tablefmt="latex")
 
 
 def lepscale(channels):
@@ -522,3 +522,6 @@ if __name__ == "__main__":
 
     elif arg == "bkg_tables":
         generate_bkg_tables()
+
+    else:
+        raise ValueError("Unrecognized option: '%s'" % arg)
