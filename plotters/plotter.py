@@ -29,8 +29,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
+plt.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 plt.rc('text', usetex=True)
-plt.rc('font', family='sans-serif')
+plt.rcParams['text.latex.preamble']=[r'\usepackage[helvet]{sfmath}']
+#plt.rc('font', family='sans-serif')
 
 
 class Plotter(object):
@@ -126,8 +128,8 @@ class Plotter(object):
         #    plt.ylim(ymin=0)
 
         plt.title(title)
-        plt.xticks(ind+1/2., labels )
-        plt.ylabel("Events")
+        plt.xticks(ind+1/2., labels, size='large')
+        plt.ylabel("Events", size='large', ha='right', position=(0,1))
 
         plt.tight_layout(0.5)
 
@@ -250,10 +252,10 @@ class Plotter(object):
         else:
             plt.ylim(ymin=0)
         if ylab_width:
-            plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
+            plt.ylabel('Events / %.1f GeV' % (bins[1] - bins[0]), ha='right', position=(0,1), size='larger')
         else:
-            plt.ylabel(ylab)
-        plt.xlabel(xlab)
+            plt.ylabel(ylab, ha='right', position=(0,1), size='larger')
+        plt.xlabel(xlab, ha='right', position=(1,0), size='larger')
         plt.title(title)
 
         if shade:
@@ -354,16 +356,20 @@ class Plotter(object):
                 patches[i].set_facecolor(self.sample_groups[name]['facecolor'])
                 patches[i].set_edgecolor(self.sample_groups[name]['edgecolor'])
 
-        plt.legend(loc=legend_loc, prop={'size':10})
+        if legend_size:
+            plt.legend(loc=legend_loc, prop={'size': legend_size})
+        else:
+            plt.legend(loc=legend_loc)
+
         if log_scale:
             plt.ylim(ymin=0.1)
         else:
             plt.ylim(ymin=0)
         if ylab_width:
-            plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]))
+            plt.ylabel('Events/%.1f GeV' % (bins[1] - bins[0]), ha='right', position=(0,1), size='larger')
         else:
-            plt.ylabel(ylab)
-        plt.xlabel(xlab)
+            plt.ylabel(ylab, ha='right', position=(0,1), size='larger')
+        plt.xlabel(xlab, ha='right', position=(1,0), size='larger')
         plt.title(title)
 
         if shade:

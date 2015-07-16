@@ -26,8 +26,9 @@ from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 
 
+plt.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 plt.rc('text', usetex=True)
-plt.rc('font', family='sans-serif')
+plt.rcParams['text.latex.preamble']=[r'\usepackage[helvet]{sfmath}']
 
 
 sys.argv.append('-b')
@@ -80,8 +81,8 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, title="", x_
     plt.yscale('log')
     plt.xlim(xmin=np.min(masses), xmax=np.max(masses))
 
-    plt.xlabel(x_label, fontsize=18)
-    plt.ylabel(y_label, fontsize=18)
+    plt.xlabel(x_label, fontsize=18, ha='right', position=(1,0))
+    plt.ylabel(y_label, fontsize=18, ha='right', position=(0,1))
     plt.title(title, fontsize=18)
 
     plt.savefig(out_fname)
