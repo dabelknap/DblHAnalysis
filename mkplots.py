@@ -6,6 +6,9 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
 
+_TITLE=r'\textbf{CMS} \emph{Preliminary} \hspace{1.9in} 19.7 fb$^{-1}$ (8 TeV)'
+
+
 def signal_shapes():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
@@ -21,10 +24,10 @@ def signal_shapes():
     order = ["hpp%i" % mass for mass in masses]
     plotter.stack_order(*order)
 
-    plotter.plot_compare('h1masses.png', 'h1mass', 200, 0, 1000,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
-            ylab=r'A.U.', log=False)
+    plotter.plot_compare('h1masses.pdf', 'h1mass', 200, 0, 1000,
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            ylab=r'A.U.', log=False, legend_size=10)
 
     plotter2 = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
@@ -34,9 +37,9 @@ def signal_shapes():
 
     plotter2.stack_order("hpp500")
 
-    plotter2.plot_compare('h1500.png', 'h1mass', 200, 300, 700,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
+    plotter2.plot_compare('h1500.pdf', 'h1mass', 200, 300, 700,
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
             ylab=r'A.U.', log=False,
             shade=[(450.0, 550.0, 'r')])
 
@@ -51,16 +54,16 @@ def four_l():
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
                       facecolor="orange", edgecolor="darkorange")
 
-    plotter.add_group("top", "Top", "T*",
+    plotter.add_group("top", r"$t/t\bar{t}$", "T*",
                       facecolor="mediumseagreen", edgecolor="darkgreen")
 
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", "$ZZ$", "ZZTo*", "ggZZ*",
                       facecolor="lightskyblue", edgecolor="darkblue")
 
-    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+    plotter.add_group("wwv", "$WWV$", "WW[WZ]*",
                       facecolor="tomato", edgecolor="red")
 
-    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+    plotter.add_group("ttv", r"$t\bar{t}$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
@@ -68,29 +71,29 @@ def four_l():
     plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 600,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T(\Phi^{++})$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T(\Phi^{++})$ (GeV)',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 600,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T(\Phi^{--})$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T(\Phi^{--})$ (GeV)',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 25, 0, 800,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
-            label_bin_width=True, log=True)
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
+            label_bin_width=True, log=False)
 
     plotter.plot_stack('sideband.pdf', 'h1mass', 24, 0, 600,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
-            label_bin_width=True, log=True,
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            label_bin_width=True, log=False,
             shade=[(225.0, 275.0, 'r'),(12.0,225.0,'k'),(275.0,700.,'k')])
 
 def four_l_em():
@@ -124,25 +127,25 @@ def four_l_em():
     plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
             label_bin_width=True, log=False)
 
 def cut_flow():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7)
 
-    plotter.add_group("hpp", "HPP (500)", "HPlus*500*",
+    plotter.add_group("hpp", r"$\Phi^{++}(500)$", "HPlus*500*",
                       facecolor='mediumorchid', edgecolor='indigo')
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
                       facecolor="orange", edgecolor="darkorange")
     plotter.add_group("top", "Top", "T*",
                       facecolor="mediumseagreen", edgecolor="darkgreen")
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", "$ZZ$", "ZZTo*", "ggZZ*",
                       facecolor="lightskyblue", edgecolor="darkblue")
-    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+    plotter.add_group("wwv", "$WWV$", "WW[WZ]*",
                       facecolor="tomato", edgecolor="red")
-    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+    plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
     plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
@@ -157,7 +160,7 @@ def cut_flow():
               "Mass Window"]
 
     plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$')
+            title=_TITLE)
 
 
 def control():
@@ -178,27 +181,27 @@ def control():
     plotter.stack_order("top","dyjets")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
-            #title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            #xlab=r'$M_{l^+l^+}$ [GeV]',
+            #title=_TITLE,
+            #xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
             title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
-            xlab='M(++) [GeV]',
+            xlab='M(++) (GeV)',
             label_bin_width=True, log=True)
 
     #plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$s_T(\Phi^{++})$ [GeV]',
+    #        title=_TITLE,
+    #        xlab=r'$s_T(\Phi^{++})$ (GeV)',
     #        label_bin_width=True, log=True)
 
     #plotter.plot_stack('st2.pdf', 'sT2', 25, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-    #        xlab=r'$s_T(\Phi^{--})$ [GeV]',
+    #        title=_TITLE,
+    #        xlab=r'$s_T(\Phi^{--})$ (GeV)',
     #        label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 25, 0, 500,
-            #title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\text{fb}^{-1}$',
-            #xlab=r'$s_T$ [GeV]',
+            #title=_TITLE,
+            #xlab=r'$s_T$ (GeV)',
             title='sqrt(s)= 8 TeV, L = 19.7 fb-1',
-            xlab='sT [GeV]',
+            xlab='sT (GeV)',
             label_bin_width=True, log=True)
 
 def tt_control():
@@ -218,10 +221,10 @@ def tt_control():
     plotter.add_group("wz", "$WZ$", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
 
-    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+    plotter.add_group("wwv", "$WWV$", "WW[WZ]*",
                       facecolor="tomato", edgecolor="red")
 
-    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+    plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
@@ -229,28 +232,28 @@ def tt_control():
     plotter.stack_order("ttv", "wwv", "wz", "top", "tt", "dyjets")
 
     plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 800,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st.pdf', 'sT', 10, 0, 800,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('met.pdf', 'met', 10, 0, 400,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$E_T^{miss}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$E_T^{miss}$ (GeV)',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st1.pdf', 'sT1', 10, 0, 400,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T(\Phi^{++})$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T(\Phi^{++})$ (GeV)',
             label_bin_width=True, log=True)
 
     plotter.plot_stack('st2.pdf', 'sT2', 10, 0, 400,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T(\Phi^{--})$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T(\Phi^{--})$ (GeV)',
             label_bin_width=True, log=True)
 
 def z_control():
@@ -269,101 +272,101 @@ def z_control():
     plotter.add_group("dyjets", r"Z+Jets", "Z[1234]jets*",
                       facecolor='orange', edgecolor='darkorange')
 
-    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+    plotter.add_group("ggH", "$H(125)$", "GluGlu*125*",
                       facecolor='lightcoral', edgecolor='maroon')
 
-    plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",
+    plotter.add_group("top", r"$t/t\bar{t}$", "TTJets*", "T_*", "Tbar_*",
                       facecolor='mediumseagreen', edgecolor='darkgreen')
 
-    plotter.add_group("zz", "ZZ", "ZZTo*", #"ggZZ*",
+    plotter.add_group("zz", "$ZZ$", "ZZTo*", #"ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
 
-    plotter.add_group("ggzz", "ZZ(gg)", "ggZZ*",
+    plotter.add_group("ggzz", "$ZZ(gg)$", "ggZZ*",
                       facecolor='deepskyblue', edgecolor='navy')
 
-    plotter.add_group("wz", "WZ", "WZJets*",
+    plotter.add_group("wz", "$WZ$", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
 
-    plotter.add_group("wwv", "WWV", "WW[WZ]*",
+    plotter.add_group("wwv", "$WWV$", "WW[WZ]*",
                       facecolor="tomato", edgecolor="red")
 
-    plotter.add_group("ttv", "TTV", "TT[WZ]*",
+    plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
 
     plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "ggH", "zz", "ggzz")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
-            label_bin_width=True, log=False, legend_size=10)
+    #plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
+    #        title=_TITLE,
+    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+    #        label_bin_width=True, log=False)#, legend_size=10)
 
-    plotter.plot_stack('h1mass_binned.pdf', 'h1mass', 25, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{l^+l^+}$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('h1mass_binned.pdf', 'h1mass', 25, 0, 500,
+    #        title=_TITLE,
+    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+    #        label_bin_width=True, log=False)
 
     plotter.plot_stack('st.pdf', 'sT', 20, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
-            label_bin_width=True, log=False, legend_size=10,
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
+            label_bin_width=True, log=False,#legend_size=10,
             shade=[(0, 150.0, 'k')])
 
-    plotter.plot_stack('met.pdf', 'met', 20, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$E_T^{miss}$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('met.pdf', 'met', 20, 0, 500,
+    #        title=_TITLE,
+    #        xlab=r'$E_T^{miss}$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('st1.pdf', 'sT1', 20, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T(\Phi^{++})$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('st1.pdf', 'sT1', 20, 0, 500,
+    #        title=_TITLE,
+    #        xlab=r'$s_T(\Phi^{++})$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('st2.pdf', 'sT2', 20, 0, 500,
-            title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T(\Phi^{--})$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('st2.pdf', 'sT2', 20, 0, 500,
+    #        title=_TITLE,
+    #        xlab=r'$s_T(\Phi^{--})$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l1pt.pdf', 'l1Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_1)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l1pt.pdf', 'l1Pt', 20, 0, 100,
+    #        title=_TITLE,
+    #        xlab=r'$p_T(\ell_1)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l2pt.pdf', 'l2Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_2)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l2pt.pdf', 'l2Pt', 20, 0, 100,
+    #        title=_TITLE,
+    #        xlab=r'$p_T(\ell_2)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l3pt.pdf', 'l3Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_3)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l3pt.pdf', 'l3Pt', 20, 0, 100,
+    #        title=_TITLE,
+    #        xlab=r'$p_T(\ell_3)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l4pt.pdf', 'l4Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_4)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l4pt.pdf', 'l4Pt', 20, 0, 100,
+    #        title=_TITLE,
+    #        xlab=r'$p_T(\ell_4)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l1eta.pdf', 'l1Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_1)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l1eta.pdf', 'l1Eta', 20, -2.5, 2.5,
+    #        title=_TITLE,
+    #        xlab=r'$\eta(\ell_1)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l2eta.pdf', 'l2Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_2)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l2eta.pdf', 'l2Eta', 20, -2.5, 2.5,
+    #        title=_TITLE,
+    #        xlab=r'$\eta(\ell_2)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l3eta.pdf', 'l3Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_3)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l3eta.pdf', 'l3Eta', 20, -2.5, 2.5,
+    #        title=_TITLE,
+    #        xlab=r'$\eta(\ell_3)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
-    plotter.plot_stack('l4eta.pdf', 'l4Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_4)$ [GeV]',
-            label_bin_width=True, log=False)
+    #plotter.plot_stack('l4eta.pdf', 'l4Eta', 20, -2.5, 2.5,
+    #        title=_TITLE,
+    #        xlab=r'$\eta(\ell_4)$ (GeV)',
+    #        label_bin_width=True, log=False)
 
 def zz_smp_m4l():
     channels = ["eeee", "mmmm", "eemm", "mmee"]
@@ -388,8 +391,8 @@ def zz_smp_m4l():
     plotter.stack_order("zz", "ggzz")
 
     plotter.plot_stack('m4l.pdf', 'mass', 36, 100, 1000,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'm(4l) [GeV]',
+            title=_TITLE,
+            xlab=r'm(4l) (GeV)',
             label_bin_width=True, log=False)
 
 
@@ -401,11 +404,11 @@ def zz_4mu():
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4mu",
                       channels=["zz4l"], lumi=19.7)
 
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
     #plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
     #                  facecolor='orange', edgecolor='darkorange')
-    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+    plotter.add_group("ggH", r"$H(125)$", "GluGlu*125*",
                       facecolor='lightcoral', edgecolor='maroon')
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
@@ -432,63 +435,63 @@ def zz_4mu():
     #plotter.stack_order("top","wz","wwv","ttv","dyjets","zz","ggH")
 
     plotter.plot_stack('st.pdf', 'sT', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4\ell}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz1.pdf', 'z1mass', 30, 60, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_1}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_1}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz2.pdf', 'z2mass', 30, 60, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_2}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_2}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l1pt.pdf', 'l1Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_1)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_1)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l2pt.pdf', 'l2Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_2)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_2)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l3pt.pdf', 'l3Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_3)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_3)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l4pt.pdf', 'l4Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_4)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_4)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l1eta.pdf', 'l1Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_1)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_1)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l2eta.pdf', 'l2Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_2)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_2)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l3eta.pdf', 'l3Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_3)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_3)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l4eta.pdf', 'l4Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_4)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_4)$ (GeV)',
             label_bin_width=True, log=False)
 
 def zz_4e():
@@ -500,11 +503,11 @@ def zz_4e():
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4e",
                       channels=["zz4l"], lumi=19.7)
 
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
     plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
                       facecolor='orange', edgecolor='darkorange')
-    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+    plotter.add_group("ggH", r"$H(125)$", "GluGlu*125*",
                       facecolor='lightcoral', edgecolor='maroon')
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
@@ -530,63 +533,63 @@ def zz_4e():
     #plotter.stack_order("top","wz","wwv","ttv","dyjets","zz","ggH")
 
     plotter.plot_stack('st.pdf', 'sT', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4\ell}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz1.pdf', 'z1mass', 30, 60, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_1}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_1}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz2.pdf', 'z2mass', 30, 60, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_2}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_2}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l1pt.pdf', 'l1Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_1)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_1)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l2pt.pdf', 'l2Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_2)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_2)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l3pt.pdf', 'l3Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_3)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_3)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l4pt.pdf', 'l4Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_4)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_4)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l1eta.pdf', 'l1Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_1)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_1)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l2eta.pdf', 'l2Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_2)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_2)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l3eta.pdf', 'l3Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_3)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_3)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l4eta.pdf', 'l4Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_4)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_4)$ (GeV)',
             label_bin_width=True, log=False)
 
 
@@ -598,10 +601,10 @@ def zz_2e2mu():
     plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/2e2mu",
                       channels=["zz4l"], lumi=19.7)
 
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
 
-    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+    plotter.add_group("ggH", r"$H(125)$", "GluGlu*125*",
                       facecolor='lightcoral', edgecolor='maroon')
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
@@ -609,8 +612,8 @@ def zz_2e2mu():
     plotter.stack_order("zz", "ggH")
 
     plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False)
 
 
@@ -624,7 +627,7 @@ def zz_all():
 
     plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",
                       facecolor='mediumseagreen', edgecolor='darkgreen')
-    plotter.add_group("zz", "ZZ", "ZZTo*", "ggZZ*",
+    plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
                       facecolor='lightskyblue', edgecolor='darkblue')
     plotter.add_group("wz", "WZ", "WZJets*",
                       facecolor='mediumpurple', edgecolor='midnightblue')
@@ -634,7 +637,7 @@ def zz_all():
                       facecolor="springgreen", edgecolor="seagreen")
     plotter.add_group("dyjets", "Z+Jets", "Z[1234]jets*",
                       facecolor='orange', edgecolor='darkorange')
-    plotter.add_group("ggH", "H(125)", "GluGlu*125*",
+    plotter.add_group("ggH", r"$H(125)$", "GluGlu*125*",
                       facecolor='lightcoral', edgecolor='maroon')
 
     plotter.add_group("data", "Observed", "data_*", isdata=True)
@@ -642,63 +645,63 @@ def zz_all():
     plotter.stack_order("zz","ggH")
 
     plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4\ell}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('st.pdf', 'sT', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$s_T$ [GeV]',
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz1.pdf', 'z1mass', 30, 60, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_1}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_1}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz2.pdf', 'z2mass', 30, 60, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_2}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_2}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l1pt.pdf', 'l1Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_1)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_1)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l2pt.pdf', 'l2Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_2)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_2)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l3pt.pdf', 'l3Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_3)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_3)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l4pt.pdf', 'l4Pt', 20, 0, 100,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$p_T(l_4)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$p_T(\ell_4)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l1eta.pdf', 'l1Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_1)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_1)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l2eta.pdf', 'l2Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_2)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_2)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l3eta.pdf', 'l3Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_3)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_3)$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('l4eta.pdf', 'l4Eta', 20, -2.5, 2.5,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$\eta(l_4)$ [GeV]',
+            title=_TITLE,
+            xlab=r'$\eta(\ell_4)$ (GeV)',
             label_bin_width=True, log=False)
 
 
@@ -731,38 +734,38 @@ def zz_powheg_breakdown():
 
     plotter.stack_order("4e")
     plotter.plot_stack('m4l_4e.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.stack_order("4mu")
     plotter.plot_stack('m4l_4mu.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False)
 
     #plotter.stack_order("4tau")
     #plotter.plot_stack('m4l_4tau.pdf', 'mass', 50, 0, 500,
-    #        title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-    #        xlab=r'$M_{4l}$ [GeV]',
+    #        title=_TITLE,
+    #        xlab=r'$M_{4l}$ (GeV)',
     #        label_bin_width=True, log=False)
 
     plotter.stack_order("2e2mu")
     plotter.plot_stack('m4l_2e2mu.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.stack_order("2e2tau")
     plotter.plot_stack('m4l_2e2tau.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.stack_order("2mu2tau")
     plotter.plot_stack('m4l_2mu2tau.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False)
 
 
@@ -799,18 +802,18 @@ def zz_breakdown():
     plotter.stack_order("4tau","2e2tau","2mu2tau", "2e2mu", "4e", "4mu")
 
     plotter.plot_stack('m4l.pdf', 'mass', 50, 0, 500,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{4l}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{4l}$ (GeV)',
             label_bin_width=True, log=False, legend_size=10)
 
     plotter.plot_stack('mz1.pdf', 'z1mass', 36, 0, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_1}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_1}$ (GeV)',
             label_bin_width=True, log=False)
 
     plotter.plot_stack('mz2.pdf', 'z2mass', 36, 0, 120,
-            title=r'$\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 fb$^{-1}$',
-            xlab=r'$M_{Z_2}$ [GeV]',
+            title=_TITLE,
+            xlab=r'$M_{Z_2}$ (GeV)',
             label_bin_width=True, log=False)
 
 

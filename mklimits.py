@@ -24,6 +24,8 @@ _EFFICIENCY_SYST = {"mmmm": {"m": 1.010},
                     "eeem": {"m": 1.002, "e": 1.047},
                     "emmm": {"m": 1.007, "e": 1.016}}
 
+_TITLE=r'\textbf{CMS} \emph{Preliminary} \hspace{1.9in} 19.7 fb$^{-1}$ (8 TeV)'
+
 
 def efficiency_systematic(channel):
     # sort the characters so e's come before m's
@@ -293,8 +295,8 @@ def plot_mmmm():
 def plot(BP, directory="datacards", out=""):
     logger.info("Plotting %s" % BP)
     plot_limits("./plots/limits/%s/%s.pdf" % (out,BP), _4L_MASSES, "%s/%s" % (directory, BP), blinded=True,
-                title=r'CMS Preliminary $\sqrt{s}=$ 8 TeV, $\mathcal{L}_{int}=$ 19.7 $\textrm{fb}^{-1}$',
-                x_label=r"$\Phi^{++}$ Mass [GeV]",
+                title=_TITLE,
+                x_label=r"$\Phi^{++}$ Mass (GeV)",
                 y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM+\Phi^{\pm\pm}}$")
 
 
