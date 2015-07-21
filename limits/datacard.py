@@ -61,7 +61,12 @@ class Datacard(object):
 
         for syst in self.syst:
             names = [self.signal[0]] + [x[0] for x in self.bkg]
-            row = [syst[2][name] if name in syst[2] else '-' for name in names]
+
+            if "gmN" in syst[1]:
+                row = ["%.3e" % syst[2][name] if name in syst[2] else '-' for name in names]
+            else:
+                row = [syst[2][name] if name in syst[2] else '-' for name in names]
+
             out += fmt.format(syst[0], syst[1], *row)
 
         return out
