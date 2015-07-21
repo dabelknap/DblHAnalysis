@@ -46,9 +46,9 @@ def signal_shapes():
 
 def four_l():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
-                      channels=["dblh4l"], lumi=19.7, partial_blind=True)
+                      channels=["dblh4l"], lumi=19.7, partial_blind=False)
 
-    plotter.add_group("hpp", r"$\Phi^{++}(250)$", "HPlus*250*",
+    plotter.add_group("hpp", r"$\Phi^{++}(500)$", "HPlus*500*",
                       facecolor='mediumorchid', edgecolor='indigo')
 
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
@@ -66,14 +66,14 @@ def four_l():
     plotter.add_group("ttv", r"$t\bar{t}$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    plotter.add_group("data", "Observed", "data_*", isdata=True)
+    #plotter.add_group("data", "Observed", "data_*", isdata=True)
 
     plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
 
-    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 500,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
             xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-            label_bin_width=True, log=False)
+            label_bin_width=True, log=True)
 
     plotter.plot_stack('st1.pdf', 'sT1', 25, 0, 600,
             title=_TITLE,
@@ -97,9 +97,9 @@ def four_l():
             shade=[(225.0, 275.0, 'r'),(12.0,225.0,'k'),(275.0,700.,'k')])
 
 def four_l_em():
-    channels = ["mmm"]
-    tmp = ["channel == '%s'" % c for c in channels]
-    cut = "((mass > 0) & (%s))" % (") | (".join(tmp))
+    channels = ["eemm"]
+    tmp = ["(channel == '%s')" % c for c in channels]
+    cut = "((mass > 0) & (%s))" % (" | ".join(tmp))
 
     plotter = Plotter("DblH", cut, "./ntuples", "./plots/4l_em",
                       channels=["dblh4l"], lumi=19.7, partial_blind=True)
