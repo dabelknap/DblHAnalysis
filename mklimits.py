@@ -162,10 +162,14 @@ def fourl_100():
 
 def BP1(directory):
     s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
-    four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP1"), scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP1"), scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP1"), scale=s.scale("mm","em"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s.scale("mm","mm"))
+    path = os.path.join(directory, "BP1")
+
+    scales = {"emem": s.scale("em","em"),
+              "emmm": s.scale("em","mm"),
+              "mmem": s.scale("mm","em"),
+              "mmmm": s.scale("mm","mm")}
+
+    four_lepton("BP1", ["emem", "emmm", "mmem", "mmmm"], path, scale=scales)
 
 
 def BP2(directory):
@@ -368,10 +372,10 @@ def main(argv=None):
 
     elif args.operation[0] == "all":
         for i in BPS:
-            globals()[i]("./datacards/4l_8tev")
+            globals()[i]("./datacards/4l_8tev_test")
 
     else:
-        globals()[args.operation[0]]("./datacards/4l_8tev")
+        globals()[args.operation[0]]("./datacards/4l_8tev_test")
 
     return 0
 
