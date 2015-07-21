@@ -64,10 +64,13 @@ class Limits(object):
 
         for key in self.sample_groups:
             is_data = self.sample_groups[key]['isData']
+            is_sig = self.sample_groups[key]['isSig']
             vals = []
             wgts = []
+
             scale_factor = self.sample_groups[key]['scale']
-            if not is_data:
+
+            if not is_data and not is_sig:
                 self.log.info("Processing MC: %s" % key)
 
                 for sample_name in self.sample_groups[key]["sample_names"]:
@@ -78,15 +81,62 @@ class Limits(object):
                             table = getattr(getattr(h5file.root,
                                                     self.analysis), chan)
                             vals += [x[var] for x in table.where(cut)]
+
                             scale = self.lumi * xsec.xsecs[sample_name] * \
                                 scale_factor / xsec.nevents[sample_name]
                             wgts += [x['pu_weight'] * x['lep_scale'] * scale
                                      for x in table.where(cut)]
 
-                if self.sample_groups[key]['isSig']:
-                    self.datacard.add_sig(key, sum(wgts))
-                else:
-                    self.datacard.add_bkg(key, sum(wgts))
+                self.datacard.add_bkg(key, sum(wgts))
+
+                #if self.sample_groups[key]['isSig']:
+                #    self.datacard.add_sig(key, sum(wgts))
+                #else:
+                #    self.datacard.add_bkg(key, sum(wgts))
+
+            elif is_sig and not is_data:
+                self.log.info("Processing Signal MC: %s" % key)
+
+                for sample_name in self.sample_groups[key]["sample_names"]:
+                    with tb.open_file(
+                        "%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') \
+                            as h5file:
+
+                        # chan is dblh4l
+                        for chan in self.channels:
+
+                            # c is mmmm, emem, eeee, etc.
+                            try:
+                                for c in scale_factor.keys():
+                                    c_cut = "%s & (channel == '%s')" % (cut, c)
+
+                                    table = getattr(getattr(h5file.root,
+                                                            self.analysis), chan)
+                                    vals += [x[var] for x in table.where(c_cut)]
+
+                                    scl = scale_factor[c]
+
+                                    scale = self.lumi * xsec.xsecs[sample_name] * \
+                                        scl / xsec.nevents[sample_name]
+
+                                    wgts += [x['pu_weight'] * x['lep_scale'] * scale
+                                             for x in table.where(c_cut)]
+
+                            except AttributeError:
+                                table = getattr(getattr(h5file.root,
+                                                        self.analysis), chan)
+                                vals += [x[var] for x in table.where(cut)]
+
+                                scl = scale_factor
+
+                                scale = self.lumi * xsec.xsecs[sample_name] * \
+                                    scl / xsec.nevents[sample_name]
+
+                                wgts += [x['pu_weight'] * x['lep_scale'] * scale
+                                         for x in table.where(cut)]
+
+                self.datacard.add_sig(key, sum(wgts))
+
 
             elif is_data and not self.blinded:
                 self.log.info('Processing Data')
