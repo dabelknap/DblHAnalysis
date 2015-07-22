@@ -89,11 +89,7 @@ class Limits(object):
 
                 self.datacard.add_bkg(key, sum(wgts))
 
-                #if self.sample_groups[key]['isSig']:
-                #    self.datacard.add_sig(key, sum(wgts))
-                #else:
-                #    self.datacard.add_bkg(key, sum(wgts))
-
+            # apply to signal MC only
             elif is_sig and not is_data:
                 self.log.info("Processing Signal MC: %s" % key)
 
@@ -103,6 +99,7 @@ class Limits(object):
                             as h5file:
 
                         # chan is dblh4l
+                        # for-loop is technically not necessary
                         for chan in self.channels:
 
                             # c is mmmm, emem, eeee, etc.
@@ -122,6 +119,7 @@ class Limits(object):
                                     wgts += [x['pu_weight'] * x['lep_scale'] * scale
                                              for x in table.where(c_cut)]
 
+                            # if scale_factor is a scalar instead of a dict
                             except AttributeError:
                                 table = getattr(getattr(h5file.root,
                                                         self.analysis), chan)

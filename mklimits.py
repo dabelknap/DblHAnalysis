@@ -100,12 +100,12 @@ def four_lepton(name, channels, directory, scale=1.0):
             mass,
             '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
 
-        limits.add_bkg_rate("bkg_sb_%s" % channels[0], float(N_db_data) * alpha)
+        limits.add_bkg_rate("bkg_sb_%s" % name, float(N_db_data) * alpha)
         kwargs = {"bkg_sb_%s" % name: alpha}
-        limits.add_systematics("bkg_err_%s" % channels[0], "gmN %i" % N_db_data, **kwargs)
+        limits.add_systematics("bkg_err_%s" % name, "gmN %i" % N_db_data, **kwargs)
 
         kwargs = {"bkg_sb_%s" % name: 1.10}
-        limits.add_systematics("alph_err", "lnN", **kwargs)
+        limits.add_systematics("alpha_err", "lnN", **kwargs)
 
         limits.gen_card("%s.txt" % name)
 
@@ -174,29 +174,42 @@ def BP1(directory):
 
 def BP2(directory):
     s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP2"), scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP2"), scale=s.scale("mm","ee"))
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP2"), scale=s.scale("ee","ee"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP2"), scale=s.scale("mm","mm"))
+    path = os.path.join(directory, "BP2")
+
+    scales = {"eemm": s.scale("ee","mm"),
+              "mmee": s.scale("mm","ee"),
+              "eeee": s.scale("ee","ee"),
+              "mmmm": s.scale("mm","mm")}
+
+    four_lepton("BP2", ["eemm", "mmee", "eeee", "mmmm"], path, scale=scales)
 
 
 def BP3(directory):
     s = Scales(0.34, 0, 0, 0.33, 0, 0.33)
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s.scale("mm","ee"))
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s.scale("ee","ee"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP3"), scale=s.scale("mm","mm"))
+    path = os.path.join(directory, "BP3")
+
+    scales = {"eemm": s.scale("ee","mm"),
+              "mmee": s.scale("mm","ee"),
+              "eeee": s.scale("ee","ee"),
+              "mmmm": s.scale("mm","mm")}
+
+    four_lepton("BP3", ["eemm","mmee","eeee","mmmm"], path, scale=scales)
 
 
 def BP4(directory):
     s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
-    four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP4"), scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP4"), scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP4"), scale=s.scale("mm","em"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s.scale("mm","mm"))
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s.scale("ee","ee"))
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP4"), scale=s.scale("mm","ee"))
+    path = os.path.join(directory, "BP4")
+
+    scales = {"emem": s.scale("em","em"),
+              "emmm": s.scale("em","mm"),
+              "mmem": s.scale("mm","em"),
+              "mmmm": s.scale("mm","mm"),
+              "eeee": s.scale("ee","ee"),
+              "eemm": s.scale("ee","mm"),
+              "mmee": s.scale("mm","ee")}
+
+    four_lepton("BP4", ["emem","emmm","mmem","mmmm","eeee","eemm","mmee"],
+                path, scale=scales)
 
 
 def mm100(directory):
@@ -208,9 +221,7 @@ def ee100(directory):
 
 
 def em100(directory):
-    four_lepton("emem", ["emem"],
-            os.path.join(directory, "em100"),
-            scale=36.0)
+    four_lepton("emem", ["emem"], os.path.join(directory, "em100"), scale=36.0)
 
 
 def mmmm_100(mass):
@@ -350,7 +361,7 @@ def main(argv=None):
         if args.operation[1] == "all":
             out = []
             for i in BPS:
-                exp, obs = globals()["exclude"](i, directory="datacards/4l_8tev")
+                exp, obs = globals()["exclude"](i, directory="datacards/4l_8tev_test")
                 out.append([i,exp,obs])
             print tabulate(out,
                            headers=["BP", "Expected", "Observed"],
