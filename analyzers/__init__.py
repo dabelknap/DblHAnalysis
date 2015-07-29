@@ -137,7 +137,11 @@ class Analyzer(object):
                 b_index = int(b[1])
             except IndexError:
                 b_index = 1
-            return a_index > b_index or a[0] > b[0]
+
+            if a[0] == b[0]:
+                return a_index > b_index
+            else:
+                return a[0] > b[0]
 
         cands = [(0, float('inf'), [])]
         for l in permutations(self.leptons):
