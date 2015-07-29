@@ -105,7 +105,7 @@ def four_lepton(name, channels, directory, scale=1.0):
         limits.add_systematics("bkg_err_%s" % channels[0], "gmN %i" % N_db_data, **kwargs)
 
         kwargs = {"bkg_sb_%s" % channels[0]: 1.10}
-        limits.add_systematics("alph_err", "lnN", **kwargs)
+        limits.add_systematics("alpha_err", "lnN", **kwargs)
 
         limits.gen_card("%s.txt" % name)
 
