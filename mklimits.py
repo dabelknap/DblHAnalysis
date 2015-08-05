@@ -185,7 +185,7 @@ def BP2(directory):
 
 
 def BP3(directory):
-    s = Scales(0.34, 0, 0, 0.33, 0, 0.33)
+    s = Scales(1./3., 0, 0, 1./3., 0, 1./3.)
     four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s.scale("ee","mm"))
     four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s.scale("mm","ee"))
     four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s.scale("ee","ee"))
