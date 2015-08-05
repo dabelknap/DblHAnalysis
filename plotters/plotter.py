@@ -27,6 +27,7 @@ import matplotlib as mpl
 # mpl.rcParams.update(pgf_with_pdflatex)
 
 import matplotlib.pyplot as plt
+import matplotlib
 
 
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})

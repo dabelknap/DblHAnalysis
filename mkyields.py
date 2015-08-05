@@ -307,7 +307,7 @@ def generate_bkg_tables():
     functions = [bkg_table_ee100, bkg_table_em100, bkg_table_mm100,
                  bkg_table_BP1, bkg_table_BP2, bkg_table_BP3, bkg_table_BP4]
 
-    with open('bkg_tables.txt', 'w') as outfile:
+    with open('bkg_tables_zveto.txt', 'w') as outfile:
         for fun in functions:
             log.info("Processing BP: %s" % fun.func_name)
 
@@ -361,8 +361,8 @@ def sidebands(channels):
     print tabulate(out, headers=["Mass (GeV)", r"\alpha",
                                  "Sideband Events (data)",
                                  "Signal Region Background Estimation",
-                                 "Signal Region Events (data)"])
-                   #tablefmt="latex")
+                                 "Signal Region Events (data)"],
+                   tablefmt="latex")
 
 
 def lepscale(channels):
