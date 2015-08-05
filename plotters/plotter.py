@@ -139,6 +139,59 @@ class Plotter(object):
 
         plt.savefig("%s/%s" % (self.out_dir, file_name))
 
+    def plot_2D(self, file_name, var1, var2, nbins1, nbins2, xmin1, xmax1,
+                xmin2, xmax2, **kwargs):
+        vals1 = []
+        wgts = []
+        vals2 = []
+
+        cuts = kwargs.get('cuts', '(True)')
+        title = kwargs.get('title', '')
+        xlab = kwargs.get('xlab','')
+        ylab = kwargs.get('ylab','')
+
+        cut = "%s & %s" % (self.base_selections, cuts)
+
+        for mc in self.sample_order:
+
+            self.log.info("Processing MC: %s" % mc)
+
+            for sample_name in self.sample_groups[mc]["sample_names"]:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis),
+                                        chan)
+                        vals1 += [x[var1] for x in table.where(cut)]
+                        vals2 += [x[var2] for x in table.where(cut)]
+                        scale = self.lumi * xsec.xsecs[sample_name] / \
+                                xsec.nevents[sample_name]
+                        wgts += [x['pu_weight'] * x['lep_scale'] * \
+                                scale for x in table.where(cut)]
+
+
+        plt.figure(figsize=(6, 5))
+
+        (n, xbins, ybins, Image) = plt.hist2d(
+                vals1, vals2,
+                bins=[nbins1,nbins2],
+                range=[[xmin1,xmax1],[xmin2,xmax2]],
+                weights=wgts)
+
+        plt.colorbar()
+        plt.title(title)
+        plt.xlabel(xlab, ha='right', position=(1,0), size='larger')
+        plt.ylabel(ylab, ha='right', position=(0,1), size='larger')
+
+        plt.axhspan(450,550,0.375,0.625,fill=False,edgecolor='white')
+
+        plt.tight_layout(0.5)
+
+        self.log.info("Generating Histogram: %s:%s, %s/%s" % (var1,var2, self.out_dir, file_name))
+
+        plt.savefig("%s/%s" % (self.out_dir, file_name))
+        plt.clf()
+
     def plot_stack(self, file_name, var, nbins, xmin, xmax, **kwargs):
         """
         Plot a stacked histogram
