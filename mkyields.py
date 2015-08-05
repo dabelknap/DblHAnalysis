@@ -103,13 +103,20 @@ def alpha(mass, channel):
     outer.add_group("top", "T*")
     outer.add_group("dyjets", "Z[1234]jets*M50")
 
+    with open('plotters/mc_events.json', 'r') as jfile:
+        mc_events = json.load(jfile)
+        single_zz_event = xsecs['ZZTo4e_8TeV-powheg-pythia6'] * 19.7 / \
+                mc_events['ZZTo4e_8TeV-powheg-pythia6']
+
     bkg = ufloat(*outer.yields("zz")) + ufloat(*outer.yields("top")) + \
         ufloat(*outer.yields("dyjets"))
 
-    if bkg.nominal_value == 0:
+    if bkg.nominal_value == 0.0:
         return sig.nominal_value
     if sig.nominal_value < sig.std_dev:
         return sig.std_dev
+    if sig.nominal_value == 0.0:
+        return single_zz_event
     else:
         return (sig/bkg).nominal_value
 
