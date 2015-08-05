@@ -201,10 +201,11 @@ def cut_flow():
     plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    plotter.stack_order("zz", "hpp")
     #plotter.stack_order("top", "dyjets", "zz", "hpp")
 
-    cuts = ["(True)",
+    cuts = ["(channel == 'emem')",
             "(%f < sT)" % (0.6*500 + 130.),
             "(%f < sT) & (%f < h1mass) & (h1mass < %f)" % ((0.6*500 + 130.), 0.9*500, 1.1*500)]
 
@@ -212,7 +213,7 @@ def cut_flow():
               "sT",
               "Mass Window"]
 
-    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True,
+    plotter.cut_flow("cut_flow_emem.pdf", cuts, labels, log=True,
             title=_TITLE)
 
 
@@ -287,27 +288,27 @@ def tt_control():
     plotter.plot_stack('h1mass.pdf', 'h1mass', 10, 0, 800,
             title=_TITLE,
             xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-            label_bin_width=True, log=True)
+            label_bin_width=True, log=False, mc_bands=0.3)
 
     plotter.plot_stack('st.pdf', 'sT', 10, 0, 800,
             title=_TITLE,
             xlab=r'$s_T$ (GeV)',
-            label_bin_width=True, log=True)
+            label_bin_width=True, log=False, mc_bands=0.3)
 
-    plotter.plot_stack('met.pdf', 'met', 10, 0, 400,
-            title=_TITLE,
-            xlab=r'$E_T^{miss}$ (GeV)',
-            label_bin_width=True, log=True)
+    #plotter.plot_stack('met.pdf', 'met', 10, 0, 400,
+    #        title=_TITLE,
+    #        xlab=r'$E_T^{miss}$ (GeV)',
+    #        label_bin_width=True, log=True)
 
-    plotter.plot_stack('st1.pdf', 'sT1', 10, 0, 400,
-            title=_TITLE,
-            xlab=r'$s_T(\Phi^{++})$ (GeV)',
-            label_bin_width=True, log=True)
+    #plotter.plot_stack('st1.pdf', 'sT1', 10, 0, 400,
+    #        title=_TITLE,
+    #        xlab=r'$s_T(\Phi^{++})$ (GeV)',
+    #        label_bin_width=True, log=True)
 
-    plotter.plot_stack('st2.pdf', 'sT2', 10, 0, 400,
-            title=_TITLE,
-            xlab=r'$s_T(\Phi^{--})$ (GeV)',
-            label_bin_width=True, log=True)
+    #plotter.plot_stack('st2.pdf', 'sT2', 10, 0, 400,
+    #        title=_TITLE,
+    #        xlab=r'$s_T(\Phi^{--})$ (GeV)',
+    #        label_bin_width=True, log=True)
 
 def z_control():
     channels = ["eemm","mmee","emme","meem","emem","meme","mmmm","eeee"]
@@ -353,6 +354,7 @@ def z_control():
     #plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
     #        title=_TITLE,
     #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+    #        mc_bands=0.1,
     #        label_bin_width=True, log=False)#, legend_size=10)
 
     #plotter.plot_stack('h1mass_binned.pdf', 'h1mass', 25, 0, 500,
@@ -363,6 +365,7 @@ def z_control():
     plotter.plot_stack('st.pdf', 'sT', 20, 0, 500,
             title=_TITLE,
             xlab=r'$s_T$ (GeV)',
+            mc_bands=0.1,
             label_bin_width=True, log=False,#legend_size=10,
             shade=[(0, 150.0, 'k')])
 
@@ -890,6 +893,8 @@ def main():
         z_control()
     elif sys.argv[1] == "4l":
         four_l()
+    elif sys.argv[1] == "2D":
+        two_D()
     elif sys.argv[1] == "4l_em":
         four_l_em()
     elif sys.argv[1] == "sigshapes":
