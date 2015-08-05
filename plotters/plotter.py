@@ -211,6 +211,8 @@ class Plotter(object):
         shade = kwargs.get('shade', None)
         legend_size = kwargs.get('legend_size', None)
         mc_err = kwargs.get('mc_err', False)
+        dump_yields = kwargs.get('dump_yields', False)
+        mc_bands = kwargs.get('mc_bands', None)
 
         hist_style = {'histtype': 'stepfilled',
                       'linewidth': 1.5,
@@ -218,6 +220,11 @@ class Plotter(object):
                       'log': log_scale}
 
         cut = "%s & %s" % (self.base_selections, cuts)
+
+        if dump_yields:
+            yfile = open(self.out_dir + '/' + file_name + '.txt', 'w')
+        else:
+            yfile = None
 
         for mc in self.sample_order:
             vals = []
@@ -264,6 +271,12 @@ class Plotter(object):
             (n1, bins1, patches1) = plt.hist(vals, nbins, range=(xmin, xmax))
             plt.clf()
 
+            if yfile:
+                yfile.write("Data\n")
+                yfile.write(bins1.__str__()+'\n')
+                yfile.write(n1.__str__()+'\n')
+
+
         self.log.info("Generating Histogram: %s, %s/%s" % (var, self.out_dir, file_name))
 
         # Plot stacked MC
@@ -271,6 +284,31 @@ class Plotter(object):
         (n, bins, patches) = plt.hist(
                 values, nbins, weights=weights, range=(xmin, xmax),
                 label=labels, **hist_style)
+
+        if yfile:
+            yfile.write("MC Total\n")
+            yfile.write(bins.__str__()+'\n')
+            yfile.write(["%.2f" % x for x in n[-1]].__str__()+'\n')
+
+        if mc_bands:
+            X = []
+            for i in bins:
+                X.append(i)
+                X.append(i)
+
+            Y = [0]
+            for i in n[-1]:
+                Y.append(i)
+                Y.append(i)
+            Y.append(0)
+            Y = np.array(Y)
+
+            _up = 1.0 + mc_bands
+            _down = 1.0 - mc_bands
+
+            plt.fill_between(X,Y*_down,Y*_up,facecolor='k',alpha=0.2,zorder=10)
+
+            #plt.plot(0.5*(bins[1:] + bins[:-1]), n[-1]*0.7, drawstyle='steps-mid')
 
         if mc_err:
             n_total = n
@@ -302,7 +340,7 @@ class Plotter(object):
             plt.legend(loc=legend_loc)
 
         if log_scale:
-            plt.ylim(ymin=0.1)
+            plt.ylim(ymin=0.01)
         else:
             plt.ylim(ymin=0)
         if ylab_width:
@@ -320,6 +358,9 @@ class Plotter(object):
         plt.tight_layout(0.5)
 
         plt.savefig("%s/%s" % (self.out_dir, file_name))
+
+        if yfile:
+            yfile.close()
 
 
     def plot_compare(self, file_name, var, nbins, xmin, xmax, **kwargs):
