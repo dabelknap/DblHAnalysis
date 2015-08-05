@@ -23,6 +23,7 @@ class Event4l(EventBase):
 
     met     = tb.Float32Col()
     metPhi  = tb.Float32Col()
+    z_sep   = tb.Float32Col()
 
     jetVeto = tb.Int32Col()
 

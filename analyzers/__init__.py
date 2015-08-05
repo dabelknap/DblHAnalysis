@@ -166,6 +166,19 @@ class Analyzer(object):
 
         return (mh1, mh2, leps)
 
+    def Z_separation(self, rtrow):
+        l = self.leptons
+        indices = [(i,j) for i in xrange(4) for j in xrange(i+1,4)]
+        mass_diffs = [abs(getattr(rtrow, "%s_%s_Mass" % (l[a[0]], l[a[1]])) - ZMASS)
+                      for a in indices
+                      if getattr(rtrow, "%s_%s_SS" % (l[a[0]], l[a[1]])) < 1 and
+                      l[a[0]][0] == l[a[1]][0]]
+        if mass_diffs:
+            return min(mass_diffs)
+        else:
+            return float('inf')
+
+
     @staticmethod
     def enumerate_leps(final_state):
         out = []
@@ -199,6 +212,7 @@ class Analyzer(object):
         h5row["mass"] = rtrow.Mass
         h5row["met"] = rtrow.pfMetEt
         h5row["metPhi"] = rtrow.pfMetPhi
+        h5row["z_sep"] = self.Z_separation(rtrow)
 
         h5row["jetVeto"] = rtrow.jetVeto30_DR05
 
@@ -407,7 +421,7 @@ class ZControl4l(Analyzer4l):
 
 
 def main():
-    with Control4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",
+    with Analyzer4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",
                     "test.h5") as analyzer4l:
         analyzer4l.analyze()
 

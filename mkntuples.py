@@ -66,19 +66,29 @@ def run_ntuples(analyzer_type, samples, njobs=1):
                     for fname in glob.glob("%s/%s" % (root_dir, string))]
 
     if analyzer_type == "4l":
-        p.map(run_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
+        p.map(run_4l, [("%s/%s" % (root_dir, name),
+                        "%s/%s.h5" % (ntup_dir, name))
+                        for name in sample_names])
 
     elif analyzer_type == "ctrl":
-        p.map(run_qcd_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
+        p.map(run_qcd_ctrl_4l, [("%s/%s" % (root_dir, name),
+                                 "%s/%s.h5" % (ntup_dir, name))
+                                 for name in sample_names])
 
     elif analyzer_type == "tt":
-        p.map(run_tt_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
+        p.map(run_tt_ctrl_4l, [("%s/%s" % (root_dir, name),
+                                "%s/%s.h5" % (ntup_dir, name))
+                                for name in sample_names])
 
     elif analyzer_type == "z":
-        p.map(run_z_ctrl_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
+        p.map(run_z_ctrl_4l, [("%s/%s" % (root_dir, name),
+                               "%s/%s.h5" % (ntup_dir, name))
+                               for name in sample_names])
 
     elif analyzer_type == "zz":
-        p.map(run_zz_4l, [("%s/%s" % (root_dir, name), "%s/%s.h5" % (ntup_dir, name)) for name in sample_names])
+        p.map(run_zz_4l, [("%s/%s" % (root_dir, name),
+                           "%s/%s.h5" % (ntup_dir, name))
+                           for name in sample_names])
         #for name in sample_names:
         #    print "processing %s" % name
         #    with anZZ.ZZAnalyzer4l("%s/%s" % (root_dir, name),
