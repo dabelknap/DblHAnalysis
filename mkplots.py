@@ -6,11 +6,12 @@ _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
               350, 400, 450, 500, 600, 700]
 
 
-_TITLE=r'\textbf{CMS} \emph{Preliminary} \hspace{1.9in} 19.7 fb$^{-1}$ (8 TeV)'
+#_TITLE=r'\textbf{CMS} \emph{Preliminary} \hspace{1.9in} 19.7 fb$^{-1}$ (8 TeV)'
+_TITLE=r'\textbf{Belknap PhD Thesis} \hspace{1.5in} 19.7 fb$^{-1}$ (8 TeV)'
 
 
 def signal_shapes():
-    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/thesis/4l",
                       channels=["dblh4l"], lumi=19.7)
 
     masses = _4L_MASSES
@@ -62,8 +63,8 @@ def two_D():
 
 
 def four_l():
-    MASS = 250
-    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+    MASS = 500
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/thesis/4l",
                       channels=["dblh4l"], lumi=19.7, partial_blind=False)
 
     plotter.add_group("hpp", r"$\Phi^{++}(%s)$" % MASS, "HPlus*%s*" % MASS,
@@ -84,39 +85,39 @@ def four_l():
     plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    #plotter.add_group("data", "Observed", "data_*", isdata=True)
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("hpp","zz")
+    plotter.stack_order("ttv", "wwv", "dyjets", "top", "zz", "hpp")
+    #plotter.stack_order("hpp","zz","top")
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            label_bin_width=True, log=True)
+
+    #plotter.plot_stack('z_sep_%i.png' % MASS, 'z_sep', 25, 0, 500,
     #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        label_bin_width=True, log=True)
+    #        xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+    #        label_bin_width=True, log=True,
+    #        shade=[(0.0, 80.0, 'k')])
 
-    plotter.plot_stack('z_sep_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=True,
-            shade=[(0.0, 80.0, 'k')])
+    #st_cut = '(%f < sT)' % (0.6*MASS + 130.0)
 
-    st_cut = '(%f < sT)' % (0.6*MASS + 130.0)
+    #plotter.plot_stack('z_sep_st_%i.png' % MASS, 'z_sep', 25, 0, 500,
+    #        cuts= st_cut,
+    #        title=_TITLE,
+    #        xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+    #        label_bin_width=True, log=True,
+    #        shade=[(0.0, 80.0, 'k')])
 
-    plotter.plot_stack('z_sep_st_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            cuts= st_cut,
-            title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=True,
-            shade=[(0.0, 80.0, 'k')])
+    #mass_cut = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)
 
-    mass_cut = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)
-
-    plotter.plot_stack('z_sep_st_mass_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            cuts='%s & %s' % (st_cut, mass_cut),
-            title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=False,
-            shade=[(0.0, 80.0, 'k')])
+    #plotter.plot_stack('z_sep_st_mass_%i.png' % MASS, 'z_sep', 25, 0, 500,
+    #        cuts='%s & %s' % (st_cut, mass_cut),
+    #        title=_TITLE,
+    #        xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+    #        label_bin_width=True, log=False,
+    #        shade=[(0.0, 80.0, 'k')])
 
     #plotter.plot_stack('dphi1.pdf', 'dPhi1', 25, -4, 4,
     #        title=_TITLE,
@@ -138,16 +139,16 @@ def four_l():
     #        xlab=r'$s_T(\Phi^{--})$ (GeV)',
     #        label_bin_width=True, log=True)
 
-    #plotter.plot_stack('st.pdf', 'sT', 25, 0, 800,
-    #        title=_TITLE,
-    #        xlab=r'$s_T$ (GeV)',
-    #        label_bin_width=True, log=False)
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 2000,
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
+            label_bin_width=True, log=True)
 
-    #plotter.plot_stack('sideband.pdf', 'h1mass', 24, 0, 600,
-    #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        label_bin_width=True, log=True,
-    #        shade=[(450.0, 550.0, 'r'),(12.0,450.0,'k'),(550.0,700.,'k')])
+    plotter.plot_stack('sideband.pdf', 'h1mass', 24, 0, 600,
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            label_bin_width=True, log=True, legend_loc='upper right', legend_size=12,
+            shade=[(450.0, 550.0, 'r'),(12.0,450.0,'k'),(550.0,700.,'k')])
 
 def four_l_em():
     channels = ["emem"]
@@ -185,10 +186,11 @@ def four_l_em():
             label_bin_width=True, log=True)
 
 def cut_flow():
-    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+    MASS =500
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/thesis/4l",
                       channels=["dblh4l"], lumi=19.7)
 
-    plotter.add_group("hpp", r"$\Phi^{++}(500)$", "HPlus*500*",
+    plotter.add_group("hpp", r"$\Phi^{++}(%s)$" % MASS, "HPlus*%s*" % MASS,
                       facecolor='mediumorchid', edgecolor='indigo')
     plotter.add_group("dyjets", "Z+Jets", "DYJets*",
                       facecolor="orange", edgecolor="darkorange")
@@ -201,20 +203,22 @@ def cut_flow():
     plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("zz", "hpp")
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
+
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("zz", "hpp")
     #plotter.stack_order("top", "dyjets", "zz", "hpp")
 
-    cuts = ["(channel == 'emem')",
-            "(%f < sT)" % (0.6*500 + 130.),
-            "(%f < sT) & (%f < h1mass) & (h1mass < %f)" % ((0.6*500 + 130.), 0.9*500, 1.1*500)]
+    cuts = ["(True)",
+            "(%f < sT)" % (0.6*MASS + 130.),
+            "(%f < sT) & (%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)" % ((0.6*MASS + 130.), 0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)]
 
     labels = ["Preselection",
               "sT",
               "Mass Window"]
 
-    plotter.cut_flow("cut_flow_emem.pdf", cuts, labels, log=True,
-            title=_TITLE)
+    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True,
+            title=_TITLE, legend_loc='lower left')
 
 
 def control():
@@ -260,7 +264,7 @@ def control():
 
 def tt_control():
     cut = '(sT > 150) & (met > 30)'
-    plotter = Plotter("DblH", cut, "./ntuples", "./plots/tt_ctrl",
+    plotter = Plotter("DblH", cut, "./ntuples", "./plots/thesis/tt_ctrl",
                       channels=["dblh4l_tt_control"], lumi=19.7)
 
     plotter.add_group("dyjets", r"Z+Jets", "Z[1234]jets*",
@@ -320,7 +324,7 @@ def z_control():
     #cut += '& (l3Pt > 15)'
     #cut += '& (l4Pt > 15)'
 
-    plotter = Plotter("DblH", cut, "./ntuples", "./plots/z_ctrl",
+    plotter = Plotter("DblH", cut, "./ntuples", "./plots/thesis/z_ctrl",
                       channels=["dblh4l_z_control"], lumi=19.7)
 
     plotter.add_group("dyjets", r"Z+Jets", "Z[1234]jets*",
@@ -351,11 +355,11 @@ def z_control():
 
     plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "ggH", "zz", "ggzz")
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
-    #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        mc_bands=0.1,
-    #        label_bin_width=True, log=False)#, legend_size=10)
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
+            title=_TITLE,
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            mc_bands=0.1, cuts="(sT > 150)",
+            label_bin_width=True, log=False)#, legend_size=10)
 
     #plotter.plot_stack('h1mass_binned.pdf', 'h1mass', 25, 0, 500,
     #        title=_TITLE,
@@ -367,7 +371,7 @@ def z_control():
             xlab=r'$s_T$ (GeV)',
             mc_bands=0.1,
             label_bin_width=True, log=False,#legend_size=10,
-            shade=[(0, 150.0, 'k')])
+            shade=[(0, 150.0, 'b')])
 
     #plotter.plot_stack('met.pdf', 'met', 20, 0, 500,
     #        title=_TITLE,
@@ -457,7 +461,7 @@ def zz_4mu():
     tmp = ["channel == '%s'" % c for c in channels]
     cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
 
-    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4mu",
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/thesis/zz/4mu",
                       channels=["zz4l"], lumi=19.7)
 
     plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
@@ -556,7 +560,7 @@ def zz_4e():
     cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
     print cut
 
-    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/4e",
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/thesis/zz/4e",
                       channels=["zz4l"], lumi=19.7)
 
     plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
@@ -654,7 +658,7 @@ def zz_2e2mu():
     tmp = ["channel == '%s'" % c for c in channels]
     cut = "(mass > 0) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
 
-    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/2e2mu",
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/thesis/zz/2e2mu",
                       channels=["zz4l"], lumi=19.7)
 
     plotter.add_group("zz", r"$ZZ$", "ZZTo*", "ggZZ*",
@@ -678,7 +682,7 @@ def zz_all():
     tmp = ["channel == '%s'" % c for c in channels]
     cut = "(0 < mass) & (40 < z1mass) & (z1mass < 120) & (12 < z2mass) & (z2mass < 120) & ((%s))" % (") | (".join(tmp))
 
-    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/zz/all",
+    plotter = Plotter("ZZ4l", cut, "./ntuples", "./plots/thesis/zz/all",
                       channels=["zz4l"], lumi=19.7)
 
     plotter.add_group("top", "Top", "TTJets*", "T_*", "Tbar_*",

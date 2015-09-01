@@ -73,7 +73,7 @@ def four_lepton(name, channels, directory, scale=1.0):
         cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
 
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
-                channels=["dblh4l"], lumi=19.7, blinded=True)
+                channels=["dblh4l"], lumi=19.7, blinded=False)
 
         limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale)
         limits.add_group("data", "data_*", isData=True)
@@ -303,14 +303,14 @@ def plot_mmmm():
 
 def plot(BP, directory="datacards", out=""):
     logger.info("Plotting %s" % BP)
-    plot_limits("./plots/limits/%s/%s.pdf" % (out,BP), _4L_MASSES, "%s/%s" % (directory, BP), blinded=True,
+    plot_limits("./plots/limits/thesis/%s/%s.pdf" % (out,BP), _4L_MASSES, "%s/%s" % (directory, BP), blinded=False,
                 title=_TITLE,
                 x_label=r"$\Phi^{++}$ Mass (GeV)",
                 y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM+\Phi^{\pm\pm}}$")
 
 
 def exclude(BP, directory="datacards"):
-     return exclusion(_4L_MASSES, "%s/%s" % (directory, BP), blinded=True)
+     return exclusion(_4L_MASSES, "%s/%s" % (directory, BP), blinded=False)
 
 
 def plot_3l():
@@ -340,9 +340,9 @@ def main(argv=None):
     if args.operation[0] == "plot":
         if args.operation[1] == "all":
             for i in BPS:
-                globals()["plot"](i)
+                globals()["plot"](i, directory="datacards/2015-08-07")
         else:
-            globals()["plot"](args.operation[1], directory="datacards/4l_8tev")
+            globals()["plot"](args.operation[1], directory="datacards/2015-08-07")
 
     elif args.operation[0] == "plotcomb":
         if args.operation[1] == "all":
@@ -355,7 +355,7 @@ def main(argv=None):
         if args.operation[1] == "all":
             out = []
             for i in BPS:
-                exp, obs = globals()["exclude"](i, directory="datacards/4l_8tev")
+                exp, obs = globals()["exclude"](i, directory="datacards/2015-08-07")
                 out.append([i,exp,obs])
             print tabulate(out,
                            headers=["BP", "Expected", "Observed"],
