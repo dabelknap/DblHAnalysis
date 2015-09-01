@@ -111,13 +111,46 @@ class Plotter(object):
                             cut = '%s & %s' % (self.base_selections, ct)
                             scale = self.lumi * xsec.xsecs[sample_name] / \
                                     xsec.nevents[sample_name]
-                            cnts = sum([x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)])
+                            cnts = sum([x['pu_weight'] * x['lep_scale'] * \
+                                    scale for x in table.where(cut)])
 
                             tmp[i] += cnts
+
 
             plots.append(plt.bar(ind, tmp, 1, bottom=counts, color=self.sample_groups[mc]['facecolor'], log=log_scale))
             leg_labs.append(self.sample_groups[mc]['label'])
             counts += tmp
+
+        if 'data' in self.sample_groups:
+
+            #if self.partial_blind:
+            #    data_cut = cut + "& (h1mass < 120) & (h2mass < 120)"
+            #else:
+            #    data_cut = cut
+
+            self.log.info("Processing Data")
+
+            evt_set = set()
+            tmp1 = np.zeros((len(cuts),))
+            for sample_name in self.sample_groups['data']['sample_names']:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis), chan)
+
+                        for i, ct in enumerate(cuts):
+                            data_cut = '%s & %s' % (self.base_selections, ct)
+                            vals = []
+                            evt_set = set([(x['evt'],x['run'],x['lumi']) for x in table.where(data_cut)])
+                            #for x in table.where(data_cut):
+                            #    if (x['evt'], x['run'], x['lumi']) not in evt_set:
+                            #        vals.append('h1mass')
+                            #        evt_set.add((x['evt'], x['run'], x['lumi']))
+                            tmp1[i] += len(evt_set)
+
+            print tmp1
+            plt.errorbar(ind+0.5, tmp1, yerr=[np.sqrt(tmp1)*0.99,np.sqrt(tmp1)],
+                    fmt='ko', capsize=0, linewidth=1, ms=5, label="Observed")
 
 
         plt.legend( [p[0] for p in plots], leg_labs, loc=legend_loc )

@@ -42,7 +42,8 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, title="", x_
     q = np.empty((6, masses.size), dtype=float)
 
     for j, mass in enumerate(masses):
-        fname = os.path.join(datacard_base_dir, str(mass), "higgsCombineTest.Asymptotic.mH%i.root" % mass)
+        fname = os.path.join(datacard_base_dir, str(mass),
+                "higgsCombineTest.Asymptotic.mH%i.root" % mass)
         rtfile = rt.TFile(fname, "READ")
         tree = rtfile.Get("limit")
 
@@ -75,8 +76,8 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, title="", x_
     plt.legend(legend_handles, legend_labels, loc='upper left')
 
     ax = plt.gca()
-    ax.grid(True, which="both", axis='y')
-    ax.grid(True, which="major", axis='x')
+    ax.grid(True, which="both", axis='y', color='gray', lw=0.1)
+    ax.grid(True, which="major", axis='x', color='gray', lw=0.1)
 
     plt.yscale('log')
     plt.xlim(xmin=np.min(masses), xmax=np.max(masses))

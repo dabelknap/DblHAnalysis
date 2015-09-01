@@ -237,9 +237,10 @@ def bkg_compare(mass, channels, scale=36.0):
                + ufloat(*mc_bkg.yields("dyjets"))
 
 
-    bkg_est = bkg_estimate(mass, '(%s)' % ' | '.join(['(channel == "%s")' %
-                                                      channel for channel
-                                                      in channels]))
+    bkg_est = bkg_estimate(
+            mass,
+            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+            cuts='(%f < sT)' % (0.6*mass + 130.0))
 
     mc_sig = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
                     lumi=19.7)
@@ -247,7 +248,12 @@ def bkg_compare(mass, channels, scale=36.0):
 
     sig_rate = ufloat(*mc_sig.yields("sig")) * ufloat(1.0, 0.15) * scale
 
-    return np.array([bkg_rate, ufloat(bkg_est[0], bkg_est[1]), ufloat(0.0,0.0), sig_rate])
+    data = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                  lumi=19.7)
+    data.add_group("data", "data_*", isData=True)
+
+    return np.array([bkg_rate, ufloat(bkg_est[0], bkg_est[1]),
+        ufloat(*data.yields("data")), sig_rate])
 
 
 def bkg_table_BP1(mass):
@@ -307,8 +313,9 @@ def bkg_table_em100(mass):
 def generate_bkg_tables():
     functions = [bkg_table_ee100, bkg_table_em100, bkg_table_mm100,
                  bkg_table_BP1, bkg_table_BP2, bkg_table_BP3, bkg_table_BP4]
+    #functions = [bkg_table_ee100]
 
-    with open('bkg_tables_zveto.txt', 'w') as outfile:
+    with open('bkg_tables_thesis.txt', 'w') as outfile:
         for fun in functions:
             log.info("Processing BP: %s" % fun.func_name)
 
@@ -322,14 +329,14 @@ def generate_bkg_tables():
             for mass in _4L_MASSES:
                 values = fun(mass)
                 string = ("%i &"
-                          " $%.2f \\pm %.2f$ &"
-                          " $%.2f \\pm %.2f$ &"
-                          " $%.2f \\pm %.2f$ &"
+                          " $%.4f \\pm %.4f$ &"
+                          " $%.4f \\pm %.4f$ &"
+                          " %i &"
                           " $%.2f \\pm %.2f$ \\\\\n" %
                           (mass,
                            values[0].nominal_value, values[0].std_dev,
                            values[1].nominal_value, values[1].std_dev,
-                           values[2].nominal_value, values[2].std_dev,
+                           values[2].nominal_value,
                            values[3].nominal_value, values[3].std_dev))
 
                 outfile.write(string)
