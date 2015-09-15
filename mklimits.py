@@ -24,11 +24,19 @@ _3L_MASSES = [170, 200, 250, 300, 350, 400, 450,
 #                    "eeem": {"m": 1.002, "e": 1.047},
 #                    "emmm": {"m": 1.007, "e": 1.016}}
 
-_EFFICIENCY_SYST = {"mmmm": {"m": 1.043},
-                    "eeee": {"e": 1.066},
-                    "eemm": {"m": 1.022, "e": 1.032},
-                    "eeem": {"m": 1.009, "e": 1.047},
-                    "emmm": {"m": 1.030, "e": 1.016}}
+#_EFFICIENCY_SYST = {"mmmm": {"m": 1.043},
+#                    "eeee": {"e": 1.066},
+#                    "eemm": {"m": 1.022, "e": 1.032},
+#                    "eeem": {"m": 1.009, "e": 1.047},
+#                    "emmm": {"m": 1.030, "e": 1.016}}
+
+# n*(.5.+.2) for muons
+# 1.1 per electron
+_EFFICIENCY_SYST = {"mmmm": {"m": 1.028},
+                    "eeee": {"e": 1.044},
+                    "eemm": {"m": 1.014, "e": 1.022},
+                    "eeem": {"m": 1.007, "e": 1.033},
+                    "emmm": {"m": 1.021, "e": 1.011}}
 
 _TITLE=r'\textbf{CMS} \emph{Preliminary} \hspace{1.9in} 19.7 fb$^{-1}$ (8 TeV)'
 
