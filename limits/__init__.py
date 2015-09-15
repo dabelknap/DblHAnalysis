@@ -80,7 +80,10 @@ class Limits(object):
                             vals += [x[var] for x in table.where(cut)]
                             scale = self.lumi * xsec.xsecs[sample_name] * \
                                 scale_factor / xsec.nevents[sample_name]
-                            wgts += [x['pu_weight'] * x['lep_scale'] * scale
+                            wgts += [x['pu_weight'] * \
+                                     x['lep_scale'] * \
+                                     x['trig_scale'] * \
+                                     scale \
                                      for x in table.where(cut)]
 
                 if self.sample_groups[key]['isSig']:
