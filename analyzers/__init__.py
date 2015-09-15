@@ -297,16 +297,16 @@ class Analyzer4l(Analyzer):
 
     def trigger(self, rtrow):
         triggers = ["mu17ele8isoPass", "mu8ele17isoPass",
-                    "doubleETightPass", "tripleEPass",
+                    "doubleETightPass",
                     "doubleMuPass", "doubleMuTrkPass"]
 
         return any([getattr(rtrow, t) > 0 for t in triggers])
 
     def fiducial(self, rtrow):
-        e_pt_cut = 15.0
+        e_pt_cut = 20.0
         e_eta_cut = 2.5
 
-        m_pt_cut = 5.0
+        m_pt_cut = 20.0
         m_eta_cut = 2.4
 
         e_pts = [getattr(rtrow, "%sPt" % l) > e_pt_cut
@@ -327,9 +327,9 @@ class Analyzer4l(Analyzer):
     def isolation(self, rtrow):
         e_iso_type = "RelPFIsoRho"
         m_iso_type = "RelPFIsoDBDefault"
-        e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type)) < 0.4
+        e_isos = [getattr(rtrow, "%s%s" % (l, e_iso_type)) < 0.15
                   for l in self.leptons if l[0] == 'e']
-        m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type)) < 0.4
+        m_isos = [getattr(rtrow, "%s%s" % (l, m_iso_type)) < 0.12
                   for l in self.leptons if l[0] == 'm']
 
         return all(e_isos + m_isos)
@@ -471,7 +471,6 @@ def main():
     with Analyzer4l("./root_files/HPlusPlusHMinusMinusHTo4L_M-450_8TeV-pythia6",
                     "test.h5") as analyzer4l:
         analyzer4l.analyze()
-
     return 0
 
 
