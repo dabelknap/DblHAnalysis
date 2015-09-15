@@ -6,7 +6,7 @@ from itertools import permutations, combinations
 import argparse
 
 from ntuple_defs import Event4l
-from scale_factors import LeptonScaleFactors
+from scale_factors_wz import LeptonScaleFactors, TriggerScaleFactors, ChargeIdSystematics
 from pu_weights import PileupWeights
 import leptonId as lepId
 
@@ -47,10 +47,13 @@ class Analyzer(object):
         self.finish()
 
     def begin(self):
-        lepscaler_logfile = os.path.splitext(
-                os.path.basename(self.outfile))[0] + ".log"
+        #lepscaler_logfile = os.path.splitext(
+        #        os.path.basename(self.outfile))[0] + ".log"
 
-        self.lepscaler = LeptonScaleFactors(logfile=lepscaler_logfile)
+        #self.lepscaler = LeptonScaleFactors(logfile=lepscaler_logfile)
+        self.lepscaler = LeptonScaleFactors()
+        self.trigscaler = TriggerScaleFactors()
+        self.chargeid = ChargeIdSystematics()
         self.pu_weights = PileupWeights()
 
         self.h5file = tb.open_file(self.outfile, mode='a')
@@ -194,6 +197,35 @@ class Analyzer(object):
     def good_to_store(cand1, cand2):
         return abs(cand1[0] - cand1[1]) < abs(cand2[0] - cand2[1])
 
+    def getScales(self, rtrow, objects, **lepargs):
+        '''Return the scale factors in a dictionary'''
+        scales = {
+            'lep'      : 1,
+            'lepup'    : 1,
+            'lepdown'  : 1,
+            'trig'     : 1,
+            'puweight' : 1,
+            'genweight': 1,
+            'chargeid' : 1,
+        }
+
+        lepscales = self.lepscaler.scale_factor(rtrow, *objects, tight=True)
+        trigscale = self.trigscaler.scale_factor(rtrow, *objects)
+        puweight  = self.pu_weights.weight(rtrow)
+        genweight = 1
+        if hasattr(rtrow,'GenWeight'):
+            genweight = rtrow.GenWeight/abs(rtrow.GenWeight)
+        chargeid  = self.chargeid.systematic(rtrow, *objects)
+        scales['lep']      = lepscales[0]
+        scales['lepup']    = lepscales[1]
+        scales['lepdown']  = lepscales[2]
+        scales['trig']     = trigscale
+        scales['puweight'] = puweight
+        scales['genweight']= genweight
+        scales['chargeid'] = chargeid
+
+        return scales
+
     def store_row(self, rtrow, h5row, l1, l2, l3, l4):
         h5row["evt"] = rtrow.evt
         h5row["lumi"] = rtrow.lumi
@@ -201,13 +233,28 @@ class Analyzer(object):
 
         h5row["nvtx"] = rtrow.nvtx
 
-        scales = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
-        h5row["lep_scale"]      = scales[0]
-        h5row["lep_scale_m_up"] = scales[1]
-        h5row["lep_scale_e_up"] = scales[2]
+        scls = self.getScales(rtrow, [l1, l2, l3, l4])
+        h5row["lep_scale"]      = scls['lep']
+        h5row["lep_scale_up"]   = scls['lepup']
+        h5row["lep_scale_down"] = scls['lepdown']
+        h5row["trig_scale"]     = scls["trig"]
+        h5row["charge_id"]      = scls["chargeid"]
+
+        #scales = self.lepscaler.scale_factor(rtrow, l1, l2, l3, l4)
+        #h5row["lep_scale"]      = scales[0]
+        #h5row["lep_scale_m_up"] = scales[1]
+        #h5row["lep_scale_e_up"] = scales[2]
+
         h5row["pu_weight"]      = self.pu_weights.weight(rtrow)
 
         h5row["channel"] = "%s%s%s%s" % (l1[0], l2[0], l3[0], l4[0])
+
+        try:
+            h5row["hpp_dec"] = getattr(rtrow, "hppDecay")
+            h5row["hmm_dec"] = getattr(rtrow, "hppDecay")
+        except AttributeError:
+            h5row["hpp_dec"] = 0
+            h5row["hmm_dec"] = 0
 
         h5row["mass"] = rtrow.Mass
         h5row["met"] = rtrow.pfMetEt
