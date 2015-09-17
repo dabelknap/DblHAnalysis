@@ -114,21 +114,16 @@ def _elec_mva(rtrow, l):
     else:
         return False
 
-
 def _elec_trig_mva(rtrow, l):
     pt = getattr(rtrow, "%sPt" % l)
     eta = abs(getattr(rtrow, "%sSCEta" % l))
     mva = getattr(rtrow, "%sMVATrig" % l)
 
     if 10.0 < pt < 20.0:
-        return (abs < 0.8 and mva > 0.00) or \
-                (0.8 < eta < 1.479 and mva > 0.10) or \
-                (1.479 < eta and mva > 0.62)
+        return (eta < 0.8 and mva > 0.00) or (0.8 < eta < 1.479 and mva > 0.10) or (1.479 < eta and mva > 0.62)
 
     elif 20.0 < pt:
-        return (abs < 0.8 and mva > 0.94) or \
-                (0.8 < eta < 1.479 and mva > 0.85) or \
-                (1.479 < eta and mva > 0.92)
+        return (eta < 0.8 and mva > 0.94) or (0.8 < eta < 1.479 and mva > 0.85) or (1.479 < eta and mva > 0.92)
 
     else:
         return False
