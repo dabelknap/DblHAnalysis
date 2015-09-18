@@ -39,13 +39,15 @@ class Limits(object):
         is_data = kwargs.get('isData', False)
         is_sig = kwargs.get('isSignal', False)
         scale = kwargs.get('scale', 1.0)
+        cuts = kwargs.get('cuts', None)
 
         self.sample_groups[group_name] = {
             'sample_names': [os.path.splitext(os.path.basename(x))[0]
                              for x in samples],
             'scale': scale,
             'isSig': is_sig,
-            'isData': is_data}
+            'isData': is_data,
+            'cuts': cuts}
 
     def add_bkg_rate(self, name, rate):
         self.datacard.add_bkg(name, rate)
@@ -60,13 +62,19 @@ class Limits(object):
         var = 'mass'
 
         cuts = kwargs.get('cuts', '(True)')
-        cut = "%s & %s" % (self.base_selections, cuts)
+        cut_a = "%s & %s" % (self.base_selections, cuts)
 
         for key in self.sample_groups:
             is_data = self.sample_groups[key]['isData']
             vals = []
             wgts = []
             scale_factor = self.sample_groups[key]['scale']
+
+            if self.sample_groups[key]['cuts']:
+                cut = cut_a + ' & ' + self.sample_groups[key]['cuts']
+            else:
+                cut = cut_a
+
             if not is_data:
                 self.log.info("Processing MC: %s" % key)
 
