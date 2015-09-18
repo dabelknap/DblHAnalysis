@@ -71,6 +71,21 @@ class Scales(object):
         return self.m[i,j]
 
 
+def hpp_decay_flags(fs):
+    """
+    fs = 'eeee', 'emem', 'mmmm', etc.
+    returns 1111, 1212, 2222, ...
+    """
+    flags = {'e': 1,
+             'm': 2,
+             't': 3}
+
+    hpp = 10*flags[fs[0]] + flags[fs[1]]
+    hmm = 10*flags[fs[2]] + flags[fs[3]]
+
+    return (hpp, hmm)
+
+
 def four_lepton(name, channels, directory, scale=1.0):
     for mass in _4L_MASSES:
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
@@ -79,10 +94,12 @@ def four_lepton(name, channels, directory, scale=1.0):
         cuts += '& (%f < sT)' % (0.6*mass + 130.0)
         cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
 
+        signal_decay_cuts = '(%s)' % ' | '.join(['((hpp_dec == %i) & (hmm_dec == %i))' % hpp_decay_flags(fs) for fs in channels])
+
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
                 channels=["dblh4l"], lumi=19.7, blinded=True)
 
-        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale)
+        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale, cuts=signal_decay_cuts)
         limits.add_group("data", "data_*", isData=True)
 
         lumi = {'hpp%i' % mass: 1.026}
