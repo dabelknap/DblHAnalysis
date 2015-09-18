@@ -97,7 +97,7 @@ def elec_id_tight(rtrow, l):
     mva = _elec_trig_mva(rtrow, l)
     elec_loose = elec_id_loose(rtrow, l)
 
-    return all([dz, dxy, mva, elec_loose, chgId])
+    return all([dz, dxy, mva, elec_loose])
 
 
 def _elec_mva(rtrow, l):
