@@ -195,9 +195,9 @@ def fourl_100():
 
 def BP1(directory):
     s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
-    four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP1"), scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP1"), scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP1"), scale=s.scale("mm","em"))
+    four_lepton("emem", ["emem"], os.path.join(directory, "BP1"), scale=s.scale("em","em"))
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP1"), scale=s.scale("em","mm"))
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP1"), scale=s.scale("mm","em"))
     four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s.scale("mm","mm"))
 
 
@@ -219,11 +219,11 @@ def BP3(directory):
 
 def BP4(directory):
     s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
-    four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP4"), scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP4"), scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP4"), scale=s.scale("mm","em"))
-    four_lepton("emee", ["emee", "meee"], os.path.join(directory, "BP4"), scale=s.scale("em","ee"))
-    four_lepton("eeem", ["eeem", "eeme"], os.path.join(directory, "BP4"), scale=s.scale("ee","em"))
+    four_lepton("emem", ["emem"], os.path.join(directory, "BP4"), scale=s.scale("em","em"))
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP4"), scale=s.scale("em","mm"))
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP4"), scale=s.scale("mm","em"))
+    four_lepton("emee", ["emee"], os.path.join(directory, "BP4"), scale=s.scale("em","ee"))
+    four_lepton("eeem", ["eeem"], os.path.join(directory, "BP4"), scale=s.scale("ee","em"))
     four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s.scale("mm","mm"))
     four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s.scale("ee","ee"))
     four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s.scale("ee","mm"))
