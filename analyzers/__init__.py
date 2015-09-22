@@ -251,7 +251,7 @@ class Analyzer(object):
 
         try:
             h5row["hpp_dec"] = getattr(rtrow, "hppDecay")
-            h5row["hmm_dec"] = getattr(rtrow, "hppDecay")
+            h5row["hmm_dec"] = getattr(rtrow, "hmmDecay")
         except AttributeError:
             h5row["hpp_dec"] = 0
             h5row["hmm_dec"] = 0
