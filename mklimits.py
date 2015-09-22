@@ -222,6 +222,8 @@ def BP4(directory):
     four_lepton("emem", ["emem", "emme", "meme", "meem"], os.path.join(directory, "BP4"), scale=s.scale("em","em"))
     four_lepton("emmm", ["emmm", "memm"], os.path.join(directory, "BP4"), scale=s.scale("em","mm"))
     four_lepton("mmem", ["mmem", "mmme"], os.path.join(directory, "BP4"), scale=s.scale("mm","em"))
+    four_lepton("emee", ["emee", "meee"], os.path.join(directory, "BP4"), scale=s.scale("em","ee"))
+    four_lepton("eeem", ["eeem", "eeme"], os.path.join(directory, "BP4"), scale=s.scale("ee","em"))
     four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s.scale("mm","mm"))
     four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s.scale("ee","ee"))
     four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s.scale("ee","mm"))
