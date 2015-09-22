@@ -239,7 +239,7 @@ def ee100(directory):
 
 
 def em100(directory):
-    four_lepton("emem", ["emem"],
+    four_lepton("emem", ["emem", "emme", "meem", "meme"],
             os.path.join(directory, "em100"),
             scale=36.0)
 
