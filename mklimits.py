@@ -80,8 +80,8 @@ def hpp_decay_flags(fs):
              'm': 2,
              't': 3}
 
-    hpp = 10*flags[fs[0]] + flags[fs[1]]
-    hmm = 10*flags[fs[2]] + flags[fs[3]]
+    hpp = 10*flags[fs[1]] + flags[fs[0]]
+    hmm = 10*flags[fs[3]] + flags[fs[2]]
 
     return (hpp, hmm)
 
