@@ -86,7 +86,7 @@ def hpp_decay_flags(fs):
     return (hpp, hmm)
 
 
-def four_lepton(name, channels, directory, scale=1.0):
+def four_lepton(name, channels, directory, scale=1.0, final_state=None):
     for mass in _4L_MASSES:
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
         cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
@@ -94,7 +94,10 @@ def four_lepton(name, channels, directory, scale=1.0):
         cuts += '& (%f < sT)' % (0.6*mass + 130.0)
         cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
 
-        signal_decay_cuts = '(%s)' % ' | '.join(['((hpp_dec == %i) & (hmm_dec == %i))' % hpp_decay_flags(fs) for fs in channels])
+        if final_state:
+            signal_decay_cuts = '(%s)' % ' | '.join(['((hpp_dec == %i) & (hmm_dec == %i))' % final_state])
+        else:
+            signal_decay_cuts = '(%s)' % ' | '.join(['((hpp_dec == %i) & (hmm_dec == %i))' % hpp_decay_flags(fs) for fs in channels])
 
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
                 channels=["dblh4l"], lumi=19.7, blinded=True)
@@ -236,6 +239,39 @@ def mm100(directory):
 
 def ee100(directory):
     four_lepton("eeee", ["eeee"], os.path.join(directory, "ee100"), scale=36.0)
+
+
+def tt100(directory):
+    four_lepton("tttt",
+            ["eeee","mmmm",
+             "eemm","mmee",
+             "emem",
+             "emmm","mmem",
+             "emee","eeem"],
+            os.path.join(directory, "tt100"), scale=36.0,
+            final_state=(33,33))
+
+
+def et100(directory):
+    four_lepton("etet",
+            ["eeee","mmmm",
+             "eemm","mmee",
+             "emem",
+             "emmm","mmem",
+             "emee","eeem"],
+            os.path.join(directory, "et100"), scale=36.0,
+            final_state=(31,31))
+
+
+def mt100(directory):
+    four_lepton("mtmt",
+            ["eeee","mmmm",
+             "eemm","mmee",
+             "emem",
+             "emmm","mmem",
+             "emee","eeem"],
+            os.path.join(directory, "mt100"), scale=36.0,
+            final_state=(32,32))
 
 
 def em100(directory):
