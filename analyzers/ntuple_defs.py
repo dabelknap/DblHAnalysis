@@ -42,6 +42,9 @@ class Event4l(EventBase):
     sT2     = tb.Float32Col()
     dPhi2   = tb.Float32Col()
 
+    dmass   = tb.Float32Col()
+    abs_dmass = tb.Float32Col()
+
     l1Pt    = tb.Float32Col()
     l1Eta   = tb.Float32Col()
     l1Phi   = tb.Float32Col()

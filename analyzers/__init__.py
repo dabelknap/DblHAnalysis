@@ -269,6 +269,10 @@ class Analyzer(object):
         h5row["h1mass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2))
         h5row["h2mass"] = getattr(rtrow, "%s_%s_Mass" % (l3, l4))
 
+        h5row["dmass"] = getattr(rtrow, "%s_%s_Mass" % (l1, l2)) - getattr(rtrow, "%s_%s_Mass" % (l3, l4))
+        h5row["abs_dmass"] = abs(getattr(rtrow, "%s_%s_Mass" % (l1, l2)) - getattr(rtrow, "%s_%s_Mass" % (l3, l4)))
+
+
         h5row["sT1"] = getattr(rtrow, "%sPt" % l1) + getattr(rtrow, "%sPt" % l2)
         h5row["sT2"] = getattr(rtrow, "%sPt" % l3) + getattr(rtrow, "%sPt" % l4)
 
