@@ -580,7 +580,11 @@ class Plotter(object):
                         vals += [x[var] for x in table.where(cut)]
                         scale = self.lumi * xsec.xsecs[sample_name] / \
                                 xsec.nevents[sample_name]
-                        wgts += [x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)]
+                        wgts += [x['pu_weight'] * \
+                                 x['lep_scale'] * \
+                                 x['trig_scale'] * \
+                                 scale \
+                                 for x in table.where(cut)]
 
             values.append(vals)
             weights.append(wgts)
