@@ -1,5 +1,6 @@
 from plotters.plotter import Plotter
 import sys
+import matplotlib.cm as cm
 from numpy import linspace
 
 _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
@@ -42,6 +43,27 @@ def signal_shapes():
             xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
             ylab=r'A.U.', log=False,
             shade=[(450.0, 550.0, 'r')])
+
+def mass_diffs():
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+                      channels=["dblh4l"], lumi=19.7)
+
+    masses = _4L_MASSES
+
+    colors = [cm.get_cmap('jet')(i) for i in linspace(0,1,len(_4L_MASSES))]
+
+    for i, mass in enumerate(masses):
+        plotter.add_group("hpp%i" % mass, r"$\Phi^{++}(%i)$" % mass,
+                "HPlus*%i*" % mass, edgecolor=colors[i])
+
+    order = ["hpp%i" % mass for mass in masses]
+    plotter.stack_order(*order)
+
+    plotter.plot_compare('dmass.pdf', 'abs_dmass', 50, 0, 50,
+            title=_TITLE,
+            xlab=r'$\vert M_{\ell^+\ell^+} - M_{\ell^-\ell^-}\vert$ (GeV)',
+            ylab=r'A.U.', log=False, legend_size=10)
+
 
 def two_D():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
@@ -893,6 +915,10 @@ def main():
         z_control()
     elif sys.argv[1] == "4l":
         four_l()
+    elif sys.argv[1] == "mass_diffs":
+        mass_diffs()
+    elif sys.argv[1] == "z_veto":
+        z_veto()
     elif sys.argv[1] == "2D":
         two_D()
     elif sys.argv[1] == "4l_em":
