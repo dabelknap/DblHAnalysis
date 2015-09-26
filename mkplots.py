@@ -149,36 +149,22 @@ def four_l():
     #plotter.add_group("data", "Observed", "data_*", isdata=True)
 
     #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("hpp","zz")
+    plotter.stack_order("zz","hpp")
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
-    #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        label_bin_width=True, log=True)
-
-    plotter.plot_stack('z_sep_%i.png' % MASS, 'z_sep', 25, 0, 500,
+    plotter.plot_stack_diff('hmm-hpp_500.pdf', 'h1mass', 'h2mass', 25, 0, 100,
             title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=True,
-            shade=[(0.0, 80.0, 'k')])
+            xlab=r'$\vert M_{\ell^+\ell^+} - M_{\ell^-\ell^-}\vert$ (GeV)',
+            label_bin_width=True, log=False)
 
-    st_cut = '(%f < sT)' % (0.6*MASS + 130.0)
-
-    plotter.plot_stack('z_sep_st_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            cuts= st_cut,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=True,
-            shade=[(0.0, 80.0, 'k')])
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            label_bin_width=True, log=True)
 
-    mass_cut = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)
-
-    plotter.plot_stack('z_sep_st_mass_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            cuts='%s & %s' % (st_cut, mass_cut),
+    plotter.plot_stack('h2mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=False,
-            shade=[(0.0, 80.0, 'k')])
+            xlab=r'$M_{\ell^-\ell^-}$ (GeV)',
+            label_bin_width=True, log=True)
 
     #plotter.plot_stack('dphi1.pdf', 'dPhi1', 25, -4, 4,
     #        title=_TITLE,
