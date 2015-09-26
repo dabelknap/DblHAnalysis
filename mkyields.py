@@ -303,6 +303,103 @@ def bkg_table_em100(mass):
     return out
 
 
+def signal_yield(mass, cut, channel, final_states, scale):
+    fs_cuts = '(%s)' % ' | '.join(
+            ['((hpp_dec == %i) & (hmm_dec == %i))' % fs for fs in final_states]
+            )
+    cuts = '(%s) & %s & (channel == "%s")' % (cut, fs_cuts, channel)
+
+    sig = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"], lumi=19.7)
+    sig.add_group("sig", "HPlus*M-%i_8TeV*" % mass)
+
+    return sig.yields("sig")[0] * scale
+
+
+def ee100_yield(mass, cuts):
+    out = signal_yield(mass, cuts, "eeee", [(11,11)], 36.0)
+    return out
+
+
+def mm100_yield(mass, cuts):
+    out = signal_yield(mass, cuts, "mmmm", [(22,22)], 36.0)
+    return out
+
+
+def em100_yield(mass, cuts):
+    out = signal_yield(mass, cuts, "emem", [(21,21)], 36.0)
+    return out
+
+
+def BP1_yield(mass, cuts):
+    s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
+    out =  signal_yield(mass, cuts, "emem", [(21,21)], s.scale("em","em"))
+    out += signal_yield(mass, cuts, "emmm", [(21,22)], s.scale("em","mm"))
+    out += signal_yield(mass, cuts, "mmem", [(22,21)], s.scale("mm","em"))
+    out += signal_yield(mass, cuts, "mmmm", [(22,22)], s.scale("mm","mm"))
+    return out
+
+
+def BP2_yield(mass, cuts):
+    s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
+    out =  signal_yield(mass, cuts, "eemm", [(11,22)], s.scale("ee","mm"))
+    out += signal_yield(mass, cuts, "mmee", [(22,11)], s.scale("mm","ee"))
+    out += signal_yield(mass, cuts, "eeee", [(11,11)], s.scale("ee","ee"))
+    out += signal_yield(mass, cuts, "mmmm", [(22,22)], s.scale("mm","mm"))
+    return out
+
+
+def BP3_yield(mass, cuts):
+    s = Scales(0.34, 0, 0, 0.33, 0, 0.33)
+    out =  signal_yield(mass, cuts, "eemm", [(11,22)], s.scale("ee","mm"))
+    out += signal_yield(mass, cuts, "mmee", [(22,11)], s.scale("mm","ee"))
+    out += signal_yield(mass, cuts, "eeee", [(11,11)], s.scale("ee","ee"))
+    out += signal_yield(mass, cuts, "mmmm", [(22,22)], s.scale("mm","mm"))
+    return out
+
+
+def BP4_yield(mass, cuts):
+    s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
+    out =  signal_yield(mass, cuts, "emem", [(21,21)], s.scale("em","em"))
+    out += signal_yield(mass, cuts, "emmm", [(21,22)], s.scale("em","mm"))
+    out += signal_yield(mass, cuts, "mmem", [(22,21)], s.scale("mm","em"))
+    out += signal_yield(mass, cuts, "mmmm", [(22,22)], s.scale("mm","mm"))
+    out += signal_yield(mass, cuts, "emee", [(21,11)], s.scale("em","ee"))
+    out += signal_yield(mass, cuts, "eeem", [(11,21)], s.scale("ee","em"))
+    out += signal_yield(mass, cuts, "eeee", [(11,11)], s.scale("ee","ee"))
+    out += signal_yield(mass, cuts, "eemm", [(11,22)], s.scale("ee","mm"))
+    out += signal_yield(mass, cuts, "mmee", [(22,11)], s.scale("mm","ee"))
+    return out
+
+
+def efficiencies(BP):
+
+    yield_fun = {"ee100": ee100_yield,
+                 "em100": em100_yield,
+                 "mm100": mm100_yield,
+                 "BP1": BP1_yield,
+                 "BP2": BP2_yield,
+                 "BP3": BP3_yield,
+                 "BP4": BP4_yield}
+
+    yields = np.zeros((len(_4L_MASSES), 3))
+
+    for i, mass in enumerate(_4L_MASSES):
+        cut1 = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass, 0.9*mass, 1.1*mass)
+        cut2 = '(%f < sT)' % (0.6*mass + 130.0)
+
+        for j, cut in enumerate(['mass > 0', cut1, cut1 + '&' + cut2]):
+
+            yields[i,j] = yield_fun[BP](mass, cut)
+
+    eff = np.zeros((len(_4L_MASSES), 3))
+
+    eff[:,0] = np.array(_4L_MASSES).T
+    eff[:,1] = yields[:,1] / yields[:,0]
+    eff[:,2] = yields[:,2] / yields[:,1]
+
+    print tabulate(eff, headers=["Mass", "Window", "sT"])
+
+
 def generate_bkg_tables():
     functions = [bkg_table_ee100, bkg_table_em100, bkg_table_mm100,
                  bkg_table_BP1, bkg_table_BP2, bkg_table_BP3, bkg_table_BP4]
@@ -531,6 +628,12 @@ if __name__ == "__main__":
 
     elif arg == "bkg_tables":
         generate_bkg_tables()
+
+
+    elif arg == "efficiencies":
+        arg2 = sys.argv[2]
+
+        efficiencies(arg2)
 
     else:
         raise ValueError("Unrecognized option: '%s'" % arg)
