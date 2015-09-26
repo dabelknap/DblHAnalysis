@@ -83,8 +83,48 @@ def two_D():
             ylab=r"$M(\ell^-\ell^-)$ (GeV)")
 
 
+def z_veto():
+    MASSES = [130, 250, 500]
+
+    for MASS in MASSES:
+        plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/z_veto",
+                          channels=["dblh4l"], lumi=19.7, partial_blind=False)
+
+        plotter.add_group("hpp", r"$\Phi^{++}(%s)$" % MASS, "HPlus*%s*" % MASS,
+                          facecolor='mediumorchid', edgecolor='indigo')
+
+        plotter.add_group("zz", "$ZZ$", "ZZTo*", "ggZZ*",
+                          facecolor="lightskyblue", edgecolor="darkblue")
+
+        plotter.stack_order("hpp","zz")
+
+        plotter.plot_stack('z_sep_%i.png' % MASS, 'z_sep', 25, 0, 500,
+                title=_TITLE,
+                xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+                label_bin_width=True, log=True,
+                shade=[(0.0, 20.0, 'k')])
+
+        st_cut = '(%f < sT)' % (0.6*MASS + 130.0)
+
+        plotter.plot_stack('z_sep_st_%i.png' % MASS, 'z_sep', 25, 0, 500,
+                cuts= st_cut,
+                title=_TITLE,
+                xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+                label_bin_width=True, log=True,
+                shade=[(0.0, 20.0, 'k')])
+
+        mass_cut = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)
+
+        plotter.plot_stack('z_sep_st_mass_%i.png' % MASS, 'z_sep', 25, 0, 500,
+                cuts='%s & %s' % (st_cut, mass_cut),
+                title=_TITLE,
+                xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+                label_bin_width=True, log=False,
+                shade=[(0.0, 20.0, 'k')])
+
+
 def four_l():
-    MASS = 250
+    MASS = 500
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7, partial_blind=False)
 
