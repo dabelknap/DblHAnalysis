@@ -86,23 +86,36 @@ def hpp_decay_flags(fs):
     return (hpp, hmm)
 
 
-def four_lepton(name, channels, directory, scale=1.0, final_state=None):
+def four_lepton(name, channels, directory, scale=1.0, final_state=None, tau=False):
     for mass in _4L_MASSES:
-        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
-        cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
-        cuts += '& (z_sep > 10)'
-        cuts += '& (%f < sT)' % (0.6*mass + 130.0)
-        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels])
+
+        if tau:
+            cuts = '(%f < h1mass) & (h1mass < %f)' % (0.5*mass, 1.1*mass)
+            cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.5*mass, 1.1*mass)
+            cuts += '& (z_sep > 10)'
+            cuts += '& ((%f < sT) | (400 < sT))' % (mass + 100.0)
+        else:
+            cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+            cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+            #cuts += '& (z_sep > 20)'
+            cuts += '& (%f < sT)' % (0.6*mass + 130.0)
+
+        cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel \
+                for channel in channels])
 
         if final_state:
-            signal_decay_cuts = '(%s)' % ' | '.join(['((hpp_dec == %i) & (hmm_dec == %i))' % final_state])
+            signal_decay_cuts = '(%s)' % ' | '.join(
+                    ['((hpp_dec == %i) & (hmm_dec == %i))' % final_state])
         else:
-            signal_decay_cuts = '(%s)' % ' | '.join(['((hpp_dec == %i) & (hmm_dec == %i))' % hpp_decay_flags(fs) for fs in channels])
+            signal_decay_cuts = '(%s)' % ' | '.join(
+                    ['((hpp_dec == %i) & (hmm_dec == %i))' % hpp_decay_flags(fs) \
+                        for fs in channels])
 
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
                 channels=["dblh4l"], lumi=19.7, blinded=True)
 
-        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True, scale=scale, cuts=signal_decay_cuts)
+        limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True,
+                scale=scale, cuts=signal_decay_cuts)
         limits.add_group("data", "data_*", isData=True)
 
         lumi = {'hpp%i' % mass: 1.026}
@@ -110,9 +123,6 @@ def four_lepton(name, channels, directory, scale=1.0, final_state=None):
 
         hpp_sys = {'hpp%i' % mass: 1.15}
         limits.add_systematics("sig_mc_err", "lnN", **hpp_sys)
-
-        #mu_eff = {'hpp%i' % mass: 1.043}
-        #limits.add_systematics("mu_eff", "lnN", **mu_eff)
 
         eff_syst = efficiency_systematic(name)
 
@@ -126,15 +136,27 @@ def four_lepton(name, channels, directory, scale=1.0, final_state=None):
             e_eff = {'hpp%i' % mass: eff_syst[1]}
             limits.add_systematics("e_eff", "lnN", **e_eff)
 
-        N_db_data = mky.data_sideband(
-            mass,
-            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
-            #cuts='(z_sep > 80) & (%f < sT)' % (0.6*mass + 130.0))
-            cuts='(%f < sT)' % (0.6*mass + 130.0))
+        if tau:
+            N_db_data = mky.data_sideband(
+                mass,
+                '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+                cuts='(10 < z_sep) & ((%f < sT) | (400 < sT))' % (mass + 100.0),
+                tau=True)
 
-        alpha = mky.alpha(
-            mass,
-            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
+            alpha = mky.alpha(
+                mass,
+                '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+                tau=True)
+        else:
+            N_db_data = mky.data_sideband(
+                mass,
+                '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+                #cuts='(z_sep > 80) & (%f < sT)' % (0.6*mass + 130.0))
+                cuts='(%f < sT)' % (0.6*mass + 130.0))
+
+            alpha = mky.alpha(
+                mass,
+                '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]))
 
         limits.add_bkg_rate("bkg_sb_%s" % channels[0], float(N_db_data) * alpha)
         kwargs = {"bkg_sb_%s" % channels[0]: alpha}
@@ -249,7 +271,7 @@ def tt100(directory):
              "emmm","mmem",
              "emee","eeem"],
             os.path.join(directory, "tt100"), scale=36.0,
-            final_state=(33,33))
+            final_state=(33,33), tau=True)
 
 
 def et100(directory):
@@ -260,7 +282,7 @@ def et100(directory):
              "emmm","mmem",
              "emee","eeem"],
             os.path.join(directory, "et100"), scale=36.0,
-            final_state=(31,31))
+            final_state=(31,31), tau=True)
 
 
 def mt100(directory):
@@ -271,7 +293,7 @@ def mt100(directory):
              "emmm","mmem",
              "emee","eeem"],
             os.path.join(directory, "mt100"), scale=36.0,
-            final_state=(32,32))
+            final_state=(32,32), tau=True)
 
 
 def em100(directory):

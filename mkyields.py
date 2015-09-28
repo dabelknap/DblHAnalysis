@@ -30,7 +30,7 @@ class Scales(object):
 
 
 
-def data_sideband(mass, channel, cuts='(True)'):
+def data_sideband(mass, channel, cuts='(True)', tau=False):
     """
     Compute the number of data events in the sidebands.
 
@@ -49,8 +49,13 @@ def data_sideband(mass, channel, cuts='(True)'):
     """
 
     # Define mass window
-    window = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
-    window += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+    if tau:
+        window = '(%f < h1mass) & (h1mass < %f)' % (0.5*mass, 1.1*mass)
+        window += '& (%f < h2mass) & (h2mass < %f)' % (0.5*mass, 1.1*mass)
+    else:
+        window = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+        window += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+
     bounds = '(12 < h1mass) & (h1mass < 700) & (12 < h2mass) & (h2mass < 700)'
 
     x = Yields("DblH", "~(%s) & (%s) & (%s) & (%s)" % (window, bounds, cuts, channel),
@@ -60,7 +65,7 @@ def data_sideband(mass, channel, cuts='(True)'):
     return x.yields("data")[0]
 
 
-def alpha(mass, channel):
+def alpha(mass, channel, tau=False):
     """
     Compute alpha used in sideband method background estimation
 
@@ -82,8 +87,12 @@ def alpha(mass, channel):
             the sidebands
     """
 
-    cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
-    cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+    if tau:
+        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.5*mass, 1.1*mass)
+        cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.5*mass, 1.1*mass)
+    else:
+        cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
+        cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
 
     inner = Yields("DblH", "(%s) & (%s)" % (cuts, channel), "./ntuples",
                    channels=["dblh4l"], lumi=19.7)
