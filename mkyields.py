@@ -380,6 +380,19 @@ def BP4_yield(mass, cuts):
     return out
 
 
+def bkg_mc_yield(cuts):
+    mc_bkg = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
+                    lumi=19.7)
+    mc_bkg.add_group("zz", "ZZTo*", "ggZZ*")
+    mc_bkg.add_group("top", "T*")
+    mc_bkg.add_group("dyjets", "Z[1234]jets*M50")
+
+    bkg_rate = ufloat(*mc_bkg.yields("zz")) + ufloat(*mc_bkg.yields("top"))\
+               + ufloat(*mc_bkg.yields("dyjets"))
+
+    return bkg_rate.nominal_value
+
+
 def efficiencies(BP):
 
     yield_fun = {"ee100": ee100_yield,
@@ -407,6 +420,42 @@ def efficiencies(BP):
     eff[:,2] = yields[:,2] / yields[:,1]
 
     print tabulate(eff, headers=["Mass", "Window", "sT"])
+
+
+def an_efficiencies():
+
+    sig_yields = np.zeros((len(_4L_MASSES), 3))
+    bkg_yields = np.zeros((len(_4L_MASSES), 3))
+
+    for i, mass in enumerate(_4L_MASSES):
+        cut1 = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass, 0.9*mass, 1.1*mass)
+        cut2 = '(%f < sT)' % (0.6*mass + 130.0)
+
+        for j, cut in enumerate(['mass > 0', cut1, cut1 + '&' + cut2]):
+            sig_yields[i,j] = BP4_yield(mass, cut)
+            bkg_yields[i,j] = bkg_mc_yield(cut)
+
+    eff1 = np.zeros((2*len(_4L_MASSES), 3))
+    eff2 = np.zeros((2*len(_4L_MASSES), 3))
+
+    eff1[::2,0]  = np.array(_4L_MASSES).T
+    eff1[::2,1]  = sig_yields[:,1] / sig_yields[:,0]
+    eff1[::2,2]  = sig_yields[:,2] / sig_yields[:,1]
+
+    eff1[1::2,0]  = np.array(_4L_MASSES).T
+    eff1[1::2,1]  = bkg_yields[:,1] / bkg_yields[:,0]
+    eff1[1::2,2]  = bkg_yields[:,2] / bkg_yields[:,1]
+
+    eff2[::2,0]  = np.array(_4L_MASSES).T
+    eff2[::2,1]  = sig_yields[:,1] / sig_yields[:,0]
+    eff2[::2,2]  = sig_yields[:,2] / sig_yields[:,0]
+
+    eff2[1::2,0]  = np.array(_4L_MASSES).T
+    eff2[1::2,1]  = bkg_yields[:,1] / bkg_yields[:,0]
+    eff2[1::2,2]  = bkg_yields[:,2] / bkg_yields[:,0]
+
+    print tabulate(eff1, headers=["Mass", "Window", "sT"])
+    print tabulate(eff2, headers=["Mass", "Window", "sT"])
 
 
 def generate_bkg_tables():
@@ -641,8 +690,10 @@ if __name__ == "__main__":
 
     elif arg == "efficiencies":
         arg2 = sys.argv[2]
-
         efficiencies(arg2)
+
+    elif arg == "an_efficiencies":
+        an_efficiencies()
 
     else:
         raise ValueError("Unrecognized option: '%s'" % arg)
