@@ -213,60 +213,47 @@ def fourl_100():
 
 def BP1(directory):
     s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
-    four_lepton("emem", ["emem"], os.path.join(directory, "BP1"), scale=s,
-            fs=[(21,21),(33,33),(32,32),(31,31)])
-    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP1"), scale=s,
-            fs=[(21,22),(33,33),(32,32),(31,31)])
-    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP1"), scale=s,
-            fs=[(22,21),(33,33),(32,32),(31,31)])
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s,
-            fs=[(22,22),(33,33),(32,32),(31,31)])
+    a = [33,32,31,22,21,11]
+    fs = [(i,j) for i in a for j in a]
+    four_lepton("emem", ["emem"], os.path.join(directory, "BP1"), scale=s, fs=fs)
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP1"), scale=s, fs=fs)
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP1"), scale=s, fs=fs)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s, fs=fs)
 
 
 def BP2(directory):
     s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP2"), scale=s,
-            fs=[(11,22),(33,33),(32,32),(31,31)])
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP2"), scale=s,
-            fs=[(22,11),(33,33),(32,32),(31,31)])
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP2"), scale=s,
-            fs=[(11,11),(33,33),(32,32),(31,31)])
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP2"), scale=s,
-            fs=[(22,22),(33,33),(32,32),(31,31)])
+    a = [33,32,31,22,21,11]
+    fs = [(i,j) for i in a for j in a]
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP2"), scale=s, fs=fs)
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP2"), scale=s, fs=fs)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP2"), scale=s, fs=fs)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP2"), scale=s, fs=fs)
 
 
 def BP3(directory):
     s = Scales(1./3., 0, 0, 1./3., 0, 1./3.)
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s,
-            fs=[(11,22),(33,33),(32,32),(31,31)])
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s,
-            fs=[(22,11),(33,33),(32,32),(31,31)])
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s,
-            fs=[(11,11),(33,33),(32,32),(31,31)])
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP3"), scale=s,
-            fs=[(22,22),(33,33),(32,32),(31,31)])
+    a = [33,32,31,22,21,11]
+    fs = [(i,j) for i in a for j in a]
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s, fs=fs)
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s, fs=fs)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s, fs=fs)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP3"), scale=s, fs=fs)
 
 
 def BP4(directory):
     s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
-    four_lepton("emem", ["emem"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(21,21),(33,33),(32,32),(31,31)])
-    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(21,22),(33,33),(32,32),(31,31)])
-    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(22,21),(33,33),(32,32),(31,31)])
-    four_lepton("emee", ["emee"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(21,11),(33,33),(32,32),(31,31)])
-    four_lepton("eeem", ["eeem"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(11,21),(33,33),(32,32),(31,31)])
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(22,22),(33,33),(32,32),(31,31)])
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(11,11),(33,33),(32,32),(31,31)])
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(11,22),(33,33),(32,32),(31,31)])
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP4"), scale=s,
-            fs=[(22,11),(33,33),(32,32),(31,31)])
+    a = [33,32,31,22,21,11]
+    fs = [(i,j) for i in a for j in a]
+    four_lepton("emem", ["emem"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("emee", ["emee"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("eeem", ["eeem"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s, fs=fs)
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP4"), scale=s, fs=fs)
 
 
 def mm100(directory):
@@ -438,7 +425,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
 
-    BPS = ["ee100", "em100", "mm100", "BP1", "BP2", "BP3", "BP4"]
+    BPS = ["ee100", "em100", "mm100", "et100", "mt100",  "BP1", "BP2", "BP3", "BP4"]
 
     args = parse_command_line(argv)
 
