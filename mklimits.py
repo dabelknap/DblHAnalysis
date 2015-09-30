@@ -152,6 +152,7 @@ def four_lepton(name, channels, directory, scale=1.0, final_state=None, tau=Fals
                 mass,
                 '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
                 #cuts='(z_sep > 80) & (%f < sT)' % (0.6*mass + 130.0))
+                #cuts='(z_sep > 20) & (mass > 0)')
                 cuts='(%f < sT)' % (0.6*mass + 130.0))
 
             alpha = mky.alpha(

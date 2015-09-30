@@ -454,8 +454,8 @@ def an_efficiencies():
     eff2[1::2,1]  = bkg_yields[:,1] / bkg_yields[:,0]
     eff2[1::2,2]  = bkg_yields[:,2] / bkg_yields[:,0]
 
-    print tabulate(eff1, headers=["Mass", "Window", "sT"])
-    print tabulate(eff2, headers=["Mass", "Window", "sT"])
+    print tabulate(eff1, headers=["Mass", "Window", "sT"], floatfmt=".3f")
+    print tabulate(eff2, headers=["Mass", "Window", "sT"], floatfmt=".3f")
 
 
 def generate_bkg_tables():
