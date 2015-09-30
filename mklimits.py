@@ -86,7 +86,7 @@ def hpp_decay_flags(fs):
     return (hpp, hmm)
 
 
-def four_lepton(name, channels, directory, scale=1.0, final_state=None, tau=False):
+def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
     for mass in _4L_MASSES:
 
         if tau:
@@ -103,19 +103,11 @@ def four_lepton(name, channels, directory, scale=1.0, final_state=None, tau=Fals
         cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel \
                 for channel in channels])
 
-        if final_state:
-            signal_decay_cuts = '(%s)' % ' | '.join(
-                    ['((hpp_dec == %i) & (hmm_dec == %i))' % final_state])
-        else:
-            signal_decay_cuts = '(%s)' % ' | '.join(
-                    ['((hpp_dec == %i) & (hmm_dec == %i))' % hpp_decay_flags(fs) \
-                        for fs in channels])
-
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
                 channels=["dblh4l"], lumi=19.7, blinded=True)
 
         limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True,
-                scale=scale, cuts=signal_decay_cuts)
+                scale=scale, allowed_decays=fs)
         limits.add_group("data", "data_*", isData=True)
 
         lumi = {'hpp%i' % mass: 1.026}
@@ -221,86 +213,114 @@ def fourl_100():
 
 def BP1(directory):
     s = Scales(0, 0.01, 0.01, 0.3, 0.38, 0.3)
-    four_lepton("emem", ["emem"], os.path.join(directory, "BP1"), scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP1"), scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP1"), scale=s.scale("mm","em"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s.scale("mm","mm"))
+    four_lepton("emem", ["emem"], os.path.join(directory, "BP1"), scale=s,
+            fs=[(21,21),(33,33),(32,32),(31,31)])
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP1"), scale=s,
+            fs=[(21,22),(33,33),(32,32),(31,31)])
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP1"), scale=s,
+            fs=[(22,21),(33,33),(32,32),(31,31)])
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP1"), scale=s,
+            fs=[(22,22),(33,33),(32,32),(31,31)])
 
 
 def BP2(directory):
     s = Scales(0.5, 0, 0, 0.125, 0.25, 0.125)
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP2"), scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP2"), scale=s.scale("mm","ee"))
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP2"), scale=s.scale("ee","ee"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP2"), scale=s.scale("mm","mm"))
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP2"), scale=s,
+            fs=[(11,22),(33,33),(32,32),(31,31)])
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP2"), scale=s,
+            fs=[(22,11),(33,33),(32,32),(31,31)])
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP2"), scale=s,
+            fs=[(11,11),(33,33),(32,32),(31,31)])
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP2"), scale=s,
+            fs=[(22,22),(33,33),(32,32),(31,31)])
 
 
 def BP3(directory):
     s = Scales(1./3., 0, 0, 1./3., 0, 1./3.)
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s.scale("mm","ee"))
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s.scale("ee","ee"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP3"), scale=s.scale("mm","mm"))
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP3"), scale=s,
+            fs=[(11,22),(33,33),(32,32),(31,31)])
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP3"), scale=s,
+            fs=[(22,11),(33,33),(32,32),(31,31)])
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP3"), scale=s,
+            fs=[(11,11),(33,33),(32,32),(31,31)])
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP3"), scale=s,
+            fs=[(22,22),(33,33),(32,32),(31,31)])
 
 
 def BP4(directory):
     s = Scales(1./6., 1./6., 1./6., 1./6., 1./6., 1./6.)
-    four_lepton("emem", ["emem"], os.path.join(directory, "BP4"), scale=s.scale("em","em"))
-    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP4"), scale=s.scale("em","mm"))
-    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP4"), scale=s.scale("mm","em"))
-    four_lepton("emee", ["emee"], os.path.join(directory, "BP4"), scale=s.scale("em","ee"))
-    four_lepton("eeem", ["eeem"], os.path.join(directory, "BP4"), scale=s.scale("ee","em"))
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s.scale("mm","mm"))
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s.scale("ee","ee"))
-    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s.scale("ee","mm"))
-    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP4"), scale=s.scale("mm","ee"))
+    four_lepton("emem", ["emem"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(21,21),(33,33),(32,32),(31,31)])
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(21,22),(33,33),(32,32),(31,31)])
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(22,21),(33,33),(32,32),(31,31)])
+    four_lepton("emee", ["emee"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(21,11),(33,33),(32,32),(31,31)])
+    four_lepton("eeem", ["eeem"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(11,21),(33,33),(32,32),(31,31)])
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(22,22),(33,33),(32,32),(31,31)])
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(11,11),(33,33),(32,32),(31,31)])
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(11,22),(33,33),(32,32),(31,31)])
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "BP4"), scale=s,
+            fs=[(22,11),(33,33),(32,32),(31,31)])
 
 
 def mm100(directory):
-    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "mm100"), scale=36.0)
+    s = Scales(0.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "mm100"), scale=s,
+            fs=[(22,22)])
 
 
 def ee100(directory):
-    four_lepton("eeee", ["eeee"], os.path.join(directory, "ee100"), scale=36.0)
+    s = Scales(1.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "ee100"), scale=s,
+            fs=[(11,11)])
+
+
+def em100(directory):
+    s = Scales(0.0, 1.0, 0.0, 0.0, 0.0, 0.0)
+    four_lepton("emem", ["emem"], os.path.join(directory, "em100"), scale=s,
+            fs=[(21,21)])
 
 
 def tt100(directory):
+    s = Scales(0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
     four_lepton("tttt",
             ["eeee","mmmm",
              "eemm","mmee",
              "emem",
              "emmm","mmem",
              "emee","eeem"],
-            os.path.join(directory, "tt100"), scale=36.0,
-            final_state=(33,33), tau=True)
+            os.path.join(directory, "tt100"), scale=s,
+            fs=[(33,33)], tau=True)
 
 
 def et100(directory):
+    s = Scales(0.0, 0.0, 1.0, 0.0, 0.0, 0.0)
     four_lepton("etet",
             ["eeee","mmmm",
              "eemm","mmee",
              "emem",
              "emmm","mmem",
              "emee","eeem"],
-            os.path.join(directory, "et100"), scale=36.0,
-            final_state=(31,31), tau=True)
+            os.path.join(directory, "et100"), scale=s,
+            fs=[(31,31)], tau=True)
 
 
 def mt100(directory):
+    s = Scales(0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
     four_lepton("mtmt",
             ["eeee","mmmm",
              "eemm","mmee",
              "emem",
              "emmm","mmem",
              "emee","eeem"],
-            os.path.join(directory, "mt100"), scale=36.0,
-            final_state=(32,32), tau=True)
-
-
-def em100(directory):
-    four_lepton("emem", ["emem", "emme", "meem", "meme"],
-            os.path.join(directory, "em100"),
-            scale=36.0)
+            os.path.join(directory, "mt100"), scale=s,
+            fs=[(32,32)], tau=True)
 
 
 def mmmm_100(mass):
