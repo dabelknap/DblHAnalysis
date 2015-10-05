@@ -399,11 +399,12 @@ def z_control():
 
     plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "ggH", "zz", "ggzz")
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
-    #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        mc_bands=0.1,
-    #        label_bin_width=True, log=False)#, legend_size=10)
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
+            title=_TITLE,
+            cuts='(sT > 150)',
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            mc_bands=0.1,
+            label_bin_width=True, log=False)#, legend_size=10)
 
     #plotter.plot_stack('h1mass_binned.pdf', 'h1mass', 25, 0, 500,
     #        title=_TITLE,
