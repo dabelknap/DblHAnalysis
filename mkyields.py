@@ -454,8 +454,22 @@ def an_efficiencies():
     eff2[1::2,1]  = bkg_yields[:,1] / bkg_yields[:,0]
     eff2[1::2,2]  = bkg_yields[:,2] / bkg_yields[:,0]
 
-    print tabulate(eff1, headers=["Mass", "Window", "sT"], floatfmt=".3f")
-    print tabulate(eff2, headers=["Mass", "Window", "sT"], floatfmt=".3f")
+    print r"Mass (GeV) & Sample & Mass Window & $s_T$ \\ \hline"
+    for i, row in enumerate(eff1):
+        if i%2:
+            print "   & Background & %.5f & %.5f \\\\ \\hline" % (row[1], row[2])
+        else:
+            print " %i & Signal & %.5f & %.5f \\\\" % (row[0], row[1], row[2])
+
+    print r"Mass (GeV) & Sample & Mass Window & $s_T$ \\ \hline"
+    for i, row in enumerate(eff2):
+        if i%2:
+            print "   & Background & %.5f & %.5f \\\\ \\hline" % (row[1], row[2])
+        else:
+            print " %i & Signal & %.5f & %.5f \\\\" % (row[0], row[1], row[2])
+
+    #print tabulate(eff1, headers=["Mass", "Window", "sT"], floatfmt=".3f")
+    #print tabulate(eff2, headers=["Mass", "Window", "sT"], floatfmt=".3f")
 
 
 def generate_bkg_tables():
