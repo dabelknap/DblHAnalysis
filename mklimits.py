@@ -276,38 +276,41 @@ def em100(directory):
 
 def tt100(directory):
     s = Scales(0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-    four_lepton("tttt",
-            ["eeee","mmmm",
-             "eemm","mmee",
-             "emem",
-             "emmm","mmem",
-             "emee","eeem"],
-            os.path.join(directory, "tt100"), scale=s,
-            fs=[(33,33)], tau=True)
+    four_lepton("emem", ["emem"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("emee", ["emee"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("eeem", ["eeem"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "tt100"), scale=s, fs=[(33,33)], tau=True)
 
 
 def et100(directory):
     s = Scales(0.0, 0.0, 1.0, 0.0, 0.0, 0.0)
-    four_lepton("etet",
-            ["eeee","mmmm",
-             "eemm","mmee",
-             "emem",
-             "emmm","mmem",
-             "emee","eeem"],
-            os.path.join(directory, "et100"), scale=s,
-            fs=[(31,31)], tau=True)
+    four_lepton("emem", ["emem"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("emee", ["emee"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("eeem", ["eeem"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "et100"), scale=s, fs=[(31,31)], tau=True)
 
 
 def mt100(directory):
     s = Scales(0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
-    four_lepton("mtmt",
-            ["eeee","mmmm",
-             "eemm","mmee",
-             "emem",
-             "emmm","mmem",
-             "emee","eeem"],
-            os.path.join(directory, "mt100"), scale=s,
-            fs=[(32,32)], tau=True)
+    four_lepton("emem", ["emem"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("emmm", ["emmm"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("mmem", ["mmem"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("emee", ["emee"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("eeem", ["eeem"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("mmmm", ["mmmm"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("eeee", ["eeee"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("eemm", ["eemm"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
+    four_lepton("mmee", ["mmee"], os.path.join(directory, "mt100"), scale=s, fs=[(32,32)], tau=True)
 
 
 def mmmm_100(mass):
