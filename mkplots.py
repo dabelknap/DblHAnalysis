@@ -148,8 +148,8 @@ def four_l():
 
     #plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("zz","hpp")
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("zz","hpp")
 
     plotter.plot_stack_diff('hmm-hpp_500.pdf', 'h1mass', 'h2mass', 25, 0, 100,
             title=_TITLE,
@@ -186,10 +186,10 @@ def four_l():
     #        xlab=r'$s_T(\Phi^{--})$ (GeV)',
     #        label_bin_width=True, log=True)
 
-    #plotter.plot_stack('st.pdf', 'sT', 25, 0, 800,
-    #        title=_TITLE,
-    #        xlab=r'$s_T$ (GeV)',
-    #        label_bin_width=True, log=False)
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 1000,
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
+            label_bin_width=True, log=True)
 
     #plotter.plot_stack('sideband.pdf', 'h1mass', 24, 0, 600,
     #        title=_TITLE,
@@ -249,11 +249,12 @@ def cut_flow():
     plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("zz", "hpp")
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("zz", "hpp")
     #plotter.stack_order("top", "dyjets", "zz", "hpp")
 
-    cuts = ["(channel == 'emem')",
+    cuts = [#"(channel == 'emem')",
+            "(h1mass > 0)",
             "(%f < sT)" % (0.6*500 + 130.),
             "(%f < sT) & (%f < h1mass) & (h1mass < %f)" % ((0.6*500 + 130.), 0.9*500, 1.1*500)]
 
@@ -261,7 +262,7 @@ def cut_flow():
               "sT",
               "Mass Window"]
 
-    plotter.cut_flow("cut_flow_emem.pdf", cuts, labels, log=True,
+    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True,
             title=_TITLE)
 
 
