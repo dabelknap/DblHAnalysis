@@ -1,5 +1,6 @@
 from plotters.plotter import Plotter
 import sys
+import matplotlib.cm as cm
 from numpy import linspace
 
 _4L_MASSES = [110, 130, 150, 170, 200, 250, 300,
@@ -43,6 +44,27 @@ def signal_shapes():
             ylab=r'A.U.', log=False,
             shade=[(450.0, 550.0, 'r')])
 
+def mass_diffs():
+    plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
+                      channels=["dblh4l"], lumi=19.7)
+
+    masses = _4L_MASSES
+
+    colors = [cm.get_cmap('jet')(i) for i in linspace(0,1,len(_4L_MASSES))]
+
+    for i, mass in enumerate(masses):
+        plotter.add_group("hpp%i" % mass, r"$\Phi^{++}(%i)$" % mass,
+                "HPlus*%i*" % mass, edgecolor=colors[i])
+
+    order = ["hpp%i" % mass for mass in masses]
+    plotter.stack_order(*order)
+
+    plotter.plot_compare('dmass.pdf', 'abs_dmass', 50, 0, 50,
+            title=_TITLE,
+            xlab=r'$\vert M_{\ell^+\ell^+} - M_{\ell^-\ell^-}\vert$ (GeV)',
+            ylab=r'A.U.', log=False, legend_size=10)
+
+
 def two_D():
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7, partial_blind=False)
@@ -61,8 +83,48 @@ def two_D():
             ylab=r"$M(\ell^-\ell^-)$ (GeV)")
 
 
+def z_veto():
+    MASSES = [130, 250, 500]
+
+    for MASS in MASSES:
+        plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/z_veto",
+                          channels=["dblh4l"], lumi=19.7, partial_blind=False)
+
+        plotter.add_group("hpp", r"$\Phi^{++}(%s)$" % MASS, "HPlus*%s*" % MASS,
+                          facecolor='mediumorchid', edgecolor='indigo')
+
+        plotter.add_group("zz", "$ZZ$", "ZZTo*", "ggZZ*",
+                          facecolor="lightskyblue", edgecolor="darkblue")
+
+        plotter.stack_order("hpp","zz")
+
+        plotter.plot_stack('z_sep_%i.png' % MASS, 'z_sep', 25, 0, 500,
+                title=_TITLE,
+                xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+                label_bin_width=True, log=True,
+                shade=[(0.0, 20.0, 'k')])
+
+        st_cut = '(%f < sT)' % (0.6*MASS + 130.0)
+
+        plotter.plot_stack('z_sep_st_%i.png' % MASS, 'z_sep', 25, 0, 500,
+                cuts= st_cut,
+                title=_TITLE,
+                xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+                label_bin_width=True, log=True,
+                shade=[(0.0, 20.0, 'k')])
+
+        mass_cut = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)
+
+        plotter.plot_stack('z_sep_st_mass_%i.png' % MASS, 'z_sep', 25, 0, 500,
+                cuts='%s & %s' % (st_cut, mass_cut),
+                title=_TITLE,
+                xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
+                label_bin_width=True, log=False,
+                shade=[(0.0, 20.0, 'k')])
+
+
 def four_l():
-    MASS = 250
+    MASS = 500
     plotter = Plotter("DblH", "(mass > 0)", "./ntuples", "./plots/4l",
                       channels=["dblh4l"], lumi=19.7, partial_blind=False)
 
@@ -86,37 +148,23 @@ def four_l():
 
     #plotter.add_group("data", "Observed", "data_*", isdata=True)
 
-    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("hpp","zz")
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("zz","hpp")
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
-    #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        label_bin_width=True, log=True)
-
-    plotter.plot_stack('z_sep_%i.png' % MASS, 'z_sep', 25, 0, 500,
+    plotter.plot_stack_diff('hmm-hpp_500.pdf', 'h1mass', 'h2mass', 25, 0, 100,
             title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=True,
-            shade=[(0.0, 80.0, 'k')])
+            xlab=r'$\vert M_{\ell^+\ell^+} - M_{\ell^-\ell^-}\vert$ (GeV)',
+            label_bin_width=True, log=False)
 
-    st_cut = '(%f < sT)' % (0.6*MASS + 130.0)
-
-    plotter.plot_stack('z_sep_st_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            cuts= st_cut,
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=True,
-            shade=[(0.0, 80.0, 'k')])
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            label_bin_width=True, log=True)
 
-    mass_cut = '(%f < h1mass) & (h1mass < %f) & (%f < h2mass) & (h2mass < %f)' % (0.9*MASS, 1.1*MASS, 0.9*MASS, 1.1*MASS)
-
-    plotter.plot_stack('z_sep_st_mass_%i.png' % MASS, 'z_sep', 25, 0, 500,
-            cuts='%s & %s' % (st_cut, mass_cut),
+    plotter.plot_stack('h2mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
-            xlab=r'$\min(M(\ell^+\ell^-)- M_Z)$ (GeV)',
-            label_bin_width=True, log=False,
-            shade=[(0.0, 80.0, 'k')])
+            xlab=r'$M_{\ell^-\ell^-}$ (GeV)',
+            label_bin_width=True, log=True)
 
     #plotter.plot_stack('dphi1.pdf', 'dPhi1', 25, -4, 4,
     #        title=_TITLE,
@@ -138,10 +186,10 @@ def four_l():
     #        xlab=r'$s_T(\Phi^{--})$ (GeV)',
     #        label_bin_width=True, log=True)
 
-    #plotter.plot_stack('st.pdf', 'sT', 25, 0, 800,
-    #        title=_TITLE,
-    #        xlab=r'$s_T$ (GeV)',
-    #        label_bin_width=True, log=False)
+    plotter.plot_stack('st.pdf', 'sT', 25, 0, 1000,
+            title=_TITLE,
+            xlab=r'$s_T$ (GeV)',
+            label_bin_width=True, log=True)
 
     #plotter.plot_stack('sideband.pdf', 'h1mass', 24, 0, 600,
     #        title=_TITLE,
@@ -201,11 +249,12 @@ def cut_flow():
     plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    #plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
-    plotter.stack_order("zz", "hpp")
+    plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
+    #plotter.stack_order("zz", "hpp")
     #plotter.stack_order("top", "dyjets", "zz", "hpp")
 
-    cuts = ["(channel == 'emem')",
+    cuts = [#"(channel == 'emem')",
+            "(h1mass > 0)",
             "(%f < sT)" % (0.6*500 + 130.),
             "(%f < sT) & (%f < h1mass) & (h1mass < %f)" % ((0.6*500 + 130.), 0.9*500, 1.1*500)]
 
@@ -213,7 +262,7 @@ def cut_flow():
               "sT",
               "Mass Window"]
 
-    plotter.cut_flow("cut_flow_emem.pdf", cuts, labels, log=True,
+    plotter.cut_flow("cut_flow.pdf", cuts, labels, log=True,
             title=_TITLE)
 
 
@@ -351,11 +400,12 @@ def z_control():
 
     plotter.stack_order("ttv", "wwv", "wz", "top", "dyjets", "ggH", "zz", "ggzz")
 
-    #plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
-    #        title=_TITLE,
-    #        xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-    #        mc_bands=0.1,
-    #        label_bin_width=True, log=False)#, legend_size=10)
+    plotter.plot_stack('h1mass.pdf', 'h1mass', 20, 0, 500,
+            title=_TITLE,
+            cuts='(sT > 150)',
+            xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
+            mc_bands=0.1,
+            label_bin_width=True, log=False)#, legend_size=10)
 
     #plotter.plot_stack('h1mass_binned.pdf', 'h1mass', 25, 0, 500,
     #        title=_TITLE,
@@ -893,6 +943,10 @@ def main():
         z_control()
     elif sys.argv[1] == "4l":
         four_l()
+    elif sys.argv[1] == "mass_diffs":
+        mass_diffs()
+    elif sys.argv[1] == "z_veto":
+        z_veto()
     elif sys.argv[1] == "2D":
         two_D()
     elif sys.argv[1] == "4l_em":

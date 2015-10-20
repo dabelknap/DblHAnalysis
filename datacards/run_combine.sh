@@ -19,6 +19,10 @@ if [ $1 == "all" ]; then
     for BP in BP1 BP2 BP3 BP4 ee100 mm100 em100; do
         run_limits $BP
     done
+elif [ $1 == "clear" ]; then
+    rm ./*/*/roo*
+    rm ./*/*/*.root
+    rm ./*/*/*.out
 else
     run_limits $1
 fi

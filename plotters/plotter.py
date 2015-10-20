@@ -363,6 +363,182 @@ class Plotter(object):
             yfile.close()
 
 
+    def plot_stack_diff(self, file_name, var1, var2, nbins, xmin, xmax,
+            **kwargs):
+        """
+        Plot a stacked histogram
+        shade=[(xmin1,xmax1,color1), (xmin2,xmax2,color2), ...]
+        """
+        values = []
+        weights = []
+        labels = []
+
+        cuts = kwargs.get('cuts', '(True)')
+        legend_loc = kwargs.get('legend_loc', 'best')
+        ylab_width = kwargs.get('label_bin_width', False)
+        ylab = kwargs.get('ylab', '')
+        xlab = kwargs.get('xlab', '')
+        title = kwargs.get('title', '')
+        log_scale = kwargs.get('log', False)
+        shade = kwargs.get('shade', None)
+        legend_size = kwargs.get('legend_size', None)
+        mc_err = kwargs.get('mc_err', False)
+        dump_yields = kwargs.get('dump_yields', False)
+        mc_bands = kwargs.get('mc_bands', None)
+
+        hist_style = {'histtype': 'stepfilled',
+                      'linewidth': 1.5,
+                      'stacked': True,
+                      'log': log_scale}
+
+        cut = "%s & %s" % (self.base_selections, cuts)
+
+        if dump_yields:
+            yfile = open(self.out_dir + '/' + file_name + '.txt', 'w')
+        else:
+            yfile = None
+
+        for mc in self.sample_order:
+            vals = []
+            wgts = []
+
+            self.log.info("Processing MC: %s" % mc)
+
+            for sample_name in self.sample_groups[mc]["sample_names"]:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis),
+                                        chan)
+                        vals += [abs(x[var1] - x[var2]) for x in table.where(cut)]
+                        scale = self.lumi * xsec.xsecs[sample_name] / \
+                                xsec.nevents[sample_name]
+                        wgts += [x['pu_weight'] * \
+                                 x['lep_scale'] * \
+                                 x['trig_scale'] * \
+                                 scale \
+                                 for x in table.where(cut)]
+
+            values.append(vals)
+            weights.append(wgts)
+            labels += [self.sample_groups[mc]['label']]
+
+        if 'data' in self.sample_groups:
+
+            if self.partial_blind:
+                data_cut = cut + "& (h1mass < 120) & (h2mass < 120)"
+            else:
+                data_cut = cut
+
+            self.log.info("Processing Data")
+
+            vals = []
+            evt_set = set()
+            for sample_name in self.sample_groups['data']['sample_names']:
+                with tb.open_file("%s/%s.h5" % (self.ntuple_dir, sample_name),
+                        'r') as h5file:
+                    for chan in self.channels:
+                        table = getattr(getattr(h5file.root, self.analysis), chan)
+                        for x in table.where(data_cut):
+                            if (x['evt'], x['run'], x['lumi']) not in evt_set:
+                                vals.append(abs(x[var1] - x[var2]))
+                                evt_set.add((x['evt'], x['run'], x['lumi']))
+
+            (n1, bins1, patches1) = plt.hist(vals, nbins, range=(xmin, xmax))
+            plt.clf()
+
+            if yfile:
+                yfile.write("Data\n")
+                yfile.write(bins1.__str__()+'\n')
+                yfile.write(n1.__str__()+'\n')
+
+
+        self.log.info("Generating Histogram: %s-%s, %s/%s" % (var1, var2, self.out_dir, file_name))
+
+        # Plot stacked MC
+        plt.figure(figsize=(6, 5))
+        (n, bins, patches) = plt.hist(
+                values, nbins, weights=weights, range=(xmin, xmax),
+                label=labels, **hist_style)
+
+        if yfile:
+            yfile.write("MC Total\n")
+            yfile.write(bins.__str__()+'\n')
+            yfile.write(["%.2f" % x for x in n[-1]].__str__()+'\n')
+
+        if mc_bands:
+            X = []
+            for i in bins:
+                X.append(i)
+                X.append(i)
+
+            Y = [0]
+            for i in n[-1]:
+                Y.append(i)
+                Y.append(i)
+            Y.append(0)
+            Y = np.array(Y)
+
+            _up = 1.0 + mc_bands
+            _down = 1.0 - mc_bands
+
+            plt.fill_between(X,Y*_down,Y*_up,facecolor='k',alpha=0.2,zorder=10)
+
+            #plt.plot(0.5*(bins[1:] + bins[:-1]), n[-1]*0.7, drawstyle='steps-mid')
+
+        if mc_err:
+            n_total = n
+            N = np.histogram(values, bins=bins)[0]
+            plt.plot(0.5*(bins[1:] + bins[:-1]), n_total + n_total/np.sqrt(N) + 0.05*n_total,
+                color='k', alpha=0.5, drawstyle='steps-mid')
+            plt.plot(0.5*(bins[1:] + bins[:-1]), n_total - n_total/np.sqrt(N) - 0.05*n_total,
+                color='k', alpha=0.5, drawstyle='steps-mid')
+
+        if log_scale:
+            plt.yscale('log')
+
+        if 'data' in self.sample_groups:
+            plt.errorbar(0.5*(bins[1:]+bins[:-1]), n1, yerr=[np.sqrt(n1)*0.99,np.sqrt(n1)],
+                         fmt='ko', capsize=0, linewidth=1, ms=5, label="Observed")
+
+        for i, name in enumerate(self.sample_order):
+            try:
+                for p in patches[i]:
+                    p.set_facecolor(self.sample_groups[name]['facecolor'])
+                    p.set_edgecolor(self.sample_groups[name]['edgecolor'])
+            except TypeError:
+                patches[i].set_facecolor(self.sample_groups[name]['facecolor'])
+                patches[i].set_edgecolor(self.sample_groups[name]['edgecolor'])
+
+        if legend_size:
+            plt.legend(loc=legend_loc, prop={'size': legend_size})
+        else:
+            plt.legend(loc=legend_loc)
+
+        if log_scale:
+            plt.ylim(ymin=0.01)
+        else:
+            plt.ylim(ymin=0)
+        if ylab_width:
+            plt.ylabel('Events / %.1f GeV' % (bins[1] - bins[0]), ha='right', position=(0,1), size='larger')
+        else:
+            plt.ylabel(ylab, ha='right', position=(0,1), size='larger')
+        plt.xlabel(xlab, ha='right', position=(1,0), size='larger')
+        plt.title(title)
+
+        if shade:
+            for specs in shade:
+                xmin, xmax, color = specs
+                plt.axvspan(xmin, xmax, facecolor=color, alpha=0.2)
+
+        plt.tight_layout(0.5)
+
+        plt.savefig("%s/%s" % (self.out_dir, file_name))
+
+        if yfile:
+            yfile.close()
+
+
     def plot_compare(self, file_name, var, nbins, xmin, xmax, **kwargs):
         """
         Plot a stacked histogram
@@ -404,7 +580,11 @@ class Plotter(object):
                         vals += [x[var] for x in table.where(cut)]
                         scale = self.lumi * xsec.xsecs[sample_name] / \
                                 xsec.nevents[sample_name]
-                        wgts += [x['pu_weight'] * x['lep_scale'] * scale for x in table.where(cut)]
+                        wgts += [x['pu_weight'] * \
+                                 x['lep_scale'] * \
+                                 x['trig_scale'] * \
+                                 scale \
+                                 for x in table.where(cut)]
 
             values.append(vals)
             weights.append(wgts)

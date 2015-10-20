@@ -13,6 +13,10 @@ class EventBase(tb.IsDescription):
     lep_scale      = tb.Float32Col()
     lep_scale_e_up = tb.Float32Col()
     lep_scale_m_up = tb.Float32Col()
+    lep_scale_up   = tb.Float32Col()
+    lep_scale_down = tb.Float32Col()
+    trig_scale     = tb.Float32Col()
+    charge_id      = tb.Float32Col()
     pu_weight      = tb.Float32Col()
 
 
@@ -25,6 +29,9 @@ class Event4l(EventBase):
     metPhi  = tb.Float32Col()
     z_sep   = tb.Float32Col()
 
+    hpp_dec = tb.Int32Col()
+    hmm_dec = tb.Int32Col()
+
     jetVeto = tb.Int32Col()
 
     h1mass  = tb.Float32Col()
@@ -34,6 +41,9 @@ class Event4l(EventBase):
     h2mass  = tb.Float32Col()
     sT2     = tb.Float32Col()
     dPhi2   = tb.Float32Col()
+
+    dmass   = tb.Float32Col()
+    abs_dmass = tb.Float32Col()
 
     l1Pt    = tb.Float32Col()
     l1Eta   = tb.Float32Col()

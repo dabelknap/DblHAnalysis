@@ -39,13 +39,17 @@ class Limits(object):
         is_data = kwargs.get('isData', False)
         is_sig = kwargs.get('isSignal', False)
         scale = kwargs.get('scale', 1.0)
+        cuts = kwargs.get('cuts', None)
+        allowed_decays = kwargs.get('allowed_decays', None)
 
         self.sample_groups[group_name] = {
             'sample_names': [os.path.splitext(os.path.basename(x))[0]
                              for x in samples],
             'scale': scale,
             'isSig': is_sig,
-            'isData': is_data}
+            'isData': is_data,
+            'allowed_decays': allowed_decays,
+            'cuts': cuts}
 
     def add_bkg_rate(self, name, rate):
         self.datacard.add_bkg(name, rate)
@@ -67,6 +71,7 @@ class Limits(object):
             vals = []
             wgts = []
             scale_factor = self.sample_groups[key]['scale']
+
             if not is_data:
                 self.log.info("Processing MC: %s" % key)
 
@@ -75,13 +80,43 @@ class Limits(object):
                         "%s/%s.h5" % (self.ntuple_dir, sample_name), 'r') \
                             as h5file:
                         for chan in self.channels:
-                            table = getattr(getattr(h5file.root,
-                                                    self.analysis), chan)
-                            vals += [x[var] for x in table.where(cut)]
-                            scale = self.lumi * xsec.xsecs[sample_name] * \
-                                scale_factor / xsec.nevents[sample_name]
-                            wgts += [x['pu_weight'] * x['lep_scale'] * scale
-                                     for x in table.where(cut)]
+                            if self.sample_groups[key]['isSig'] and self.sample_groups[key]['allowed_decays']:
+                                table = getattr(getattr(h5file.root,
+                                                        self.analysis), chan)
+                                for dec in self.sample_groups[key]['allowed_decays']:
+                                    vals += [x[var] for x in table.where(
+                                        "%s & (hpp_dec == %i) & (hmm_dec == %i)" % \
+                                                (cut, dec[0], dec[1]))]
+
+                                    tmp = {33:"tt",
+                                           32:"mt",
+                                           31:"et",
+                                           22:"mm",
+                                           21:"em",
+                                           11:"ee"}
+
+                                    scale = self.lumi * xsec.xsecs[sample_name] * \
+                                        scale_factor.scale(tmp[dec[0]],tmp[dec[1]]) \
+                                        / xsec.nevents[sample_name]
+
+                                    wgts += [x['pu_weight'] * \
+                                             x['lep_scale'] * \
+                                             x['trig_scale'] * \
+                                             scale \
+                                             for x in table.where(
+                                            "%s & (hpp_dec == %i) & (hmm_dec == %i)" % \
+                                                    (cut, dec[0], dec[1]))]
+                            else:
+                                table = getattr(getattr(h5file.root,
+                                                        self.analysis), chan)
+                                vals += [x[var] for x in table.where(cut)]
+                                scale = self.lumi * xsec.xsecs[sample_name] * \
+                                    scale_factor / xsec.nevents[sample_name]
+                                wgts += [x['pu_weight'] * \
+                                         x['lep_scale'] * \
+                                         x['trig_scale'] * \
+                                         scale \
+                                         for x in table.where(cut)]
 
                 if self.sample_groups[key]['isSig']:
                     self.datacard.add_sig(key, sum(wgts))
