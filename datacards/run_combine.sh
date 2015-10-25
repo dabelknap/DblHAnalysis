@@ -16,7 +16,7 @@ run_limits()
 }
 
 if [ $1 == "all" ]; then
-    for BP in BP1 BP2 BP3 BP4 ee100 mm100 em100; do
+    for BP in BP1 BP2 BP3 BP4 ee100 mm100 em100 mt100 et100; do
         run_limits $BP
     done
 elif [ $1 == "clear" ]; then
