@@ -38,6 +38,12 @@ _EFFICIENCY_SYST = {"mmmm": {"m": 1.028},
                     "eeem": {"m": 1.007, "e": 1.033},
                     "emmm": {"m": 1.021, "e": 1.011}}
 
+_ELEC_CHG_MISID = {"eeee": {"e": 1.032},
+                   "eemm": {"e": 1.016},
+                   "eeem": {"e": 1.021},
+                   "emmm": {"e": 1.011}}
+
+
 _TITLE=r'\textbf{CMS} \emph{Preliminary} \hspace{1.9in} 19.7 fb$^{-1}$ (8 TeV)'
 
 
@@ -56,6 +62,18 @@ def efficiency_systematic(channel):
         e_syst = None
 
     return (m_syst, e_syst)
+
+
+def electron_chg_misid_syst(channel):
+    chan = ''.join(sorted(channel))
+
+    try:
+        e_syst = _ELEC_CHG_MISID[chan]['e']
+    except KeyError:
+        e_syst = None
+
+    return e_syst
+
 
 
 class Scales(object):
@@ -118,6 +136,8 @@ def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
 
         eff_syst = efficiency_systematic(name)
 
+        chg_syst = electron_chg_misid_syst(name)
+
         # Add the muon efficiency systematic if it exists for this channel
         if eff_syst[0]:
             mu_eff = {'hpp%i' % mass: eff_syst[0]}
@@ -127,6 +147,10 @@ def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
         if eff_syst[1]:
             e_eff = {'hpp%i' % mass: eff_syst[1]}
             limits.add_systematics("e_eff", "lnN", **e_eff)
+
+        if chg_syst:
+            e_chg = {'hpp%i' % mass: chg_syst}
+            limits.add_systematics("e_chg", "lnN", **e_chg)
 
         if tau:
             N_db_data = mky.data_sideband(
