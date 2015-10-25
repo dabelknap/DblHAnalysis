@@ -75,8 +75,8 @@ def plot_limits(out_fname, masses, datacard_base_dir, blinded=True, title="", x_
     plt.legend(legend_handles, legend_labels, loc='upper left')
 
     ax = plt.gca()
-    ax.grid(True, which="both", axis='y')
-    ax.grid(True, which="major", axis='x')
+    ax.grid(True, which="both", axis='y', color='gray', lw=0.1)
+    ax.grid(True, which="major", axis='x', color='gray', lw=0.1)
 
     plt.yscale('log')
     plt.xlim(xmin=np.min(masses), xmax=np.max(masses))
