@@ -136,13 +136,15 @@ class Limits(object):
                             table = getattr(getattr(h5file.root,
                                                     self.analysis), chan)
                             for x in table.where(cut):
-                                if (x['evt'], x['run'], x['lumi']) \
-                                        not in evt_set:
-                                    vals.append(x[var])
-                                    evt_set.add(
+                                evt_set.add(
                                         (x['evt'], x['run'], x['lumi']))
+                                #if (x['evt'], x['run'], x['lumi']) \
+                                #        not in evt_set:
+                                #    vals.append(x[var])
+                                #    evt_set.add(
+                                #        (x['evt'], x['run'], x['lumi']))
 
-                self.datacard.set_observed(len(vals))
+                self.datacard.set_observed(len(evt_set))
 
         self.log.info("Saving card to file: %s/%s" % (self.out_dir, file_name))
 
