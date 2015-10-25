@@ -234,10 +234,11 @@ def bkg_compare(mass, channels, scale=36.0):
     cuts+= '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
     cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel for channel
                                    in channels])
+    cuts += '& (%f < sT)' % (0.6*mass + 130.0)
 
     mc_bkg = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
                     lumi=19.7)
-    mc_bkg.add_group("zz", "ZZTo*")
+    mc_bkg.add_group("zz", "ZZTo*", "ggZZ*")
     mc_bkg.add_group("top", "T*")
     mc_bkg.add_group("dyjets", "Z[1234]jets*M50")
 
@@ -245,9 +246,10 @@ def bkg_compare(mass, channels, scale=36.0):
                + ufloat(*mc_bkg.yields("dyjets"))
 
 
-    bkg_est = bkg_estimate(mass, '(%s)' % ' | '.join(['(channel == "%s")' %
-                                                      channel for channel
-                                                      in channels]))
+    bkg_est = bkg_estimate(
+            mass,
+            '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
+            cuts='(%f < sT)' % (0.6*mass + 130.0))
 
     mc_sig = Yields("DblH", cuts, "./ntuples", channels=["dblh4l"],
                     lumi=19.7)

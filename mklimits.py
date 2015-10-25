@@ -104,7 +104,7 @@ def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
                 for channel in channels])
 
         limits = Limits("DblH", cuts, "./ntuples", "%s/%i" % (directory, mass),
-                channels=["dblh4l"], lumi=19.7, blinded=True)
+                channels=["dblh4l"], lumi=19.7, blinded=False)
 
         limits.add_group("hpp%i" % mass, "HPlus*%i*" % mass, isSignal=True,
                 scale=scale, allowed_decays=fs)
@@ -398,14 +398,14 @@ def plot_mmmm():
 
 def plot(BP, directory="datacards", out=""):
     logger.info("Plotting %s" % BP)
-    plot_limits("./plots/limits/%s/%s.pdf" % (out,BP), _4L_MASSES, "%s/%s" % (directory, BP), blinded=True,
+    plot_limits("./plots/limits/%s/%s.pdf" % (out,BP), _4L_MASSES, "%s/%s" % (directory, BP), blinded=False,
                 title=_TITLE,
                 x_label=r"$\Phi^{++}$ Mass (GeV)",
                 y_label=r"95\% CLs Upper Limit on $\sigma/\sigma_{SM+\Phi^{\pm\pm}}$")
 
 
 def exclude(BP, directory="datacards"):
-     return exclusion(_4L_MASSES, "%s/%s" % (directory, BP), blinded=True)
+     return exclusion(_4L_MASSES, "%s/%s" % (directory, BP), blinded=False)
 
 
 def plot_3l():

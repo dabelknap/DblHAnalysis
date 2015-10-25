@@ -146,7 +146,7 @@ def four_l():
     plotter.add_group("ttv", r"$t\bar{t}V$", "TT[WZ]*",
                       facecolor="springgreen", edgecolor="seagreen")
 
-    #plotter.add_group("data", "Observed", "data_*", isdata=True)
+    plotter.add_group("data", "Observed", "data_*", isdata=True)
 
     plotter.stack_order("ttv", "wwv", "top", "dyjets", "zz", "hpp")
     #plotter.stack_order("zz","hpp")
@@ -159,7 +159,7 @@ def four_l():
     plotter.plot_stack('h1mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
             xlab=r'$M_{\ell^+\ell^+}$ (GeV)',
-            label_bin_width=True, log=True)
+            label_bin_width=True, log=True, legend_size=10)
 
     plotter.plot_stack('h2mass.pdf', 'h1mass', 25, 0, 625,
             title=_TITLE,
