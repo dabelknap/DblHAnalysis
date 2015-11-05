@@ -97,12 +97,14 @@ class Yields(object):
                         table = getattr(getattr(h5file.root,
                                                 self.analysis), chan)
                         for x in table.where(cut):
-                            if (x['evt'], x['run'], x['lumi']) \
-                                    not in evt_set:
-                                vals.append(x[var])
-                                evt_set.add(
-                                    (x['evt'], x['run'], x['lumi']))
-            counts = len(vals)
+                            evt_set.add(
+                                (x['evt'], x['run'], x['lumi']))
+                            #if (x['evt'], x['run'], x['lumi']) \
+                            #        not in evt_set:
+                            #    vals.append(x[var])
+                            #    evt_set.add(
+                            #        (x['evt'], x['run'], x['lumi']))
+            counts = len(evt_set)
             err = np.sqrt(float(counts))
 
         return (counts, err)
