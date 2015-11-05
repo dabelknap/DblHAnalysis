@@ -115,7 +115,6 @@ def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
         else:
             cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
             cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
-            #cuts += '& (z_sep > 20)'
             cuts += '& (%f < sT)' % (0.6*mass + 130.0)
 
         cuts += '& (%s)' % ' | '.join(['(channel == "%s")' % channel \
@@ -156,7 +155,7 @@ def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
             N_db_data = mky.data_sideband(
                 mass,
                 '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
-                cuts='(10 < z_sep) & ((%f < sT) | (400 < sT))' % (mass + 100.0),
+                #cuts='(10 < z_sep) & ((%f < sT) | (400 < sT))' % (mass + 100.0),
                 tau=True)
 
             alpha = mky.alpha(
@@ -169,7 +168,8 @@ def four_lepton(name, channels, directory, scale=1.0, fs=None, tau=False):
                 '(%s)' % ' | '.join(['(channel == "%s")' % channel for channel in channels]),
                 #cuts='(z_sep > 80) & (%f < sT)' % (0.6*mass + 130.0))
                 #cuts='(z_sep > 20) & (mass > 0)')
-                cuts='(%f < sT)' % (0.6*mass + 130.0))
+                #cuts='(%f < sT)' % (0.6*mass + 130.0)
+                )
 
             alpha = mky.alpha(
                 mass,

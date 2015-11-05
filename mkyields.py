@@ -30,7 +30,7 @@ class Scales(object):
 
 
 
-def data_sideband(mass, channel, cuts='(True)', tau=False):
+def data_sideband(mass, channel, tau=False):
     """
     Compute the number of data events in the sidebands.
 
@@ -58,7 +58,7 @@ def data_sideband(mass, channel, cuts='(True)', tau=False):
 
     bounds = '(12 < h1mass) & (h1mass < 700) & (12 < h2mass) & (h2mass < 700)'
 
-    x = Yields("DblH", "~(%s) & (%s) & (%s) & (%s)" % (window, bounds, cuts, channel),
+    x = Yields("DblH", "~(%s) & (%s) & (%s)" % (window, bounds, channel),
                "./ntuples", channels=["dblh4l"], lumi=19.7)
     x.add_group("data", "data_*", isData=True)
 
@@ -90,11 +90,13 @@ def alpha(mass, channel, tau=False):
     if tau:
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.5*mass, 1.1*mass)
         cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.5*mass, 1.1*mass)
+        extra = '(10 < z_sep) & ((%f < sT) | (400 < sT))' % (mass + 100.0)
     else:
         cuts = '(%f < h1mass) & (h1mass < %f)' % (0.9*mass, 1.1*mass)
         cuts += '& (%f < h2mass) & (h2mass < %f)' % (0.9*mass, 1.1*mass)
+        extra = '(%f < sT)' % (0.6*mass + 130.0)
 
-    inner = Yields("DblH", "(%s) & (%s)" % (cuts, channel), "./ntuples",
+    inner = Yields("DblH", "(%s) & (%s) & (%s)" % (cuts, channel, extra), "./ntuples",
                    channels=["dblh4l"], lumi=19.7)
 
     inner.add_group("zz", "ZZTo*", "ggZZ*")
@@ -710,6 +712,9 @@ if __name__ == "__main__":
 
     elif arg == "an_efficiencies":
         an_efficiencies()
+
+    elif arg == "test":
+        print data_sideband(300, "(channel == 'emem')", tau=True)
 
     else:
         raise ValueError("Unrecognized option: '%s'" % arg)
